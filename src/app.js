@@ -6,8 +6,11 @@ const logger = require('morgan');
 const sassMiddleware = require('node-sass-middleware');
 
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
-const authRouter = require('./components/auth/authRouter')
+const authRouter = require('./components/auth/authRouter');
+const shopRouter = require('./components/shop/shopRouter');
+const contactRouter = require('./components/contact/contactRouter');
+const cartRouter = require('./components/cart/cartRouter');
+const checkRouter = require('./components/check/checkRouter')
 
 const app = express();
 
@@ -29,7 +32,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/', authRouter);
-app.use('/users', usersRouter);
+app.use('/shop', shopRouter);
+app.use('/contact', contactRouter);
+app.use('/cart', cartRouter);
+app.use('/check', checkRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

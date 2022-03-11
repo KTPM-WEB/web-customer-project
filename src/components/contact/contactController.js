@@ -1,5 +1,5 @@
 /*************************** GET methods ***************************/
-// Render check out page
+// Render contact page
 exports.render = (req, res) => {
-    res.render("check/views/check");
+    res.render("contact/views/contact");
 };

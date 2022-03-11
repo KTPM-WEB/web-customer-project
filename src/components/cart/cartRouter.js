@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const checkController = require("./checkController");
+const cartController = require("./cartController");
 
 /*************************** GET methods ***************************/
-//render check out page
-router.get("/", checkController.render);
+//render cart page
+router.get("/", cartController.render);
 
 /*************************** POST methods ***************************/
 

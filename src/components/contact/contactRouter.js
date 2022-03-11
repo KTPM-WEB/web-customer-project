@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const checkController = require("./checkController");
+const contactController = require("./contactController");
 
 /*************************** GET methods ***************************/
-//render check out page
-router.get("/", checkController.render);
+//render contact page
+router.get("/", contactController.render);
 
 /*************************** POST methods ***************************/
 

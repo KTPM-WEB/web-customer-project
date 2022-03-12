@@ -1,4 +1,4 @@
-#Web Application Project
+# Web Application Project
 Our team has created a web application for the purpose of learning how to create a web application.
 
 Here is a list of the technologies used in this project:

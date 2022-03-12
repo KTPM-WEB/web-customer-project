@@ -14,10 +14,9 @@ Here is a list of the technologies used in this project:
 * [Passport.js](https://www.passportjs.org/)
 
 Our team:
-* [Kelsey](
 * 19127449 - Phùng Anh Khoa
 * 19127525 - Nguyễn Thanh 
-* 19127633 - Nguyễn Phan Vũ)
+* 19127633 - Nguyễn Phan Vũ
 
 This project is hosted on heroku.
 

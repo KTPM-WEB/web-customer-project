@@ -15,7 +15,7 @@ Here is a list of the technologies used in this project:
 
 Our team:
 * 19127449 - Phùng Anh Khoa
-* 19127525 - Nguyễn Thanh 
+* 19127525 - Nguyễn Thanh Quân
 * 19127633 - Nguyễn Phan Vũ
 
 This project is hosted on heroku.

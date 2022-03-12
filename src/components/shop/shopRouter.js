@@ -6,6 +6,9 @@ const shopController = require("./shopController");
 //render shop page
 router.get("/", shopController.render);
 
+//render shop page
+router.get("/detail", shopController.rederDetail);
+
 /*************************** POST methods ***************************/
 
 /*************************** PUT methods ***************************/

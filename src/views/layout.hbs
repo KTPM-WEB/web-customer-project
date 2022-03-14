@@ -14,6 +14,9 @@
 	<!--Fontawesome-->
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
+	<!--Fontawesome-->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" rel="stylesheet">
+
 	<!--Material-->
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css" rel="stylesheet">
 
@@ -68,11 +71,10 @@
 			<div class="col-lg-6 col-md-6">
 				<nav class="header__menu mobile-menu">
 					<ul>
-						<li class="active"><a href="/">Home</a></li>
-						<li><a href="/shop">Shop</a></li>
-						<li><a href="/cart">Cart</a></li>
-						<li><a href="/check">Check Out</a></li>
-						{{!<li><a href="/contact">Contacts</a></li> --}}
+						<li><a href="/" class="{{#if active.Home}}action{{/if}}">Home</a></li>
+						<li><a href="/shop" class="{{#if active.Shop}}action{{/if}}">Shop</a></li>
+						<li><a href="/cart" class="{{#if active.Cart}}action{{/if}}">Cart</a></li>
+						<li><a href="/check" class="{{#if active.Check}}action{{/if}}">Check Out</a></li>
 					</ul>
 				</nav>
 			</div>

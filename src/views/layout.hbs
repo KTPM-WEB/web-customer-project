@@ -9,7 +9,7 @@
 
 	<!-- Google Font -->
 	<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
-		  rel="stylesheet">
+		rel="stylesheet">
 
 	<!--Fontawesome-->
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -18,7 +18,9 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" rel="stylesheet">
 
 	<!--Material-->
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css" rel="stylesheet">
+	<link
+		href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css"
+		rel="stylesheet">
 
 	<!-- Css Styles -->
 	<link rel="stylesheet" href="/vendors/bootstrap/bootstrap.min.css">
@@ -35,137 +37,142 @@
 </head>
 
 <body>
-<!-- Page Preloder -->
-<div id="preloder">
-	<div class="loader"></div>
-</div>
+	<!-- Page Preloder -->
+	<div id="preloder">
+		<div class="loader"></div>
+	</div>
 
-<!-- Header Section Begin -->
-<header class="header">
-	<div class="header__top">
+	<!-- Header Section Begin -->
+	<header class="header">
+		<div class="header__top">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-6 col-md-7">
+						<div class="header__top__left">
+							<p>Sign in to purchase</p>
+						</div>
+					</div>
+					<div class="col-lg-6 col-md-5">
+						<div class="header__top__right">
+							<div class="header__top__links">
+								<a href="/login">Sign in</a>
+								<a href="/register">Sign up</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-6 col-md-7">
-					<div class="header__top__left">
-						<p>Sign in to purchase</p>
+				<div class="col-lg-3 col-md-3">
+					<div class="header__logo">
+						<a href="/"><img src="/img/logo2.png" alt="logo"></a>
 					</div>
 				</div>
-				<div class="col-lg-6 col-md-5">
-					<div class="header__top__right">
-						<div class="header__top__links">
-							<a href="/login">Sign in</a>
-							<a href="/register">Sign up</a>
+				<div class="col-lg-6 col-md-6">
+					<nav class="header__menu mobile-menu">
+						<ul>
+							<li><a href="/" class="{{#if active.Home}}active{{/if}}">Home</a></li>
+							<li><a href="/shop" class="{{#if active.Shop}}active{{/if}}">Shop</a></li>
+							<li><a href="/cart" class="{{#if active.Cart}}active{{/if}}">Cart</a></li>
+							<li><a href="/check" class="{{#if active.Check}}active{{/if}}">Check Out</a></li>
+						</ul>
+					</nav>
+				</div>
+				<div class="col-lg-3 col-md-3">
+					<div class="header__nav__option">
+						<a href="#" class="search-switch"><img src="/img/icon/search.png" alt=""></a>
+						<a href="#"><img src="/img/icon/heart.png" alt=""></a>
+						<a href="#"><img src="/img/icon/cart.png" alt=""> <span>0</span></a>
+						<div class="price">$0.00</div>
+					</div>
+				</div>
+			</div>
+			<div class="canvas__open"><i class="fa fa-bars"></i></div>
+		</div>
+	</header>
+	<!-- Header Section End -->
+
+	{{{body}}}
+
+	<!-- Footer Section Begin -->
+	<footer class="footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-4 col-md-3 col-sm-3">
+					<div class="footer__about">
+						<div class="footer__logo">
+							<a href="#"><img src="/img/footer-logo.png" alt=""></a>
+						</div>
+						<p>The customer is at the heart of our unique business model, which includes design.</p>
+						<a href="#"><img src="/img/payment.png" alt=""></a>
+					</div>
+				</div>
+
+				<div class="col-lg-4 col-md-6 col-sm-6">
+					<div class="footer__widget">
+						<h6>Contact us</h6>
+						<p>The customer is king, so contact us immediately for assistance. We always welcome that!</p>
+						<div class="row">
+							<div class="col-6 customer_service">
+								<p style="color: yellow;">Customter Service
+								<p style="position: relative; top:-30px">(123) 456-789-000</p>
+								</p>
+							</div>
+
+							<div class="col-6 social_media">
+								<p style="color: yellow;">Social media</p>
+								<div class="social_line">
+									<img src="/img/contact/fb.png" alt="">
+									<img src="/img/contact/ytb.png" alt="">
+									<img src="/img/contact/twitter.png" alt="">
+									<img src="/img/contact/linkedin.png" alt="">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-lg-4 col-md-3 col-sm-3">
+					<div class="footer__widget">
+						<h6>NewLetter</h6>
+						<div class="footer__newslatter">
+							<p>Be the first to know about new arrivals, look books, sales & promos!</p>
+							<form action="#">
+								<input type="text" placeholder="Your email">
+								<button type="submit"><span class="icon_mail_alt"></span></button>
+							</form>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-3 col-md-3">
-				<div class="header__logo">
-					<a href="/"><img src="/img/logo2.png" alt="logo" ></a>
-				</div>
-			</div>
-			<div class="col-lg-6 col-md-6">
-				<nav class="header__menu mobile-menu">
-					<ul>
-						<li><a href="/" class="{{#if active.Home}}active{{/if}}">Home</a></li>
-						<li><a href="/shop" class="{{#if active.Shop}}active{{/if}}">Shop</a></li>
-						<li><a href="/cart" class="{{#if active.Cart}}active{{/if}}">Cart</a></li>
-						<li><a href="/check" class="{{#if active.Check}}active{{/if}}">Check Out</a></li>
-					</ul>
-				</nav>
-			</div>
-			<div class="col-lg-3 col-md-3">
-				<div class="header__nav__option">
-					<a href="#" class="search-switch"><img src="/img/icon/search.png" alt=""></a>
-					<a href="#"><img src="/img/icon/heart.png" alt=""></a>
-					<a href="#"><img src="/img/icon/cart.png" alt=""> <span>0</span></a>
-					<div class="price">$0.00</div>
-				</div>
-			</div>
-		</div>
-		<div class="canvas__open"><i class="fa fa-bars"></i></div>
-	</div>
-</header>
-<!-- Header Section End -->
+	</footer>
+	<!-- Footer Section End -->
 
-{{{body}}}
-
-<!-- Footer Section Begin -->
-<footer class="footer">
-	<div class="container">
-		<div class="row">
-			<div class="col-4">
-				<div class="footer__about">
-					<div class="footer__logo">
-						<a href="#"><img src="/img/footer-logo.png" alt=""></a>
-					</div>
-					<p>The customer is at the heart of our unique business model, which includes design.</p>
-					<a href="#"><img src="/img/payment.png" alt=""></a>
-				</div>
-			</div>
-
-			<div class="col-4">
-				<div class="footer__widget">
-					<h6>Contact us</h6>
-					<p>The customer is king, so contact us immediately for assistance. We always welcome that!</p>
-					<div class="customer_service">
-						<p style="color: yellow;">Customter Service<p style="position: relative; top:-30px">(123) 456-789-000</p></p>
-					</div>
-
-					<div class="social_media" style="float: right;">
-						<p style="color: yellow;">Social media</p>
-						<div class="social_line">
-							<img src="/img/contact/fb.png" alt="">
-							<img src="/img/contact/ytb.png" alt="">
-							<img src="/img/contact/twitter.png" alt="">
-							<img src="/img/contact/linkedin.png" alt="">
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-4">
-				<div class="footer__widget">
-					<h6>NewLetter</h6>
-					<div class="footer__newslatter">
-						<p>Be the first to know about new arrivals, look books, sales & promos!</p>
-						<form action="#">
-							<input type="text" placeholder="Your email">
-							<button type="submit"><span class="icon_mail_alt"></span></button>
-						</form>
-					</div>
-				</div>
-			</div>
+	<!-- Search Begin -->
+	<div class="search-model">
+		<div class="h-100 d-flex align-items-center justify-content-center">
+			<div class="search-close-switch">+</div>
+			<form class="search-model-form">
+				<input type="text" id="search-input" placeholder="Search here.....">
+			</form>
 		</div>
 	</div>
-</footer>
-<!-- Footer Section End -->
+	<!-- Search End -->
 
-<!-- Search Begin -->
-<div class="search-model">
-	<div class="h-100 d-flex align-items-center justify-content-center">
-		<div class="search-close-switch">+</div>
-		<form class="search-model-form">
-			<input type="text" id="search-input" placeholder="Search here.....">
-		</form>
-	</div>
-</div>
-<!-- Search End -->
-
-<script src="/vendors/jquery/jquery-3.3.1.min.js"></script>
-<script src="/vendors/bootstrap/bootstrap.min.js"></script>
-<script src="/vendors/nice-select/jquery.nice-select.min.js"></script>
-<script src="/vendors/jquery.nicescroll.min.js"></script>
-<script src="/vendors/magnific-popup/jquery.magnific-popup.min.js"></script>
-<script src="/vendors/jquery.countdown.min.js"></script>
-<script src="/vendors/slicknav/jquery.slicknav.js"></script>
-<script src="/vendors/mixitup.min.js"></script>
-<script src="/vendors/owl-carousel/owl.carousel.min.js"></script>
-<script src="/js/main.js"></script>
+	<script src="/vendors/jquery/jquery-3.3.1.min.js"></script>
+	<script src="/vendors/bootstrap/bootstrap.min.js"></script>
+	<script src="/vendors/nice-select/jquery.nice-select.min.js"></script>
+	<script src="/vendors/jquery.nicescroll.min.js"></script>
+	<script src="/vendors/magnific-popup/jquery.magnific-popup.min.js"></script>
+	<script src="/vendors/jquery.countdown.min.js"></script>
+	<script src="/vendors/slicknav/jquery.slicknav.js"></script>
+	<script src="/vendors/mixitup.min.js"></script>
+	<script src="/vendors/owl-carousel/owl.carousel.min.js"></script>
+	<script src="/js/main.js"></script>
 
 </body>
+
 </html>

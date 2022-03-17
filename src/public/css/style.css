@@ -1988,12 +1988,11 @@ ol {
 	margin-bottom: 30px;
 }
 
-.footer__widget .customer_service
+/* .footer__widget .customer_service
 {
 	display: inline;
 	float:left;
-}
-
+} */
 
 .footer__widget .social_media .social_line
 {
@@ -2002,10 +2001,10 @@ ol {
 }
 
 
-
 .footer__widget .social_media .social_line img
 {
 	margin-right: 5px;
+	width: 15%;
 }
 
 .footer__widget .footer__newslatter p {

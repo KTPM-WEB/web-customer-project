@@ -6,5 +6,5 @@ exports.render = (req, res) => {
 
 // Render product detail page
 exports.rederDetail = (req, res) => {
-    res.render("shop/views/product_detail", {active: {Shop:true}, page:"product_detail"});
+    res.render("shop/views/product_detail");
 };

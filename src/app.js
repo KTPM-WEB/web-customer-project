@@ -11,6 +11,9 @@ const contactRouter = require('./components/contact/contactRouter');
 const cartRouter = require('./components/cart/cartRouter');
 const checkRouter = require('./components/check/checkRouter')
 
+const db = require('./config/database.config');
+db.connect();
+
 const app = express();
 
 // view engine setup

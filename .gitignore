@@ -107,3 +107,8 @@ dist
 .DS_Store
 .idea
 .idea/
+
+# .env
+.env.example
+.env.development
+.env.production

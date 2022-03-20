@@ -4,7 +4,6 @@
  * Module dependencies.
  */
 
-require('dotenv').config()
 const app = require('../src/app');
 const debug = require('debug')('web-ecommerce-project:server');
 const http = require('http');

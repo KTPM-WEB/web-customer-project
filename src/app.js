@@ -6,13 +6,13 @@ const logger = require('morgan');
 
 const indexRouter = require('./routes/index');
 const authRouter = require('./components/auth/authRouter');
-const shopRouter = require('./components/shop/shopRouter');
+const shopRouter = require('./components/product/productRouter');
 const contactRouter = require('./components/contact/contactRouter');
 const cartRouter = require('./components/cart/cartRouter');
 const checkRouter = require('./components/check/checkRouter')
 
-// const db = require('./config/database.config');
-// db.connect();
+const db = require('./config/database.config');
+db.connect();
 
 const app = express();
 
@@ -28,7 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/', authRouter);
-app.use('/shop', shopRouter);
+app.use('/product', shopRouter);
 app.use('/contact', contactRouter);
 app.use('/cart', cartRouter);
 app.use('/check', checkRouter);

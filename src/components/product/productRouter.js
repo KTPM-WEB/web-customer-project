@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const shopController = require("./shopController");
+const productController = require("./productController");
 
 /*************************** GET methods ***************************/
-//render shop page
-router.get("/", shopController.render);
+//render products page
+router.get("/", productController.render);
 
-//render shop page
-router.get("/detail", shopController.rederDetail);
+//render product-detail page
+router.get("/detail", productController.renderDetail);
 
 /*************************** POST methods ***************************/
 

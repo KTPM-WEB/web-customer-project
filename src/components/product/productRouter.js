@@ -7,7 +7,7 @@ const productController = require("./productController");
 router.get("/", productController.render);
 
 //render product-detail page
-router.get("/detail", productController.renderDetail);
+router.get("/:id", productController.renderDetail);
 
 /*************************** POST methods ***************************/
 

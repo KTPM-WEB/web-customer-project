@@ -1497,6 +1497,26 @@ ol {
 	padding-right: 15px;
 }
 
+.product__pagination .next_page
+{
+	margin-left: 26px;
+}
+
+.product__pagination .next_page:hover
+{
+	border:none;
+}
+
+.product__pagination .prev_page
+{
+	margin-right: 26px;
+}
+
+.product__pagination .prev_page:hover
+{
+	border:none;
+}
+
 /*---------------------
   Shop
 -----------------------*/

@@ -267,7 +267,7 @@
         let liTag = '';
 
         if (totalPage > 1 && page <= totalPage) {
-            if (page != 1)
+            if (page !== 1)
                 liTag += `<a class="prev_page" href="/product?page=${page - 1}">Prev</a>`;
 
             liTag += `<a href="/product?page=1">1</a>`;
@@ -281,7 +281,7 @@
                     for (let i = 2; i <= Math.min(3, totalPage); i++)
                         liTag += `<a href="/product?page=${i}">${i}</a>`;
 
-                    if (page == 3) {
+                    if (page === 3) {
                         if (totalPage > 3) {
                             liTag += `<a href="/product?page=4">4</a>`;
                         }
@@ -306,7 +306,7 @@
                         liTag += `<a href="/product?page=${totalPage}">${totalPage}</a>`;
                     }
                     else {
-                        if (page == totalPage - 2) {
+                        if (page === totalPage - 2) {
 
                             liTag += `<a href="/product?page=${page - 1}">${page - 1}</a>`;
                         }

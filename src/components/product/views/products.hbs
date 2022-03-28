@@ -216,7 +216,7 @@
 								</ul>
 							</div>
 							<div class="product__item__text">
-								<h6{{name}}</h6>
+								<h6>{{name}}</h6>
 								<a href="#" class="add-cart">+ Add To Cart</a>
 								<div class="rating">
 									<i class="fa fa-star"></i>
@@ -245,6 +245,9 @@
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="product__pagination">
+							{{#each buffer}}
+								{{{this}}}
+							{{/each}}
 							{{!-- <a class="active" href="#">1</a>
 							<a href="#">2</a>
 							<a href="#">3</a>
@@ -258,11 +261,6 @@
 	</div>
 </section>
 
-<!-- Shop Section End -->
-<script type="text/javascript" src="/js/pagination.js"></script>
-<script language="javascript">
-   createPagination({{totalPage}},{{page}})
-</script>
 
 
 

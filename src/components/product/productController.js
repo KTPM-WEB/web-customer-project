@@ -1,4 +1,5 @@
 const productService = require('./productService');
+const productUtils = require('./productUtils');
 const {ObjectId} = require('mongodb')
 
 const PAGE_SIZE = 9;
@@ -11,8 +12,11 @@ exports.render = async (req, res) => {
     const end = start + PAGE_SIZE;
 
     const products = (await productService.getAllProducts());
+    const totalPage=parseInt(products.length/9);
 
-    res.render("product/views/products", {active: {Shop:true}, page: page, products:products.slice(start, end), totalProduct:products.length, totalPage:parseInt(products.length/9)});
+    const buffer = await productUtils.paging(totalPage,page);
+
+    res.render("product/views/products", {active: {Shop:true}, page: page, products:products.slice(start, end), buffer:buffer, totalProduct:products.length, totalPage:totalPage});
 };
 
 // Render product detail page

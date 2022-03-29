@@ -44,24 +44,19 @@
 				<div class="col-lg-8">
 					<div class="product__details__text">
 						<h4>{{product.name}}</h4>
-						<div class="rating">
-							<i class="fa fa-star"></i>
-							<i class="fa fa-star"></i>
-							<i class="fa fa-star"></i>
-							<i class="fa fa-star"></i>
-							<i class="fa fa-star-o"></i>
-							{{!-- <span> - 5 Reviews</span> --}}
-						</div>
+
 						<h3>${{product.price}} <span>${{product.price}}</span></h3>
 						<p>{{product.introduction}}</p>
 						<div class="product__details__option">
 							<div class="product__details__option__size">
+								{{#if product.size}}
 									<span>Size:</span>
 									{{#each product.size}}
 									<label for="{{this}}">{{this}}
 										<input type="radio" id="{{this}}">
 									</label>
 									{{/each}}
+								{{/if}}
 							</div>
 							<div class="product__details__option__color">
 								<span>Color:</span>
@@ -117,10 +112,6 @@
 						<div class="tab-content">
 							<div class="tab-pane active" id="tabs-5" role="tabpanel">
 								<div class="product__details__tab__content">
-									{{!-- <p class="note">Nam tempus turpis at metus scelerisque placerat nulla deumantos
-										solicitud felis. Pellentesque diam dolor, elementum etos lobortis des mollis
-										ut risus. Sedcus faucibus an sullamcorper mattis drostique des commodo
-										pharetras loremos.</p> --}}
 									<div class="product__details__tab__content__item">
 										<h5>Products Infomation</h5>
 										<p>{{product.infomation}}</p>

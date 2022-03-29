@@ -4,16 +4,20 @@ const Schema = mongoose.Schema;
 /**
  * Schema
  */
-const productSchema = new Schema(
-    {
-        color: String,
+const product = new Schema({
         name: String,
         price: Number,
-        img: { type: String },
-        category: String,
         brand: String,
-        size: String,
-    }
-);
+        size: [String],
+        color: [String],
+        category: String,
+        img: [String],
+        SKU: String,
+        introduction: String,
+        infomation: String,
 
-module.exports = mongoose.model("product", productSchema, "product");
+}, {
+        versionKey: false // You should be aware of the outcome after set to false
+});
+
+module.exports = mongoose.model("product", product, "product");

@@ -1,7 +1,7 @@
 <!-- Shop Details Section Begin -->
 <section class="shop-details">
-	<div class="product__details__pic">
-		<div class="container">
+		<div class="product__details__pic">
+		<div class="container" style="height: 720px;">
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="product__details__breadcrumb">
@@ -15,23 +15,40 @@
 				<div class="col-lg-3 col-md-3">
 					<ul class="nav nav-tabs" role="tablist">
 						{{#each product.img}}
+						{{#if @first}}
+						<li class="nav-item">
+							<a class="nav-link active" data-toggle="tab" href="#tabs-{{@index}}" role="tab">
+								<div class="product__thumb__pic set-bg" data-setbg="{{this}}">
+								</div>
+							</a>
+						</li>
+						{{else}}
 						<li class="nav-item">
 							<a class="nav-link" data-toggle="tab" href="#tabs-{{@index}}" role="tab">
 								<div class="product__thumb__pic set-bg" data-setbg="{{this}}">
 								</div>
 							</a>
 						</li>
+						{{/if}}
 						{{/each}}
 					</ul>
 				</div>
 				<div class="col-lg-6 col-md-9">
 					<div class="tab-content">
 						{{#each product.img}}
-						<div class="tab-pane" id="tabs-{{@index}}" role="tabpanel">
+						{{#if @first}}
+						<div class="tab-pane active" id="tabs-{{@index}}" role="tabpanel">
 							<div class="product__details__pic__item">
-								<img src="{{this}}" alt="">
+								<img src="{{this}}" alt="" style="height: 680px">
 							</div>
 						</div>
+						{{else}}
+						<div class="tab-pane" id="tabs-{{@index}}" role="tabpanel">
+							<div class="product__details__pic__item">
+								<img src="{{this}}" alt="" style="height: 680px">
+							</div>
+						</div>
+						{{/if}}
 						{{/each}}
 					</div>
 				</div>

@@ -8,6 +8,12 @@ const saltRounds = 10;
 
 module.exports.Register = async (body) => {
     try {
+
+        // check input fields
+        if (!body.username || !body.password || !body.email) {
+            return "input_error";
+        }
+
         const find_user = await userModel.findOne({ username: body.username });
         if (find_user !== null) {
             return "existed";

@@ -43,6 +43,9 @@ exports.Register = async (req, res) => {
     } else if (register === "email_exist") {
         message = "Email already exist";
         state = false;
+    } else if (register === "input_error") {
+        message = "Please input all field";
+        state = false;
     }
 
     res.redirect("/auth/register?state=" + state + "&message=" + message);

@@ -17,3 +17,15 @@ module.exports.getProductByID = (id) => {
 }
 
 
+module.exports.getDistinctByField = (field) => {
+  return model.find({},{field:1}).distinct(field).lean()
+}
+
+
+module.exports.getRelatedList = (categoryValue) =>
+{
+  return model.aggregate([
+    { "$match": { "category": { "$eq": categoryValue } } },
+    { "$sample": { "size": 4 } }
+])
+}

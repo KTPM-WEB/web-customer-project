@@ -16,11 +16,16 @@ exports.render = async (req, res) => {
 
     const buffer = await productUtils.paging(totalPage,page);
 
-    res.render("product/views/products", {active: {Shop:true}, page: page, products:products.slice(start, end), buffer:buffer, totalProduct:products.length, totalPage:totalPage});
+    const categories= await productService.getDistinctByField("category");
+    const brands= await productService.getDistinctByField("brand");
+    const relate=  await productService.getRelatedList("Clothing");
+
+    res.render("product/views/products", {active: {Shop:true}, page: page, products:products.slice(start, end), categories:categories, brands:brands, buffer:buffer, totalProduct:products.length, totalPage:totalPage});
 };
 
 // Render product detail page
 exports.renderDetail = async (req, res) => {
     const product= await productService.getProductByID(ObjectId(req.params.id));
-    res.render("product/views/product_detail",{product:product});
+    const relatedProduct = await productService.getRelatedList(product.category)
+    res.render("product/views/product_detail",{product:product,relatedProduct:relatedProduct});
 };

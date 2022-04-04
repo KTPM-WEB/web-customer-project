@@ -940,6 +940,8 @@ ol {
 	margin-bottom: 40px;
 }
 
+
+
 .product__item.sale .product__item__pic .label {
 	color: #ffffff;
 	background: #111111;
@@ -973,6 +975,7 @@ ol {
 }
 
 .product__item__pic {
+	width: 90%;
 	height: 260px;
 	position: relative;
 	background-position: center center;
@@ -1235,11 +1238,11 @@ ol {
 	display: block;
 }
 
-.shop__sidebar__categories ul,
+/* .shop__sidebar__categories ul,
 .shop__sidebar__price ul,
 .shop__sidebar__brand ul {
 	height: 225px;
-}
+} */
 
 .shop__sidebar__categories ul li,
 .shop__sidebar__price ul li,

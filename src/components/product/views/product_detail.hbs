@@ -144,14 +144,20 @@
                                         </form>
                                     </div>
 
-									<div class="product__details__tab__content__item col-7">
+                                    {{#if review}}
+                                    <div class="product__details__tab__content__item col-7" style="position: relative; left: 120px">
                                         {{#each review}}
-                                            <h4>{{userName}}</h4>
-                                            <span style="font-size:10px; font-weight: lighter; font-style: italic; color: gray">{{createdAt}}</span>
-                                            <p>{{content}}</p>
+                                            <h3>{{userName}}</h3>
+                                            <span style="font-size:10px; font-weight: lighter; font-style: italic; color: gray; position: relative; top:-10px">{{createdAt}}</span>
+                                            <p style="font-size: 16px">{{content}}</p>
                                             <hr>
                                         {{/each}}
-									</div>
+                                    </div>
+                                    {{else}}
+                                    <div class="product__details__tab__content__item col-7" style="text-align: center; padding-top: 70px">
+                                        <p style="font-weight: bold; font-size: 20px">Sorry, this product doesn't have any reviews yet...</p>
+                                    </div>
+                                    {{/if}}
 								</div>
 							</div>
 						</div>

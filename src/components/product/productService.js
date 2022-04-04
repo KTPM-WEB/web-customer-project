@@ -1,5 +1,8 @@
 const async = require('hbs/lib/async');
 const model = require('./productModel');
+const productReview = require('./productReviewModel')
+const mongoose = require("mongoose");
+const {ObjectID, Timestamp} = require("mongodb");
 
 
 
@@ -29,3 +32,18 @@ module.exports.getRelatedList = (categoryValue) =>
     { "$sample": { "size": 4 } }
 ])
 }
+
+module.exports.createReview = (userName,productID,content) =>
+{
+    return new productReview({
+        userName: userName,
+        productID: productID,
+        content: content,
+        createdAt: Date.now()
+    }).save();
+}
+
+module.exports.getAllReviewByProductID = (productID) =>{
+    return productReview.find({productID: productID}).lean();
+}
+

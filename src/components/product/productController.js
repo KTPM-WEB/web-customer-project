@@ -25,7 +25,19 @@ exports.render = async (req, res) => {
 
 // Render product detail page
 exports.renderDetail = async (req, res) => {
-    const product= await productService.getProductByID(ObjectId(req.params.id));
+    const product = await productService.getProductByID(ObjectId(req.params.id));
+    const review = await  productService.getAllReviewByProductID(req.params.id);
     const relatedProduct = await productService.getRelatedList(product.category)
-    res.render("product/views/product_detail",{product:product,relatedProduct:relatedProduct});
+    res.render("product/views/product_detail",{product:product, review:review, relatedProduct:relatedProduct});
 };
+
+module.exports.postReview = async (req,res) =>
+{
+    if (!req.user)
+        res.redirect('/auth/login')
+    else
+    {
+        productService.createReview(req.user.username, req.body.productID,req.body.content)
+        res.redirect('/product/'+req.body.productID)
+    }
+}

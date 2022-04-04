@@ -14,7 +14,10 @@ const user = new Schema({
     avatar_url: String,
     address: String,
     phone: String,
-    intro: String
+    account_balance: Number,
+    intro: String,
+    firstName: String,
+    lastName: String
 }, {
     versionKey: false // You should be aware of the outcome after set to false
 });

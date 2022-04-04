@@ -34,8 +34,13 @@ module.exports.Register = async (body) => {
 
         const user = {
             username: body.username,
+            firstName: "First",
+            lastName: "Last",
             password: hash_pass,
-            email: body.email
+            email: body.email,
+            phone: "Unknown",
+            avatar_url: "https://bsnl.ch/wp-content/uploads/2019/03/avatar-default-circle.png",
+            account_balance: 0.0
         }
 
         console.log("user:", user);

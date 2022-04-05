@@ -4,6 +4,7 @@ const session = require("express-session");
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const cors = require('cors');
 
 const passport = require("./middlewares/passport");
 const indexRouter = require('./routes/index');
@@ -28,6 +29,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
 // session
 app.use(session({

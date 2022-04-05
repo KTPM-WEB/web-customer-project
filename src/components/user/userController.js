@@ -9,4 +9,10 @@ module.exports.displayProfile = async (req,res) =>
     res.render('user/views/profile',{user:user})
 }
 
+module.exports.editProfile = async (req,res) =>
+{
+    await userService.updateUser(req.user.username,req.body.field,req.body.value)
+    res.redirect("/user/profile")
+}
+
 

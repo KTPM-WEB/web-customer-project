@@ -8,43 +8,63 @@
                             <div class="row m-l-0 m-r-0" style="height: 600px;">
                                 <div class="col-sm-4 user-profile">
                                     <div class="card-block text-center text-white">
-                                        <div class="m-b-25"> <img style="width: 100px" src={{user.avatar_url}} class="img-radius" alt="User-Profile-Image"> </div>
-                                        <h6 class="f-w-600" style="font-size: 30px; position: relative; top: -15px">{{user.username}}</h6>
-                                        <p style="color: yellow; font-size: 18px; position: relative; top: -15px">${{user.account_balance}}</p> <i class=" mdi mdi-square-edit-outline feather icon-edit m-t-10 f-16"></i>
+                                        <div class="m-b-25"> <img id="profile-avatar" src={{user.avatar_url}} class="img-radius" alt="User-Profile-Image"> </div>
+                                        <h6 class="f-w-600" id="profile-username">{{user.username}}</h6>
+                                        <!--<p style="color: yellow; font-size: 18px; position: relative; top: -15px">${{user.account_balance}}</p> <i class=" mdi mdi-square-edit-outline feather icon-edit m-t-10 f-16"></i>-->
                                     </div>
                                 </div>
                                 <div class="col-sm-8">
                                     <div class="card-block">
-                                        <h6 class="m-b-20 p-b-5 b-b-default f-w-600">General</h6>
+                                        <h6 class="m-b-20 p-b-5 b-b-default f-w-600 profile-header-section">General</h6>
                                         <div class="row">
                                             <div class="col-sm-6">
-                                                <p class="m-b-10 f-w-600">First Name</p>
-                                                <h6 class="text-muted f-w-400">{{user.firstName}}</h6>
+                                                <p class="m-b-10 f-w-600 profile-header-field">First Name</p>
+                                                <div class="infomation-row">
+                                                    <h6 class="text-muted f-w-400" id="firstName">{{user.firstName}}</h6>
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                </div>
+
+<!--                                             <form method="post">
+                                                    <div class="container edit-form">
+                                                        <input class="edit-input" type="text"; name="firstname">
+                                                        <input type="submit" value="Apply" class="sub-btn">
+                                                    </div>
+                                                </form>-->
+
                                             </div>
                                             <div class="col-sm-6">
-                                                <p class="m-b-10 f-w-600">LastName</p>
-                                                <h6 class="text-muted f-w-400">{{user.lastName}}</h6>
+                                                <p class="m-b-10 f-w-600 profile-header-field">LastName</p>
+                                                <div class="infomation-row">
+                                                    <h6 class="text-muted f-w-400" id="lastName">{{user.lastName}}</h6>
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                </div>
                                             </div>
                                         </div>
-                                        <h6 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600">Contact</h6>
+                                        <h6 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600 profile-header-section">Contact</h6>
                                         <div class="row">
                                             <div class="col-sm-6">
-                                                <p class="m-b-10 f-w-600">Email</p>
-                                                <h6 class="text-muted f-w-400">{{user.email}}</h6>
+                                                <p class="m-b-10 f-w-600 profile-header-field">Email</p>
+                                                <div class="infomation-row">
+                                                    <h6 class="text-muted f-w-400" id="email">{{user.email}}</h6>
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                </div>
                                             </div>
                                             <div class="col-sm-6">
-                                                <p class="m-b-10 f-w-600">Phone</p>
-                                                <h6 class="text-muted f-w-400">{{user.phone}}</h6>
+                                                <p class="m-b-10 f-w-600 profile-header-field">Phone</p>
+                                                <div class="infomation-row">
+                                                    <h6 class="text-muted f-w-400" id="phone">{{user.phone}}</h6>
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                </div>
                                             </div>
                                         </div>
-                                        <h6 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600">Others</h6>
+                                        <h6 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600 profile-header-section">Others</h6>
                                         <div class="row">
                                             <div class="col-sm-6">
-                                                <p class="m-b-10 f-w-600">Recent</p>
+                                                <p class="m-b-10 f-w-600 profile-header-field">Recent</p>
                                                 <h6 class="text-muted f-w-400">Sam Disuja</h6>
                                             </div>
                                             <div class="col-sm-6">
-                                                <p class="m-b-10 f-w-600">Most Viewed</p>
+                                                <p class="m-b-10 f-w-600 profile-header-field">Most Viewed</p>
                                                 <h6 class="text-muted f-w-400">Dinoter husainm</h6>
                                             </div>
                                         </div>
@@ -62,5 +82,7 @@
             </div>
         </div>
     </div>
-
 </section>
+
+<script src="/js/profile.js"></script>
+

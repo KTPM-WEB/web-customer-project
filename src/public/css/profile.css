@@ -140,3 +140,70 @@ h6 {
     -webkit-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out
 }
+
+.sub-btn {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 343;
+    text-transform: uppercase;
+    padding: 4px 9px;
+    color: #ffffff;
+    background: #000000;
+    letter-spacing: 2px;
+}
+
+#profile-avatar
+{
+    width: 100px
+}
+
+#profile-username
+{
+    font-size: 30px; position: relative; top: -15px
+}
+
+.profile-header-section
+{
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.profile-header-field{
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.infomation-row
+{
+    display: flex;
+    flex-direction: row;
+}
+
+.infomation-row:hover i
+{
+    transition: 0.25s;
+    opacity: 0.9;
+}
+
+.infomation-row i
+{
+    position: relative;
+    left: 10px;
+    opacity: 0.1;
+}
+
+.container .edit-form
+{
+    padding: 0px
+}
+
+.edit-input
+{
+    width: 55%;
+    font-size: 12px;
+}
+
+.container .edit-form .sub-btn{
+    position: relative;
+    left: 5px;
+}

@@ -35,6 +35,8 @@ router.post('/login', passport.authenticate('local', {
     failureRedirect: '/auth/login?message=Account%20dont%20exist' //login fail, redirect to login page
 }));
 
+router.post('/logout',authController.logout)
+
 
 /*************************** PUT methods ***************************/
 

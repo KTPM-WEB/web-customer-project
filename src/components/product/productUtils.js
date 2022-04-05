@@ -62,7 +62,6 @@ module.exports.paging=  (totalPage,page) =>
                 const index = buffer.at(i).lastIndexOf("\"")
                 const oldStr = buffer.at(i)
                 const newStr = [oldStr.slice(0, 2), ` class="active" ` , oldStr.slice(3)].join('');
-                console.log(newStr)
                 buffer[i]=newStr
                 break;
             }

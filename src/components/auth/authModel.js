@@ -14,7 +14,6 @@ const user = new Schema({
     avatar_url: String,
     address: String,
     phone: String,
-    account_balance: Number,
     intro: String,
     firstName: String,
     lastName: String

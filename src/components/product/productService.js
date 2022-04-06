@@ -32,10 +32,9 @@ module.exports.getProductByID = (id) => {
  * @param name {string}
  * @returns {Promise<*>}
  */
-module.exports.getByName = async (name) => {
+module.exports.getProductByName = async (name) => {
     try {
-        const products = await productModel.find().lean();
-        return products.filter((product) => product.name.toLowerCase().includes(name))
+        return await productModel.find({name: {$regex: new RegExp('^' + name + '.*','i')}}).exec();
     } catch (err) {
         throw err;
     }
@@ -49,7 +48,20 @@ module.exports.getByName = async (name) => {
 module.exports.getDistinctByField = (field) => {
     try {
         return productModel.distinct(field).lean();
-    }catch (err){
+    } catch (err) {
+        throw err;
+    }
+}
+
+/**
+ * get product by field
+ * @param field {string}
+ * @returns {Promise<*>}
+ */
+module.exports.getProductByField = (field) => {
+    try {
+        return productModel.find({category: field}).lean();
+    } catch (err) {
         throw err;
     }
 }

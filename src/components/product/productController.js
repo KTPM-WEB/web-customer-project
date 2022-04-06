@@ -11,13 +11,8 @@ const productUtils = require('./productUtils');
 exports.render = async (req, res) => {
     try{
         const page = parseInt(req.query.page) || 1;
-        const start = (page - 1) * 9;
-        const end = start + 9;
-
         const products = (await productService.getAllProducts());
-        const totalPage = parseInt(products.length / 9);
-
-        const buffer = productUtils.paging(totalPage, page);
+        const data = productUtils.paging(products, page);
 
         const categories = await productService.getDistinctByField("category");
         const brands = await productService.getDistinctByField("brand");
@@ -26,17 +21,15 @@ exports.render = async (req, res) => {
         res.render("product/views/products", {
             active: {Shop: true},
             page: page,
-            products: products.slice(start, end),
             categories: categories,
             brands: brands,
-            buffer: buffer,
+            products: data,
             totalProduct: products.length,
-            totalPage: totalPage
+            quote:"123"
         });
     }catch (err){
         res.status(500).json({message: err.message});
     }
-
 };
 
 /**

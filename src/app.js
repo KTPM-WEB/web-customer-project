@@ -41,7 +41,12 @@ app.use(passport.authenticate('session'));
 
 app.use(function (req, res, next) {
   res.locals.user = req.user || req.session.user;
-  // res.locals.message = req.session.message;
+
+  if (req.user === undefined) {
+    req.user = req.session.user;
+  }
+
+  res.locals.number_product = req.session.number_product;
   next();
 });
 

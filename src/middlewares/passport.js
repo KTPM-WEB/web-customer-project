@@ -68,7 +68,21 @@ passport.use(new GoogleStrategy({
 
 passport.serializeUser(function (user, cb) {
     process.nextTick(function () {
-        cb(null, { id: user._id, username: user.username });
+        cb(null, {
+            _id: user._id,
+            fullname: user.fullname,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            username: user.username,
+            email: user.email,
+            employed: user.employed,
+            avatar_url: user.avatar_url,
+            address: user.address,
+            phone: user.phone,
+            intro: user.intro,
+            total: user.total,
+            cart: user.cart
+        });
     });
 });
 

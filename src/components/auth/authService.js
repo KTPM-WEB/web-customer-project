@@ -45,6 +45,7 @@ module.exports.Register = async (body) => {
             address: "",
             phone: "",
             intro: "",
+            total: 0,
             avatar_url: "https://res.cloudinary.com/web-hcmus/image/upload/v1648341181/Default_avatar/default-avtar_wmf6yf.jpg", //default avatar
         }
 
@@ -63,13 +64,6 @@ module.exports.Register = async (body) => {
 module.exports.addUserGoogle = async (profile) => {
     if (this.verifyGoogle(profile) !== 'false') {
         // create new user
-
-        //                             employed: now[2] + ' ' + now[1] + ',' + now[3],
-        //                                 address: "",
-        //                                     phone: "",
-        //                                         intro: "",
-        //                                             avatar_url: "https://res.cloudinary.com/web-hcmus/image/upload/v1648341181/Default_avatar/default-avtar_wmf6yf.jpg", //default avatar
-
         // get datetime
         const now = (new Date()).toString().split(" ");
 
@@ -85,6 +79,7 @@ module.exports.addUserGoogle = async (profile) => {
             address: profile.locale || "",
             phone: "",
             intro: "",
+            total: 0,
             avatar_url: profile.picture || "https://res.cloudinary.com/web-hcmus/image/upload/v1648341181/Default_avatar/default-avtar_wmf6yf.jpg", //default avatar
         }
 

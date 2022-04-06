@@ -1,0 +1,5 @@
+.add-cart:hover {
+    color: rgb(238, 64, 64);
+    transform: scale(1.05) translateX(5px);
+    transition: 0.5s all ease;
+}

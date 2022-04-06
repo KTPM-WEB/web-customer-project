@@ -14,11 +14,14 @@ const shopRouter = require('./components/product/productRouter');
 const contactRouter = require('./components/contact/contactRouter');
 const cartRouter = require('./components/cart/cartRouter');
 const checkRouter = require('./components/check/checkRouter')
+const apiRouter = require('./components/api/apiRouter');
 
 const db = require('./config/database.config');
 db.connect();
 
 const app = express();
+
+app.use(express.static(__dirname + '/public'));
 
 // view engine setup
 app.set('views', [path.join(__dirname, 'views'), path.join(__dirname, "components")]);
@@ -57,6 +60,7 @@ app.use('/product', shopRouter);
 app.use('/contact', contactRouter);
 app.use('/cart', cartRouter);
 app.use('/check', checkRouter);
+app.use('/api', apiRouter);
 
 
 // catch 404 and forward to error handler

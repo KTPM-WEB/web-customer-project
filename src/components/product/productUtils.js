@@ -15,7 +15,7 @@ module.exports.paging=  (totalPage,page) =>
                 for (let i = 2; i <= Math.min(3, totalPage); i++)
                     buffer.push(`<a href="/product?page=${i}">${i}</a>`);
 
-                if (page == 3) {
+                if (page === 3) {
                     if (totalPage > 3) {
                         buffer.push(`<a href="/product?page=4">4</a>`);
                     }
@@ -40,7 +40,7 @@ module.exports.paging=  (totalPage,page) =>
                     buffer.push(`<a href="/product?page=${totalPage}">${totalPage}</a>`);
                 }
                 else {
-                    if (page == totalPage - 2) {
+                    if (page === totalPage - 2) {
                         buffer.push(`<a href="/product?page=${page - 1}">${page - 1}</a>`);
                     }
 
@@ -57,12 +57,11 @@ module.exports.paging=  (totalPage,page) =>
 
         for(let i=1;i<buffer.length-1;i++)
         {
-            if (buffer.at(i).search(page.toString()) != -1)
+            if (buffer.at(i).search(page.toString()) !== -1)
             {
                 const index = buffer.at(i).lastIndexOf("\"")
                 const oldStr = buffer.at(i)
-                const newStr = [oldStr.slice(0, 2), ` class="active" ` , oldStr.slice(3)].join('');
-                buffer[i]=newStr
+                buffer[i]=[oldStr.slice(0, 2), ` class="active" `, oldStr.slice(3)].join('')
                 break;
             }
 

@@ -3,20 +3,44 @@ const passport = require("../../middlewares/passport");
 
 
 /*************************** GET methods ***************************/
-// Render Login page
+/**
+ * render login page
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
 exports.renderLogin = (req, res) => {
-    req.query.state = req.query.state === 'true';
-    res.render("auth/views/login", { message: req.query.message, state: req.query.state });
+    try {
+        req.query.state = req.query.state === 'true';
+        res.render("auth/views/login", {message: req.query.message, state: req.query.state});
+    } catch (err) {
+        res.status(500).json({message: err.message});
+    }
+
 };
 
-// Render Register page
+/**
+ * render register page
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
 exports.renderRegister = (req, res) => {
-    req.query.state = req.query.state === 'true';
-    res.render("auth/views/register", { message: req.query.message, state: req.query.state });
+    try {
+        req.query.state = req.query.state === 'true';
+        res.render("auth/views/register", {message: req.query.message, state: req.query.state});
+    } catch (err) {
+        res.status(500).json({message: err.message});
+    }
 };
 
-
-// Render Register page
+/*************************** POST methods ***************************/
+/**
+ * redirect register page
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
 exports.Register = async (req, res) => {
     try {
         const register = await service.Register(req.body);
@@ -41,12 +65,17 @@ exports.Register = async (req, res) => {
         }
         res.redirect("/auth/register?state=" + state + "&message=" + message);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({message: err.message});
     }
 };
 
+
 exports.logout = async (req, res) => {
-    req.session.user = null;
-    await req.logout();
-    res.redirect('/');
+    try {
+        req.session.user = null;
+        await req.logout();
+        res.redirect('/');
+    } catch (err) {
+        res.status(500).json({message: err.message});
+    }
 };

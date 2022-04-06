@@ -10,11 +10,15 @@ router.get("/", productController.render);
 router.get("/:id", productController.renderDetail);
 
 /*************************** POST methods ***************************/
+// post review to product
 router.post("/:id/reviews", productController.postReview);
-
 
 //add products to cart
 router.post("/", productController.addToCart);
+
+//render product-detail page
+router.post("/search", productController.search);
+
 /*************************** PUT methods ***************************/
 
 /*************************** DELETE methods ***************************/

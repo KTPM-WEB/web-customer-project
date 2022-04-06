@@ -1,6 +1,6 @@
 const cartService = require("./cartService");
 const userModel = require("../auth/authModel");
-const productModel = require("../product/productModel")
+const productModel = require("../product/model/productModel")
 
 /*************************** GET methods ***************************/
 // Render cart page

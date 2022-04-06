@@ -7,7 +7,6 @@ const authService = require('../components/auth/authService');
 const userModel = require('../components/auth/authModel');
 
 
-
 // authN local
 passport.use(new LocalStrategy(async function verify(username, password, cb) {
     /*    console.log('Passport verify usser');
@@ -27,11 +26,11 @@ passport.use(new LocalStrategy(async function verify(username, password, cb) {
 
 // authN google
 passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: 'http://localhost:3000/auth/google/callback',
-    passReqToCallback: true
-},
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: 'http://localhost:3000/auth/google/callback',
+        passReqToCallback: true
+    },
     async (req, accessToken, refreshToken, profile, cb) => {
         // console.log('---------');
         // console.log('Passport auth google');
@@ -42,25 +41,22 @@ passport.use(new GoogleStrategy({
 
         // console.log("passport user:", user);
 
-        if (user === 'false') {
+        if (!user) {
             if (req.query.state === 'register') {
                 console.log('passport: register - account dont exist');
                 const result = await authService.addUserGoogle(profile);
                 console.log('result:', result);
 
                 return cb(null, true, result);
+            } else {
+                return cb(null, true, {message: 'login: account dont exist'});
             }
-            else {
-                return cb(null, true, { message: 'login: account dont exist' });
-            }
-        }
-        else {
+        } else {
 
             if (req.query.state === 'register') {
-                return cb(null, user, { message: 'register: account exist' });
-            }
-            else {
-                return cb(null, user, { message: 'login: login success' });
+                return cb(null, user, {message: 'register: account exist'});
+            } else {
+                return cb(null, user, {message: 'login: login success'});
             }
         }
     }

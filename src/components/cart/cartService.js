@@ -1,4 +1,4 @@
-const productModel = require("../product/productModel");
+const productModel = require("../product/model/productModel");
 const userModel = require("../auth/authModel");
 
 module.exports.getProducts = async (cart) => {

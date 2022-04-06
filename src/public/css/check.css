@@ -1,0 +1,20 @@
+/* .row {
+    border: 1px solid red;
+}
+
+span {
+    border: 1px solid blue
+} */
+
+.checkout-img {
+    width: 70px;
+}
+
+.checkout_order_products_title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.product-total {
+    font-size: 17px;
+}

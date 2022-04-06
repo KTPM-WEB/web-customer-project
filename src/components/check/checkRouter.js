@@ -7,6 +7,10 @@ const checkController = require("./checkController");
 router.get("/", checkController.render);
 
 /*************************** POST methods ***************************/
+// place order
+router.post("/order", checkController.placeOrder);
+
+
 
 /*************************** PUT methods ***************************/
 

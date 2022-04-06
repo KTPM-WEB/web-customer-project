@@ -32,31 +32,40 @@
                                 <th></th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {{#each products}}
-                            <tr>
-                                <td class="product__cart__item">
-                                    <div class="product__cart__item__pic">
-                                        <img src="{{thumb}}" style="width: 150px; object-fit: contain;" alt="thumbnail">
-                                    </div>
-                                    <div class="product__cart__item__text">
-                                        <h6>{{name}}</h6>
-                                        <h5>${{price}}</h5>
-                                    </div>
-                                </td>
-
-                                <td class="quantity__item">
-                                    <div class="quantity">
-                                        <div class="pro-qty-2">
-                                            <input type="text" value="{{quantity}}">
+                        <form action="/cart/update" id="update-form" method="post">
+                            <tbody>
+                                {{#each products}}
+                                <tr>
+                                    <td class="product__cart__item">
+                                        <div class="product__cart__item__pic">
+                                            <img src="{{thumb}}" style="width: 150px; object-fit: contain;"
+                                                alt="thumbnail">
                                         </div>
-                                    </div>
-                                </td>
-                                <td class="cart__price">${{total}}</td>
-                                <td class="cart__close"><i class="fa fa-close"></i></td>
-                            </tr>
-                            {{/each}}
-                        </tbody>
+                                        <div class="product__cart__item__text">
+                                            <h6>{{name}}</h6>
+                                            <h5>${{price}}</h5>
+                                        </div>
+                                    </td>
+
+                                    <td class="quantity__item">
+                                        <div class="quantity">
+                                            <div class="pro-qty-2">
+                                                <input type="number" name="quantity" value="{{quantity}}">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="cart__price">${{total}}</td>
+                                    <td class="cart__close">
+
+                                        <a href="/cart/delete/{{_id}}">
+                                            <i class="fa fa-close"></i>
+                                        </a>
+
+                                    </td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </form>
                     </table>
                 </div>
                 <div class="row">
@@ -67,11 +76,18 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="continue__btn update__btn">
-                            <a href="/cart"><i class="fa fa-spinner"></i> Update cart</a>
+                            <a href="javascript:{}" onclick="document.getElementById('update-form').submit();">
+                                <i class="fa fa-spinner"></i>Update cart
+                            </a>
                         </div>
+
                     </div>
                 </div>
             </div>
+
+            {{!-- form --}}
+            {{!-- <form id="delete_{{@index}}" method="post" action="/cart/delete/{{_id}}?_method=DELETE"></form> --}}
+
             <div class="col-lg-4">
                 <div class="cart__discount">
                     <h6>Discount codes</h6>

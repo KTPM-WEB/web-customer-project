@@ -23,8 +23,8 @@
 			<div class="col-lg-3">
 				<div class="shop__sidebar">
 					<div class="shop__sidebar__search">
-						<form action="#">
-							<input type="text" placeholder="Search..." />
+						<form action="/product/search" method="POST">
+							<input type="text" name="name" placeholder="Search..." />
 							<button type="submit"><span class="icon_search"></span></button>
 						</form>
 					</div>
@@ -39,7 +39,7 @@
 										<div class="shop__sidebar__categories">
 											<ul class="nice-scroll">
 												{{#each categories}}
-													<li><a href="#">{{this}}</a></li>
+												<li><a href="#">{{this}}</a></li>
 												{{/each}}
 											</ul>
 										</div>
@@ -55,7 +55,7 @@
 										<div class="shop__sidebar__brand">
 											<ul>
 												{{#each brands}}
-													<li><a href="#">{{this}}</a></li>
+												<li><a href="#">{{this}}</a></li>
 												{{/each}}
 											</ul>
 										</div>
@@ -155,24 +155,6 @@
 									</div>
 								</div>
 							</div>
-							<div class="card">
-								<div class="card-heading">
-									<a data-toggle="collapse" data-target="#collapseSix">Tags</a>
-								</div>
-								<div id="collapseSix" class="collapse show" data-parent="#accordionExample">
-									<div class="card-body">
-										<div class="shop__sidebar__tags">
-											<a href="#">Product</a>
-											<a href="#">Bags</a>
-											<a href="#">Shoes</a>
-											<a href="#">Fashio</a>
-											<a href="#">Clothing</a>
-											<a href="#">Hats</a>
-											<a href="#">Accessories</a>
-										</div>
-									</div>
-								</div>
-							</div>
 						</div>
 					</div>
 				</div>
@@ -213,7 +195,12 @@
 							</div>
 							<div class="product__item__text">
 								<h6>{{name}}</h6>
-								<a href="#" class="add-cart">+ Add To Cart</a>
+								<form action="/product" id="add-form-{{@index}}" method="post">
+									<input type="hidden" name="id" value="{{_id}}">
+									<a href="javascript:{}" class="add-cart"
+										onclick="document.getElementById('add-form-{{@index}}').submit();">+ Add To
+										Cart</a>
+								</form>
 								<h5>${{price}}</h5>
 								<div class="product__color__select">
 									{{!-- <label for="pc-16">
@@ -221,7 +208,7 @@
 									</label> --}}
 									{{#each color}}
 									<label for="pc-17" style="background-color: {{this}};">
-										<input type="radio" id="pc-17"/>
+										<input type="radio" id="pc-17" />
 									</label>
 									{{/each}}
 									{{!-- <label class="grey" for="pc-18">
@@ -237,7 +224,7 @@
 					<div class="col-lg-12">
 						<div class="product__pagination">
 							{{#each buffer}}
-								{{{this}}}
+							{{{this}}}
 							{{/each}}
 							{{!-- <a class="active" href="#">1</a>
 							<a href="#">2</a>
@@ -251,7 +238,3 @@
 		</div>
 	</div>
 </section>
-
-
-
-

@@ -1,41 +1,111 @@
 const productService = require('./productService');
 const productUtils = require('./productUtils');
-const {ObjectId} = require('mongodb')
 
-/*************************** GET methods ***************************/
-// Render product page
+/************************************* GET methods *************************************/
+/**
+ * render the product page
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
 exports.render = async (req, res) => {
-    const page = parseInt(req.query.page)||1;
-    const start = (page - 1) * 9;
-    const end = start + 9;
+    try{
+        const page = parseInt(req.query.page) || 1;
+        const start = (page - 1) * 9;
+        const end = start + 9;
 
-    const products = (await productService.getAllProducts());
-    const totalPage=parseInt(products.length/9);
+        const products = (await productService.getAllProducts());
+        const totalPage = parseInt(products.length / 9);
 
-    const buffer = productUtils.paging(totalPage, page);
+        const buffer = productUtils.paging(totalPage, page);
 
-    const categories= await productService.getDistinctByField("category");
-    const brands= await productService.getDistinctByField("brand");
-    await productService.getRelatedList("Clothing");
+        const categories = await productService.getDistinctByField("category");
+        const brands = await productService.getDistinctByField("brand");
+        await productService.getRelatedList("Clothing");
 
-    res.render("product/views/products", {active: {Shop:true}, page: page, products:products.slice(start, end), categories:categories, brands:brands, buffer:buffer, totalProduct:products.length, totalPage:totalPage});
+        res.render("product/views/products", {
+            active: {Shop: true},
+            page: page,
+            products: products.slice(start, end),
+            categories: categories,
+            brands: brands,
+            buffer: buffer,
+            totalProduct: products.length,
+            totalPage: totalPage
+        });
+    }catch (err){
+        res.status(500).json({message: err.message});
+    }
+
 };
 
-// Render product detail page
+/**
+ * render product detail page
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
 exports.renderDetail = async (req, res) => {
-    const product = await productService.getProductByID(ObjectId(req.params.id));
-    const review = await  productService.getAllReviewByProductID(req.params.id);
-    const relatedProduct = await productService.getRelatedList(product.category)
-    res.render("product/views/product_detail",{product:product, review:review, relatedProduct:relatedProduct});
+    try{
+        const product = await productService.getProductByID(req.params.id);
+        const review = await productService.getAllReviewByProductID(req.params.id);
+        const relatedProduct = await productService.getRelatedList(product.category)
+        res.render("product/views/product_detail", {product: product, review: review, relatedProduct: relatedProduct});
+    }catch (err) {
+        res.status(500).json({message: err.message});
+    }
+
 };
 
-module.exports.postReview = async (req,res) =>
-{
-    if (!req.user)
-        res.redirect('/auth/login')
-    else
-    {
-        productService.createReview(req.user.username, req.body.productID,req.body.content)
-        res.redirect('/product/'+req.body.productID)
+/************************************* POST methods *************************************/
+/**
+ * post review
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
+module.exports.postReview = async (req, res) => {
+    try{
+        if (!req.user)
+            res.redirect('/auth/login')
+        else {
+            await productService.createReview(req.user.username, req.body.productID, req.body.content)
+            res.redirect('/product/' + req.body.productID)
+        }
+    }catch (err) {
+        res.status(500).json({message: err.message});
     }
 }
+
+/**
+ * add to cart
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
+module.exports.addToCart = async (req, res) => {
+    try{
+        console.log("controller add to cart");
+        console.log("req.body", req.body);
+        console.log("req.user", req.user);
+
+        req.session.user = await productService.addToCart(req.body.id, req.user._id);
+        req.session.number_product += 1;
+
+        console.log("req.user:", req.user);
+
+        res.redirect('/product');
+    }catch (err) {
+        res.status(500).json({message: err.message});
+    }
+}
+
+// search
+exports.search = async (req, res) => {
+    try {
+        const search = req.body.name;
+        await productService.getByName(search);
+    }catch (err){
+        res.status(500).json({message: err.message});
+    }
+};

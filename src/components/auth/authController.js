@@ -3,20 +3,44 @@ const passport = require("../../middlewares/passport");
 
 
 /*************************** GET methods ***************************/
-// Render Login page
+/**
+ * render login page
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
 exports.renderLogin = (req, res) => {
-    req.query.state = req.query.state === 'true';
-    res.render("auth/views/login", {message: req.query.message, state: req.query.state});
+    try {
+        req.query.state = req.query.state === 'true';
+        res.render("auth/views/login", {message: req.query.message, state: req.query.state});
+    } catch (err) {
+        res.status(500).json({message: err.message});
+    }
+
 };
 
-// Render Register page
+/**
+ * render register page
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
 exports.renderRegister = (req, res) => {
-    req.query.state = req.query.state === 'true';
-    res.render("auth/views/register", {message: req.query.message, state: req.query.state});
+    try {
+        req.query.state = req.query.state === 'true';
+        res.render("auth/views/register", {message: req.query.message, state: req.query.state});
+    } catch (err) {
+        res.status(500).json({message: err.message});
+    }
 };
 
-
-// Render Register page
+/*************************** POST methods ***************************/
+/**
+ * redirect register page
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
 exports.Register = async (req, res) => {
     try {
         const register = await service.Register(req.body);
@@ -45,30 +69,13 @@ exports.Register = async (req, res) => {
     }
 };
 
-exports.logout = async (req, res) => {
-    req.session.user = null;
-    await req.logout();
-    res.redirect('/');
-};
 
-exports.callBack = async (req, res) => {
+exports.logout = async (req, res) => {
     try {
-        await passport.authenticate('google', {}, (err, user, info) => {
-            info = info.message;
-            if (info === 'login: account dont exist') {
-                res.redirect('/auth/login?state=false&message=Account%20dont%20exist');
-            } else if (info === 'login: login success') {
-                req.session.user = user;
-                res.redirect("/");
-            } else try {
-                if (info.includes('register')) {
-                    res.redirect("/auth/register?message=" + info.replace("register: ", "").replace(" ", "%20"));
-                }
-            } catch (error) {
-                res.redirect("/auth/register?state=true&message=Create%20new%20user%20success");
-            }
-        })
-    }catch (err) {
+        req.session.user = null;
+        await req.logout();
+        res.redirect('/');
+    } catch (err) {
         res.status(500).json({message: err.message});
     }
 };

@@ -30,19 +30,23 @@ module.exports.Register = async (body) => {
         const salt = bcrypt.genSaltSync(saltRounds);
         const hash_pass = bcrypt.hashSync(body.password, salt);
 
-        /*console.log("hash_pass:", hash_pass);*/
+        // get datetime
+        const now = (new Date()).toString().split(" ");
 
         const user = {
             username: body.username,
-            firstName: "First", //test
-            lastName: "Last", //test
+            firstName: body.firstName,
+            lastName: body.lastName,
+            fullname: body.firstName + ' ' + body.lastName,
             password: hash_pass,
             email: body.email,
-            phone: "Unknown",
-            avatar_url: "https://bsnl.ch/wp-content/uploads/2019/03/avatar-default-circle.png", //default avatar
+            role: "User",
+            employed: now[2] + ' ' + now[1] + ',' + now[3],
+            address: "",
+            phone: "",
+            intro: "",
+            avatar_url: "https://res.cloudinary.com/web-hcmus/image/upload/v1648341181/Default_avatar/default-avtar_wmf6yf.jpg", //default avatar
         }
-
-        /*console.log("user:", user);*/
 
         // insert 
         await userModel.insertMany(user)
@@ -59,16 +63,30 @@ module.exports.Register = async (body) => {
 module.exports.addUserGoogle = async (profile) => {
     if (this.verifyGoogle(profile) !== 'false') {
         // create new user
+
+        //                             employed: now[2] + ' ' + now[1] + ',' + now[3],
+        //                                 address: "",
+        //                                     phone: "",
+        //                                         intro: "",
+        //                                             avatar_url: "https://res.cloudinary.com/web-hcmus/image/upload/v1648341181/Default_avatar/default-avtar_wmf6yf.jpg", //default avatar
+
+        // get datetime
+        const now = (new Date()).toString().split(" ");
+
         const user = {
-            provider: profile.provider,
             googleId: profile.id,
             username: profile.displayName,
             fullname: profile.name.familyName + ' ' + profile.name.givenName,
+            firstName: profile.name.familyName,
+            lastName: profile.name.givenName,
             email: profile.email,
-            avatar_ur: profile.picture,
-            address: profile.locale
+            role: "User",
+            employed: now[2] + ' ' + now[1] + ',' + now[3],
+            address: profile.locale || "",
+            phone: "",
+            intro: "",
+            avatar_url: profile.picture || "https://res.cloudinary.com/web-hcmus/image/upload/v1648341181/Default_avatar/default-avtar_wmf6yf.jpg", //default avatar
         }
-        /*console.log("user:", user);*/
 
         // insert
         const result = await userModel.insertMany(user)

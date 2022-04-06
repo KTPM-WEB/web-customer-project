@@ -10,17 +10,17 @@ const userModel = require('../components/auth/authModel');
 
 // authN local
 passport.use(new LocalStrategy(async function verify(username, password, cb) {
-/*    console.log('Passport verify usser');
-    console.log("username:", username);
-    console.log("password:", password);*/
+    /*    console.log('Passport verify usser');
+        console.log("username:", username);
+        console.log("password:", password);*/
 
     const user = await authService.verifyUser(username, password);
     if (user) {
-/*        console.log('login success');*/
+        /*        console.log('login success');*/
         return cb(null, user);
     }
 
-/*    console.log("login fail");*/
+    /*    console.log("login fail");*/
     return cb(null, false);
 }));
 
@@ -33,8 +33,8 @@ passport.use(new GoogleStrategy({
     passReqToCallback: true
 },
     async (req, accessToken, refreshToken, profile, cb) => {
-/*        console.log('---------');
-        console.log('Passport auth google');*/
+        // console.log('---------');
+        // console.log('Passport auth google');
         // console.log("req-query:", req.query);
         // console.log("profile:", profile);
 

@@ -35,7 +35,7 @@
 	<link rel="stylesheet" href="/css/signin_style.css" type="text/css">
 	<link rel="stylesheet" href="/css/signup_style.css" type="text/css">
 	<link rel="stylesheet" href="/css/layout_style.css" type="text/css">
-    <link rel="stylesheet" href="/css/profile.css" type="text/css">
+	<link rel="stylesheet" href="/css/profile.css" type="text/css">
 
 	<script src="/vendors/bootstrap/bootstrap.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
@@ -59,9 +59,7 @@
 					<div class="dropdown">
 						<button class="dropdown-avatar dropdown-toggle d-flex align-items-center" type="button"
 							id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<img class="avatar rounded float-left"
-								src="https://img5.thuthuatphanmem.vn/uploads/2021/08/25/background-3d-4k_085529380.jpg"
-								alt="avatar">
+							<img class="avatar rounded float-left" src="{{user.avatar_url}}" alt="avatar">
 							<span class="ml-2 name-avatar">
 								{{user.username}}
 							</span>
@@ -136,7 +134,7 @@
 	</header>
 	<!-- Header Section End -->
 
-    {{{body}}}
+	{{{body}}}
 
 	<!-- Footer Section Begin -->
 	<footer class="footer">

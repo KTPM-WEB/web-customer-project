@@ -3,9 +3,10 @@ const { default: mongoose } = require("mongoose");
 const Schema = mongoose.Schema;
 
 const user = new Schema({
-    provider: String,
     googleId: String,
     fullname: String,
+    firstName: String,
+    lastName: String,
     username: String,
     password: String,
     email: String,
@@ -14,9 +15,7 @@ const user = new Schema({
     avatar_url: String,
     address: String,
     phone: String,
-    intro: String,
-    firstName: String,
-    lastName: String
+    intro: String
 }, {
     versionKey: false // You should be aware of the outcome after set to false
 });

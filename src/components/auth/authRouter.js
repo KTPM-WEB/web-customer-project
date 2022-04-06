@@ -24,7 +24,34 @@ router.get('/login/google', passport.authenticate('google', {
 }));
 
 // get google callback
-router.get("/google/callback", authController.callBack);
+router.get("/google/callback", (req, res, next) => {
+    passport.authenticate('google', {}, (err, user, info) => {
+
+        console.log('--------------');
+        console.log("google callback");
+        console.log('user:', user);
+        console.log('info:', info);
+
+        info = info.message;
+
+
+        if (info === 'login: account dont exist') {
+            res.redirect('/auth/login?state=false&message=Account%20dont%20exist');
+        }
+        else if (info === 'login: login success') {
+            req.session.user = user;
+            res.redirect("/");
+        }
+        else try {
+            if (info.includes('register')) {
+                res.redirect("/auth/register?message=" + info.replace("register: ", "").replace(" ", "%20"));
+            }
+        }
+        catch (error) {
+            res.redirect("/auth/register?state=true&message=Create%20new%20user%20success");
+        }
+    })(req, res, next);
+});
 
 /*************************** POST methods ***************************/
 router.post("/register", authController.Register);
@@ -35,7 +62,7 @@ router.post('/login', passport.authenticate('local', {
     failureRedirect: '/auth/login?message=Account%20dont%20exist' //login fail, redirect to login page
 }));
 
-router.post('/logout',authController.logout)
+router.post('/logout', authController.logout)
 
 
 /*************************** PUT methods ***************************/

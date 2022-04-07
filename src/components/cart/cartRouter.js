@@ -12,6 +12,6 @@ router.post("/update", cartController.updateCart);
 /*************************** PUT methods ***************************/
 
 /*************************** DELETE methods ***************************/
-router.get("/delete/:productID", cartController.deleteProduct);
+// router.get("/delete/:productID", cartController.deleteProduct);
 
 module.exports = router;

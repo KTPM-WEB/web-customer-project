@@ -49,6 +49,4 @@ function addProduct(productID) {
     })
 
     alert(`Add ${productID} to cart successfully`);
-
-
 }

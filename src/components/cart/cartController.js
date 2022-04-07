@@ -7,7 +7,7 @@ const productModel = require("../product/model/productModel")
 exports.render = async (req, res) => {
     console.log("render cart");
     const user = await userModel.findById(req.user._id);
-    const products = await cartService.getProducts(user.cart);
+    // const products = await cartService.getProducts(user.cart);
 
     // console.log('-------');
     // console.log("user", user);
@@ -17,7 +17,8 @@ exports.render = async (req, res) => {
 
     // console.log("products", products);
 
-    res.render("cart/views/cart", { active: { Cart: true }, page: "cart", products, subtotal, total });
+    // res.render("cart/views/cart", { active: { Cart: true }, page: "cart", products, subtotal, total });
+    res.render("cart/views/cart", { active: { Cart: true }, page: "cart", subtotal, total });
 };
 
 exports.updateCart = async (req, res) => {

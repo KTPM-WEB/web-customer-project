@@ -4261,3 +4261,16 @@ list-type-ulli, .socials {
 		margin-bottom: 10px; } }
 
 /*# sourceMappingURL=style.css.map */
+
+.shop__sidebar__search form button {
+	color: #b7b7b7;
+	border: none;
+	background: transparent;
+	position: inherit;
+	right: 0;
+	/* padding: 0 15px; */
+	top: 0;
+	height: 100%;
+	font-size: 11px;
+	text-align: left;
+}

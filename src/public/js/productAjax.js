@@ -19,11 +19,18 @@ function sendData(e) {
             let payload = data.payload;
             $searchResult.html('');
             if (payload.length < 1) {
-                $searchResult.html('<h3>No results found</h3>');
+                $searchResult.html('<h5>No results found</h5>');
                 return;
             }
+            $searchResult
+                .append(``)
             payload.forEach((item, index) => {
-                $searchResult.append(`<li class="list-group-item text-black-20 small" value="${item._id}">${item.name} </li> <button style="background-image:'/img/icon/search.png';"></button>`);
+                $searchResult
+                    .append(`<li class="list-group-item text-black-20 small">
+                                <form id="my-form" action="/product/${item._id}" method="get">
+                                    <button class="text-black-50" onclick="document.getElementById('my-form').submit()"> ${item.name} </button> 
+                                </form>
+                            </li>`);
             })
         });
     }

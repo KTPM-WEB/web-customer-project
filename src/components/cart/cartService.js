@@ -9,7 +9,7 @@ module.exports.getProducts = async (cart) => {
     var products = [];
 
     for (let i = 0; i < productsID.length; i++) {
-        const product = await productModel.findById(productsID[i]);
+        const product = await productModel.findById(productsID[i]).lean();
 
         if (product) {
             product.quantity = cart[i].quantity;
@@ -23,7 +23,7 @@ module.exports.getProducts = async (cart) => {
 
 module.exports.deleteProduct = async (userID, productID) => {
     try {
-        var user = await userModel.findById(userID);
+        var user = await userModel.findById(userID).lean();
         var number_of_quantity_delete = 0;
         console.log("user:", user);
 
@@ -51,7 +51,7 @@ module.exports.deleteProduct = async (userID, productID) => {
             throw Error("product not exist in cart");
         }
 
-        return number_of_quantity_delete;
+        return user;
     } catch (err) {
         console.log("Err:", err);
     }

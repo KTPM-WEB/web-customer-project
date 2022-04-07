@@ -47,7 +47,6 @@ function addProduct(productID) {
     })
 
     alert(`Add ${productID} to cart successfully`);
-}
 
 function getProductByName() {
     const searchValue = document.getElementById("myInput").value;

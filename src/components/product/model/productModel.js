@@ -16,7 +16,6 @@ const product = new Schema({
     SKU: String,
     introduction: String,
     infomation: String,
-
 }, {
     versionKey: false // You should be aware of the outcome after set to false
 });

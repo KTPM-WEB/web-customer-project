@@ -25,7 +25,7 @@
 					<div class="shop__sidebar__search">
 						<form>
 							<input class="form-control" id="myInput" type="text" placeholder="Search.."
-								   onkeyup="sendData(this)"/>
+								onkeyup="sendData(this)" />
 							<ul class="list-group" id="myList">
 							</ul>
 						</form>
@@ -42,8 +42,8 @@
 											<form action="/product" method="GET">
 												<ul class="nice-scroll">
 													{{#each categories}}
-														<input type="hidden" name="category" value="{{this}}">
-														<button type="submit" class="btn btn-light">{{this}}</button>
+													<input type="hidden" name="category" value="{{this}}">
+													<button type="submit" class="btn btn-light">{{this}}</button>
 													{{/each}}
 												</ul>
 											</form>
@@ -61,8 +61,8 @@
 											<form action="/product" method="GET">
 												<ul>
 													{{#each brands}}
-														<input type="hidden" name="brand" value="{{this}}">
-														<button type="submit" class="btn btn-light">{{this}}</button>
+													<input type="hidden" name="brand" value="{{this}}">
+													<button type="submit" class="btn btn-light">{{this}}</button>
 													{{/each}}
 												</ul>
 											</form>
@@ -87,10 +87,10 @@
 														$50 - $100
 													</button>
 													<button type="submit" name="price" value="100"
-															class="btn btn-light">$100 - $150
+														class="btn btn-light">$100 - $150
 													</button>
 													<button type="submit" name="price" value="150"
-															class="btn btn-light">$150+
+														class="btn btn-light">$150+
 													</button>
 												</ul>
 											</form>
@@ -135,31 +135,31 @@
 									<div class="card-body">
 										<div class="shop__sidebar__color">
 											<label class="c-1" for="sp-1">
-												<input type="radio" id="sp-1"/>
+												<input type="radio" id="sp-1" />
 											</label>
 											<label class="c-2" for="sp-2">
-												<input type="radio" id="sp-2"/>
+												<input type="radio" id="sp-2" />
 											</label>
 											<label class="c-3" for="sp-3">
-												<input type="radio" id="sp-3"/>
+												<input type="radio" id="sp-3" />
 											</label>
 											<label class="c-4" for="sp-4">
-												<input type="radio" id="sp-4"/>
+												<input type="radio" id="sp-4" />
 											</label>
 											<label class="c-5" for="sp-5">
-												<input type="radio" id="sp-5"/>
+												<input type="radio" id="sp-5" />
 											</label>
 											<label class="c-6" for="sp-6">
-												<input type="radio" id="sp-6"/>
+												<input type="radio" id="sp-6" />
 											</label>
 											<label class="c-7" for="sp-7">
-												<input type="radio" id="sp-7"/>
+												<input type="radio" id="sp-7" />
 											</label>
 											<label class="c-8" for="sp-8">
-												<input type="radio" id="sp-8"/>
+												<input type="radio" id="sp-8" />
 											</label>
 											<label class="c-9" for="sp-9">
-												<input type="radio" id="sp-9"/>
+												<input type="radio" id="sp-9" />
 											</label>
 										</div>
 									</div>
@@ -181,45 +181,47 @@
 				</div>
 				<div class="row">
 					{{#each products.data}}
-						<div class="col-lg-4 col-md-6 col-sm-6">
-							<div class="product__item sale">
-								<div class="product__item__pic set-bg" data-setbg={{thumb}}>
-									<span class="label">Sale</span>
-									<ul class="product__hover">
-										<li><a href="#"><img src="/img/icon/heart.png" alt=""/></a></li>
-										<li><a href="#"><img src="/img/icon/compare.png" alt=""/>
+					<div class="col-lg-4 col-md-6 col-sm-6">
+						<div class="product__item sale">
+							<div class="product__item__pic set-bg" data-setbg={{thumb}}>
+								<span class="label">Sale</span>
+								<ul class="product__hover">
+									<li><a href="#"><img src="/img/icon/heart.png" alt="" /></a></li>
+									<li><a href="#"><img src="/img/icon/compare.png" alt="" />
 											<span>Compare</span></a>
-										</li>
-										<li><a href="/product/{{_id}}"><img src="/img/icon/search.png" alt=""/></a>
-										</li>
-									</ul>
-								</div>
-								<div class="product__item__text">
-									<h6>{{name}}</h6>
-									<form action="/product" id="add-form-{{@index}}" method="post">
-										<input type="hidden" name="id" value="{{_id}}">
-										<a href="javascript:{}" class="add-cart"
-										   onclick="document.getElementById('add-form-{{@index}}').submit();">+ Add
-											To
-											Cart</a>
-									</form>
-									<h5>${{price}}</h5>
-									<div class="product__color__select">
-										{{!-- <label for="pc-16">
-                                            <input type="radio" id="pc-16" />
-                                        </label> --}}
-										{{#each color}}
-											<label for="pc-17" style="background-color: {{this}};">
-												<input type="radio" id="pc-17"/>
-											</label>
-										{{/each}}
-										{{!-- <label class="grey" for="pc-18">
-                                            <input type="radio" id="pc-18" />
-                                        </label> --}}
-									</div>
+									</li>
+									<li><a href="/product/{{_id}}"><img src="/img/icon/search.png" alt="" /></a>
+									</li>
+								</ul>
+							</div>
+							<div class="product__item__text">
+								<h6>{{name}}</h6>
+								{{!-- <form action="/api/products/add/{{_id}}" id="add-form-{{@index}}" method="post">
+									--}}
+									<input type="hidden" name="id" value="{{_id}}">
+									<a href="javascript:{}" id="add-product-{{_id}}" class="add-cart"
+										onclick="addProduct('{{_id}}')">+ Add
+										To
+										Cart</a>
+									{{!--
+								</form> --}}
+								<h5>${{price}}</h5>
+								<div class="product__color__select">
+									{{!-- <label for="pc-16">
+										<input type="radio" id="pc-16" />
+									</label> --}}
+									{{#each color}}
+									<label for="pc-17" style="background-color: {{this}};">
+										<input type="radio" id="pc-17" />
+									</label>
+									{{/each}}
+									{{!-- <label class="grey" for="pc-18">
+										<input type="radio" id="pc-18" />
+									</label> --}}
 								</div>
 							</div>
 						</div>
+					</div>
 					{{/each}}
 				</div>
 				<div class="row">
@@ -228,38 +230,33 @@
 							<ul class="pagination" style="display: flex; justify-content: right;">
 
 								<li class="page-item" style="{{products.disablePrev}} ">
-									<a class="page-link" style="color: #0b0b0b"
-									   href="/product?page={{products.prev}}"
-									aria-label="Previous">
-									<span aria-hidden="true">&laquo;</span>
+									<a class="page-link" style="color: #0b0b0b" href="/product?page={{products.prev}}"
+										aria-label="Previous">
+										<span aria-hidden="true">&laquo;</span>
 									</a>
 								</li>
 
 								<li class="page-item {{products.hiddenPrev}}"
 									style="{{products.disablePrev}} {{products.numberPrev}} color: #0b0b0b;">
-									<a class="page-link" style="color: #0b0b0b"
-									   href="/product?page={{products.prev}}
+									<a class="page-link" style="color: #0b0b0b" href="/product?page={{products.prev}}
 									"> {{products.prev}} </a>
 								</li>
 
 								<li class="page-item active" style="color: #0b0b0b;">
-									<a class="page-link" style="color: #0b0b0b"
-									   href="/product?page={{products.page}}
+									<a class="page-link" style="color: #0b0b0b" href="/product?page={{products.page}}
 									"> {{products.page}} </a>
 								</li>
 
 								<li class="page-item {{products.hiddenNext}}"
 									style="{{products.disableNext}} {{products.numberNext}} color: #0b0b0b">
-									<a class="page-link" style="color: #0b0b0b"
-									   href="/product?page={{products.next}}
+									<a class="page-link" style="color: #0b0b0b" href="/product?page={{products.next}}
 									"> {{products.next}} </a>
 								</li>
 
 								<li class="page-item" style="{{products.disableNext}} color: #0b0b0b">
-									<a class="page-link" style="color: #0b0b0b"
-									   href="/product?page={{products.next}}"
-									aria-label="Next">
-									<span aria-hidden="true">&raquo;</span>
+									<a class="page-link" style="color: #0b0b0b" href="/product?page={{products.next}}"
+										aria-label="Next">
+										<span aria-hidden="true">&raquo;</span>
 									</a>
 								</li>
 							</ul>

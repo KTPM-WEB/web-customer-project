@@ -1,5 +1,5 @@
 function sendData(e) {
-    const $searchResult =  $('#myList');
+    const $searchResult = $('#myList');
     let match = e.value.match(/^[a-zA-Z0-9]*/);
     let match2 = e.value.match(/\s*/);
     if (match2[0] === e.value) {
@@ -27,5 +27,21 @@ function sendData(e) {
             })
         });
     }
+}
+
+function addProduct(productID) {
+    const url = '/api/products/add/' + productID;
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            id: productID
+        })
+    })
+
+    alert(`Add ${productID} to cart successfully`);
+
 
 }

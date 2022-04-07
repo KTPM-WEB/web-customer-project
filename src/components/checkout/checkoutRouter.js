@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const checkController = require("./checkController");
+const checkoutController = require("./checkoutController");
 
 /*************************** GET methods ***************************/
 //render check out page
-router.get("/", checkController.render);
+router.get("/", checkoutController.render);
 
 /*************************** POST methods ***************************/
 // place order
-router.post("/order", checkController.placeOrder);
+router.post("/order", checkoutController.placeOrder);
 
 
 

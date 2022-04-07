@@ -1,5 +1,5 @@
 const cartService = require("../cart/cartService");
-const checkService = require("./checkService");
+const checkoutService = require("./checkoutService");
 const userModel = require("../auth/authModel");
 const { check } = require("express-validator");
 
@@ -18,7 +18,7 @@ exports.render = async (req, res) => {
 
     // console.log("products", products);
 
-    res.render("check/views/check", { active: { Check: true }, page: "check", products, subtotal, total });
+    res.render("checkout/views/checkout", { active: { Checkout: true }, page: "checkout", products, subtotal, total });
 };
 
 exports.placeOrder = async (req, res) => {
@@ -28,7 +28,7 @@ exports.placeOrder = async (req, res) => {
 
     const user = await userModel.findById(req.user._id);
 
-    await checkService.order(user);
+    await checkoutService.order(user);
 
     // set product in cart = 0
     req.session.number_product = 0;

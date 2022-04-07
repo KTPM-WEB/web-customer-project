@@ -26,7 +26,6 @@
 						<input class="form-control" id="myInput" type="text" placeholder="Search.."
 							   onkeyup="sendData(this)"/>
 						<ul class="list-group" id="myList">
-
 						</ul>
 					</div>
 					<div class="shop__sidebar__accordion">
@@ -178,7 +177,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="row">
+				<div class="row" id="product-list">
 					{{#each products.data}}
 						<div class="col-lg-4 col-md-6 col-sm-6">
 							<div class="product__item sale">
@@ -204,17 +203,11 @@
 									</form>
 									<h5>${{price}}</h5>
 									<div class="product__color__select">
-										{{!-- <label for="pc-16">
-                                            <input type="radio" id="pc-16" />
-                                        </label> --}}
 										{{#each color}}
 											<label for="pc-17" style="background-color: {{this}};">
 												<input type="radio" id="pc-17"/>
 											</label>
 										{{/each}}
-										{{!-- <label class="grey" for="pc-18">
-                                            <input type="radio" id="pc-18" />
-                                        </label> --}}
 									</div>
 								</div>
 							</div>
@@ -265,6 +258,10 @@
 						</nav>
 					</div>
 				</div>
+			</div>
+			<button  onclick="getData()"> fetch data</button>
+			<div id="demo" class="row">
+
 			</div>
 		</div>
 	</div>

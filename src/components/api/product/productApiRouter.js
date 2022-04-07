@@ -5,5 +5,7 @@ const controller = require("./productApiController");
 
 router.post("/search", controller.search);
 
+router.get("/", controller.getdata);
+
 module.exports = router;
 

@@ -25,3 +25,13 @@ exports.search = async (req, res) => {
         res.status(500).json({message: err.message});
     }
 };
+
+exports.getdata = async (req, res) => {
+    try {
+        let search = await productService.getAllProducts();
+        search = search.slice(0, 10);
+        res.send({payload: search});
+    } catch (err) {
+        res.status(500).json({message: err.message});
+    }
+};

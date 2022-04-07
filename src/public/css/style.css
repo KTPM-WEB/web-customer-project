@@ -4274,3 +4274,8 @@ list-type-ulli, .socials {
 	font-size: 11px;
 	text-align: left;
 }
+
+.page-item.active .page-link {
+	background-color: #818a94;
+	border-color: #818a94;
+}

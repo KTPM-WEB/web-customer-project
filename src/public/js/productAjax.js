@@ -22,8 +22,6 @@ function sendData(e) {
                 $searchResult.html('<h5>No results found</h5>');
                 return;
             }
-            $searchResult
-                .append(``)
             payload.forEach((item, index) => {
                 $searchResult
                     .append(`<li class="list-group-item text-black-20 small">
@@ -34,5 +32,56 @@ function sendData(e) {
             })
         });
     }
+}
 
+
+function getData() {
+    const $product = $('#demo');
+    fetch('/api/products', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(r => r.json()).then(data => {
+        let payload = data.payload;
+        $product.html('');
+        if (payload.length < 1) {
+            $product.html('');
+            return;
+        }
+        payload.forEach((item, index) => {
+            $product
+                .append(`<div class="col-lg-4 col-md-6 col-sm-6">
+							<div class="product__item sale">
+								<div class="product__item__pic set-bg" data-setbg=${item.thumb}">
+									<span class="label">Sale</span>
+									<ul class="product__hover">
+										<li><a href="#"><img src="/img/icon/heart.png" alt=""/></a></li>
+										<li><a href="#"><img src="/img/icon/compare.png" alt=""/>
+											<span>Compare</span></a>
+										</li>
+										<li><a href="/product/${item._id}"><img src="/img/icon/search.png" alt=""/></a>
+										</li>
+									</ul>
+								</div>
+								<div class="product__item__text">
+									<h6>${item.name}</h6>
+									<form action="/product" id="add-form-${index}" method="post">
+										<input type="hidden" name="id" value="${item._id}">
+										<a href="javascript:{}" class="add-cart"
+										   onclick="document.getElementById('add-form-${index}').submit();">+ Add
+											To
+											Cart</a>
+									</form>
+									<h5>$${item.price}</h5>
+									<div class="product__color__select">
+											<label for="pc-17" style="background-color: {{this}};">
+												<input type="radio" id="pc-17"/>
+											</label>
+									</div>
+								</div>
+							</div>
+						</div>`);
+        })
+    });
 }

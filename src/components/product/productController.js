@@ -24,8 +24,7 @@ exports.render = async (req, res) => {
             categories: categories,
             brands: brands,
             products: data,
-            totalProduct: products.length,
-            quote:"123"
+            totalProduct: products.length
         });
     }catch (err){
         res.status(500).json({message: err.message});

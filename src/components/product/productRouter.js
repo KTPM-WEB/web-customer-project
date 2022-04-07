@@ -6,6 +6,9 @@ const productController = require("./productController");
 //render products page
 router.get("/", productController.render);
 
+//render products page
+router.get("/name", productController.render);
+
 //render product-detail page
 router.get("/:id", productController.renderDetail);
 
@@ -15,9 +18,6 @@ router.post("/:id/reviews", productController.postReview);
 
 //add products to cart
 router.post("/", productController.addToCart);
-
-//render product-detail page
-router.post("/search", productController.search);
 
 /*************************** PUT methods ***************************/
 

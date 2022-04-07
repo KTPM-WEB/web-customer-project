@@ -34,6 +34,7 @@ module.exports.paging = (data, page) => {
     }else {
         result.end = data.length;
     }
+    result.total = data.length;
 
     return result;
 }

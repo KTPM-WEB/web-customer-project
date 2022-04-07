@@ -91,13 +91,3 @@ module.exports.addToCart = async (req, res) => {
         res.status(500).json({message: err.message});
     }
 }
-
-// search
-exports.search = async (req, res) => {
-    try {
-        const search = req.body.name;
-        await productService.getByName(search);
-    }catch (err){
-        res.status(500).json({message: err.message});
-    }
-};

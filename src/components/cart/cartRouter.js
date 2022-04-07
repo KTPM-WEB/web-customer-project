@@ -7,7 +7,6 @@ const cartController = require("./cartController");
 router.get("/", cartController.render);
 
 /*************************** POST methods ***************************/
-router.post("/update", cartController.updateCart);
 
 /*************************** PUT methods ***************************/
 

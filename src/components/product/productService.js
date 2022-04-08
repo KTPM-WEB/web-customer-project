@@ -1,5 +1,5 @@
 const productModel = require('./model/productModel');
-const userModel = require('../auth/authModel');
+const userModel = require('../user/userModel');
 const productReview = require('./model/productReviewModel');
 
 /**
@@ -34,7 +34,33 @@ module.exports.getProductByID = (id) => {
  */
 module.exports.getProductByName = async (name) => {
     try {
-        return await productModel.find({name: {$regex: new RegExp('^' + name + '.*','i')}}).exec();
+        return await productModel.find({name: {$regex: new RegExp('^' + name + '.*', 'i')}}).exec();
+    } catch (err) {
+        throw err;
+    }
+}
+
+/**
+ * get product by field
+ * @param field {string}
+ * @param type {string}
+ * @returns {Promise<*>}
+ */
+module.exports.getProductByField = async (field, type) => {
+    try {
+        if (type === 'name') {
+            return await productModel.find({name: {$regex: new RegExp('^' + field + '.*', 'i')}}).exec();
+        } else if (type === 'category') {
+            return await productModel.find({category: {$regex: new RegExp('^' + field + '.*', 'i')}}).exec();
+        } else if (type === 'brand') {
+            return await productModel.find({brand: {$regex: new RegExp('^' + field + '.*', 'i')}}).exec();
+        } else if (type === 'price') {
+            return await productModel.find({price: {$lte: field + 49 || 1000000000, $gte: field || 150}}).exec();
+        } else if (type === 'size') {
+            return await productModel.find({size: {$regex: new RegExp('^' + field + '.*', 'i')}}).exec();
+        } else if (type === 'color') {
+            return await productModel.find({color: [{$regex: new RegExp('^' + field + '.*', 'i')}]}).exec();
+        }
     } catch (err) {
         throw err;
     }
@@ -48,19 +74,6 @@ module.exports.getProductByName = async (name) => {
 module.exports.getDistinctByField = (field) => {
     try {
         return productModel.distinct(field).lean();
-    } catch (err) {
-        throw err;
-    }
-}
-
-/**
- * get product by field
- * @param field {string}
- * @returns {Promise<*>}
- */
-module.exports.getProductByField = (field) => {
-    try {
-        return productModel.find({category: field}).lean();
     } catch (err) {
         throw err;
     }
@@ -164,7 +177,6 @@ module.exports.addToCart = async (productID, user_id, quantity = 1) => {
             return user;
         }
     } catch (err) {
-        console.log("err:", err);
         throw err;
     }
 }

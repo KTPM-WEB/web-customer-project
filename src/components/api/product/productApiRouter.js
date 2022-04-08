@@ -7,6 +7,7 @@ router.post("/add/:productID", controller.addToCart);
 
 router.post("/search", controller.search);
 
+router.get("/field", controller.renderByField);
 
 module.exports = router;
 

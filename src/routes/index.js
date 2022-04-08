@@ -13,7 +13,7 @@ router.get('/', async (req, res, next) => {
 
   req.session.number_product = number_product;
 
-  if (req.query.checkout == "true") {
+  if (req.query.checkout === "true") {
     res.render('index', { number_product, message: "Place order successful" });
   }
 

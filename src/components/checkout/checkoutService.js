@@ -1,5 +1,5 @@
 const orderModel = require("./checkoutModel");
-const userModel = require("../auth/authModel");
+const userModel = require("../user/userModel");
 
 module.exports.order = async (user) => {
     console.log("--- order ---");

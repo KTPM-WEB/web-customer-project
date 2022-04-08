@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
 
-const passport = require("./middlewares/passport");
+const passport = require("./config/passport");
 const indexRouter = require('./routes/index');
 const authRouter = require('./components/auth/authRouter');
 const userRouter = require('./components/user/userRouter');

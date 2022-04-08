@@ -2,9 +2,9 @@ require('dotenv').config()
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
-var GoogleStrategy = require('passport-google-oauth2').Strategy;
+const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const authService = require('../components/auth/authService');
-const userModel = require('../components/auth/authModel');
+const userModel = require('../components/user/userModel');
 
 
 // authN local
@@ -67,8 +67,6 @@ passport.serializeUser(function (user, cb) {
         cb(null, {
             _id: user._id,
             fullname: user.fullname,
-            firstName: user.firstName,
-            lastName: user.lastName,
             username: user.username,
             email: user.email,
             employed: user.employed,

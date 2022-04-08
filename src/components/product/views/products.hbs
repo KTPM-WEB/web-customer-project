@@ -23,12 +23,21 @@
 			<div class="col-lg-3">
 				<div class="shop__sidebar">
 					<div class="shop__sidebar__search">
-						<form>
-							<input class="form-control" id="myInput" type="text" placeholder="Search.."
-								onkeyup="sendData(this)" />
-							<ul class="list-group" id="myList">
-							</ul>
-						</form>
+						<div class="input-group">
+							<div class="col-12">
+								<input class="form-control" id="myInput" type="text" name="name" placeholder="Search.."
+									   onkeyup="sendData(this)"/>
+							</div>
+							<div class="col-6">
+								<button class="btn btn-outline-secondary"
+										onclick="getProductByField(document.getElementById('myInput').value,'name')"
+										type="button"><i
+										class="fa fa-search"></i></button>
+							</div>
+						</div>
+						<ul class="list-group" id="myList">
+
+						</ul>
 					</div>
 					<div class="shop__sidebar__accordion">
 						<div class="accordion" id="accordionExample">
@@ -39,14 +48,20 @@
 								<div id="collapseOne" class="collapse show" data-parent="#accordionExample">
 									<div class="card-body">
 										<div class="shop__sidebar__categories">
-											<form action="/product" method="GET">
-												<ul class="nice-scroll">
-													{{#each categories}}
-													<input type="hidden" name="category" value="{{this}}">
-													<button type="submit" class="btn btn-light">{{this}}</button>
-													{{/each}}
-												</ul>
-											</form>
+											<ul class="nice-scroll">
+												<button type="button"
+														onclick="getProductByField('Accessories','category')"
+														class="btn btn-light">Accessories
+												</button>
+												<button type="button"
+														onclick="getProductByField('Bags','category')"
+														class="btn btn-light">Bags
+												</button>
+												<button type="button"
+														onclick="getProductByField('Clothing','category')"
+														class="btn btn-light">Clothing
+												</button>
+											</ul>
 										</div>
 									</div>
 								</div>
@@ -58,14 +73,23 @@
 								<div id="collapseTwo" class="collapse show" data-parent="#accordionExample">
 									<div class="card-body">
 										<div class="shop__sidebar__brand">
-											<form action="/product" method="GET">
-												<ul>
-													{{#each brands}}
-													<input type="hidden" name="brand" value="{{this}}">
-													<button type="submit" class="btn btn-light">{{this}}</button>
-													{{/each}}
-												</ul>
-											</form>
+											<ul>
+												<button type="button" onclick="getProductByField('brand1', 'brand')"
+														class="btn btn-light">brand1
+												</button>
+												<button type="button" onclick="getProductByField('brand2', 'brand')"
+														class="btn btn-light">brand2
+												</button>
+												<button type="button" onclick="getProductByField('brand3', 'brand')"
+														class="btn btn-light">brand3
+												</button>
+												<button type="button" onclick="getProductByField('brand4', 'brand')"
+														class="btn btn-light">brand4
+												</button>
+												<button type="button" onclick="getProductByField('brand5', 'brand')"
+														class="btn btn-light">brand5
+												</button>
+											</ul>
 										</div>
 									</div>
 								</div>
@@ -78,22 +102,24 @@
 								<div id="collapseThree" class="collapse show" data-parent="#accordionExample">
 									<div class="card-body">
 										<div class="shop__sidebar__price">
-											<form action="/product" method="GET">
-												<ul>
-													<button type="submit" name="price" value="0" class="btn btn-light">
-														$0 - $50
-													</button>
-													<button type="submit" name="price" value="50" class="btn btn-light">
-														$50 - $100
-													</button>
-													<button type="submit" name="price" value="100"
-														class="btn btn-light">$100 - $150
-													</button>
-													<button type="submit" name="price" value="150"
-														class="btn btn-light">$150+
-													</button>
-												</ul>
-											</form>
+											<ul>
+												<button type="button" name="price" value="0" class="btn btn-light"
+														onclick="getProductByField(0,'price')">
+													$0 - $50
+												</button>
+												<button type="button" name="price" value="50" class="btn btn-light"
+														onclick="getProductByField(50,'price')">
+													$50 - $100
+												</button>
+												<button type="button" name="price" value="100"
+														class="btn btn-light"
+														onclick="getProductByField(100,'price')">$100 - $150
+												</button>
+												<button type="button" name="price" value="150"
+														class="btn btn-light"
+														onclick="getProductByField(null,'price')">$150+
+												</button>
+											</ul>
 										</div>
 									</div>
 								</div>
@@ -105,24 +131,33 @@
 								<div id="collapseFour" class="collapse show" data-parent="#accordionExample">
 									<div class="card-body">
 										<div class="shop__sidebar__size">
-											<form action="/product" method="GET">
-												<button type="submit" name="size" value="XS" class="btn btn-light">XS
-												</button>
-												<button type="submit" name="size" value="S" class="btn btn-light">S
-												</button>
-												<button type="submit" name="size" value="M" class="btn btn-light">M
-												</button>
-												<button type="submit" name="size" value="L" class="btn btn-light">L
-												</button>
-												<button type="submit" name="size" value="XL" class="btn btn-light">XL
-												</button>
-												<button type="submit" name="size" value="2XL" class="btn btn-light">
-													2XL
-												</button>
-												<button type="submit" name="size" value="3XL" class="btn btn-light">
-													3XL
-												</button>
-											</form>
+											<button type="button" name="size" value="XS" class="btn btn-light"
+													onclick="getProductByField('XS','size')">XS
+											</button>
+											<button type="button" name="size" value="S" class="btn btn-light"
+													onclick="getProductByField('S','size')">S
+											</button>
+											<button type="button" name="size" value="M" class="btn btn-light"
+													onclick="getProductByField('M','size')">M
+											</button>
+											<button type="button" name="size" value="L" class="btn btn-light"
+													onclick="getProductByField('L','size')">L
+											</button>
+											<button type="button" name="size" value="XL" class="btn btn-light"
+													onclick="getProductByField('XL','size')">XL
+											</button>
+											<button type="button" name="size" value="2XL" class="btn btn-light"
+													onclick="getProductByField('2XL','size')">
+												2XL
+											</button>
+											<button type="button" name="size" value="3XL" class="btn btn-light"
+													onclick="getProductByField('3XL','size')">
+												3XL
+											</button>
+											<button type="button" name="size" value="3XL" class="btn btn-light"
+													onclick="getProductByField('4XL','size')">
+												4XL
+											</button>
 										</div>
 									</div>
 								</div>
@@ -135,31 +170,31 @@
 									<div class="card-body">
 										<div class="shop__sidebar__color">
 											<label class="c-1" for="sp-1">
-												<input type="radio" id="sp-1" />
+												<input type="radio" id="sp-1"/>
 											</label>
 											<label class="c-2" for="sp-2">
-												<input type="radio" id="sp-2" />
+												<input type="radio" id="sp-2"/>
 											</label>
 											<label class="c-3" for="sp-3">
-												<input type="radio" id="sp-3" />
+												<input type="radio" id="sp-3"/>
 											</label>
 											<label class="c-4" for="sp-4">
-												<input type="radio" id="sp-4" />
+												<input type="radio" id="sp-4"/>
 											</label>
 											<label class="c-5" for="sp-5">
-												<input type="radio" id="sp-5" />
+												<input type="radio" id="sp-5"/>
 											</label>
 											<label class="c-6" for="sp-6">
-												<input type="radio" id="sp-6" />
+												<input type="radio" id="sp-6"/>
 											</label>
 											<label class="c-7" for="sp-7">
-												<input type="radio" id="sp-7" />
+												<input type="radio" id="sp-7"/>
 											</label>
 											<label class="c-8" for="sp-8">
-												<input type="radio" id="sp-8" />
+												<input type="radio" id="sp-8"/>
 											</label>
 											<label class="c-9" for="sp-9">
-												<input type="radio" id="sp-9" />
+												<input type="radio" id="sp-9"/>
 											</label>
 										</div>
 									</div>
@@ -170,7 +205,7 @@
 				</div>
 			</div>
 			<div class="col-lg-9">
-				<div class="shop__product__option">
+				<div class="shop__product__option" id="stat-end">
 					<div class="row">
 						<div class="col-lg-6 col-md-6 col-sm-6">
 							<div class="shop__product__option__left">
@@ -179,84 +214,62 @@
 						</div>
 					</div>
 				</div>
-				<div class="row">
+				<div class="row" id="product-list">
 					{{#each products.data}}
-					<div class="col-lg-4 col-md-6 col-sm-6">
-						<div class="product__item sale">
-							<div class="product__item__pic set-bg" data-setbg={{thumb}}>
-								<span class="label">Sale</span>
-								<ul class="product__hover">
-									<li><a href="#"><img src="/img/icon/heart.png" alt="" /></a></li>
-									<li><a href="#"><img src="/img/icon/compare.png" alt="" />
-											<span>Compare</span></a>
-									</li>
-									<li><a href="/product/{{_id}}"><img src="/img/icon/search.png" alt="" /></a>
-									</li>
-								</ul>
-							</div>
-							<div class="product__item__text">
-								<h6>{{name}}</h6>
-								{{!-- <form action="/api/products/add/{{_id}}" id="add-form-{{@index}}" method="post">
-									--}}
+						<div class="col-lg-4 col-md-6 col-sm-6">
+							<div class="card" style="width: 18rem;">
+								<a href="/product/{{_id}}">
+									<img class="card-img-top" src="{{thumb}}" alt="Card image cap">
+								</a>
+								<div class="card-body">
+									<h6>{{name}}</h6>
 									<input type="hidden" name="id" value="{{_id}}">
 									<a href="javascript:{}" id="add-product-{{_id}}" class="add-cart"
-										onclick="addProduct('{{_id}}')">+ Add
+									   onclick="addProduct('{{_id}}')">+ Add
 										To
 										Cart</a>
-									{{!--
-								</form> --}}
-								<h5>${{price}}</h5>
-								<div class="product__color__select">
-									{{!-- <label for="pc-16">
-										<input type="radio" id="pc-16" />
-									</label> --}}
-									{{#each color}}
-									<label for="pc-17" style="background-color: {{this}};">
-										<input type="radio" id="pc-17" />
-									</label>
-									{{/each}}
-									{{!-- <label class="grey" for="pc-18">
-										<input type="radio" id="pc-18" />
-									</label> --}}
+									<h5>${{price}}</h5>
+									<div class="product__color__select">
+										{{#each color}}
+											<label for="pc-17" style="background-color: {{this}};">
+
+											</label>
+										{{/each}}
+									</div>
+
 								</div>
 							</div>
 						</div>
-					</div>
 					{{/each}}
 				</div>
 				<div class="row">
 					<div class="col-lg-12">
-						<nav aria-label="Page navigation example">
+						<nav aria-label="Page navigation example" id="pagination">
 							<ul class="pagination" style="display: flex; justify-content: right;">
-
 								<li class="page-item" style="{{products.disablePrev}} ">
 									<a class="page-link" style="color: #0b0b0b" href="/product?page={{products.prev}}"
-										aria-label="Previous">
-										<span aria-hidden="true">&laquo;</span>
+									aria-label="Previous">
+									<span aria-hidden="true">&laquo;</span>
 									</a>
 								</li>
-
 								<li class="page-item {{products.hiddenPrev}}"
 									style="{{products.disablePrev}} {{products.numberPrev}} color: #0b0b0b;">
 									<a class="page-link" style="color: #0b0b0b" href="/product?page={{products.prev}}
 									"> {{products.prev}} </a>
 								</li>
-
 								<li class="page-item active" style="color: #0b0b0b;">
 									<a class="page-link" style="color: #0b0b0b" href="/product?page={{products.page}}
 									"> {{products.page}} </a>
 								</li>
-
 								<li class="page-item {{products.hiddenNext}}"
 									style="{{products.disableNext}} {{products.numberNext}} color: #0b0b0b">
 									<a class="page-link" style="color: #0b0b0b" href="/product?page={{products.next}}
 									"> {{products.next}} </a>
 								</li>
-
 								<li class="page-item" style="{{products.disableNext}} color: #0b0b0b">
 									<a class="page-link" style="color: #0b0b0b" href="/product?page={{products.next}}"
-										aria-label="Next">
-										<span aria-hidden="true">&raquo;</span>
+									aria-label="Next">
+									<span aria-hidden="true">&raquo;</span>
 									</a>
 								</li>
 							</ul>

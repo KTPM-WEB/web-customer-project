@@ -1,4 +1,4 @@
-const userModel = require("../components/auth/authModel")
+const userModel = require("../components/user/userModel");
 
 module.exports.getNumberProduct = async (userID) => {
     var number_product = 0;

@@ -1,6 +1,4 @@
 const service = require('./authService');
-const passport = require("../../middlewares/passport");
-
 
 /*************************** GET methods ***************************/
 /**

@@ -1,4 +1,4 @@
-const userModel = require("../../auth/authModel");
+const userModel = require("../../user/userModel");
 const checkoutModel = require("../../checkout/checkoutModel");
 const userService = require("../../user/userService");
 

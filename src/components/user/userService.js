@@ -1,4 +1,4 @@
-const userModel = require('../auth/authModel');
+const userModel = require('./userModel');
 const orderModel = require("../checkout/checkoutModel");
 const productService = require("../product/productService");
 
@@ -61,6 +61,28 @@ module.exports.getUserOrder = async (userID) => {
 module.exports.updateUser = (username, field, new_value) => {
     try {
         return userModel.findOneAndUpdate({ username: username }, { $set: { [field]: new_value } }, { new: true });
+    } catch (err) {
+        throw err;
+    }
+}
+
+/**
+ * display profile page
+ * @param id
+ * @param cart
+ * @param total
+ * @returns {Promise<*>}
+ */
+module.exports.updateCart = async (id, cart, total) => {
+    try {
+        await userModel.findByIdAndUpdate(
+            { _id: id },
+            {
+                $set: {
+                    cart: cart,
+                    total: total
+                }
+            });
     } catch (err) {
         throw err;
     }

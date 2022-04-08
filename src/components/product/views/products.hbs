@@ -29,7 +29,8 @@
 									   onkeyup="sendData(this)"/>
 							</div>
 							<div class="col-6">
-								<button class="btn btn-outline-secondary" onclick="getProductByName()" type="button"><i class="fa fa-search"></i></button>
+								<button class="btn btn-outline-secondary" onclick="getProductByName()" type="button"><i
+										class="fa fa-search"></i></button>
 							</div>
 						</div>
 						<ul class="list-group" id="myList">
@@ -45,14 +46,20 @@
 								<div id="collapseOne" class="collapse show" data-parent="#accordionExample">
 									<div class="card-body">
 										<div class="shop__sidebar__categories">
-											<form action="/product" method="GET">
-												<ul class="nice-scroll">
-													{{#each categories}}
-														<input type="hidden" name="category" value="{{this}}">
-														<button type="submit" class="btn btn-light">{{this}}</button>
-													{{/each}}
-												</ul>
-											</form>
+											<ul class="nice-scroll">
+												<button type="button"
+														onclick="getProductByField('Accessories','category')"
+														class="btn btn-light">Accessories
+												</button>
+												<button type="button"
+														onclick="getProductByField('Bags','category')"
+														class="btn btn-light">Bags
+												</button>
+												<button type="button"
+														onclick="getProductByField('Clothing','category')"
+														class="btn btn-light">Clothing
+												</button>
+											</ul>
 										</div>
 									</div>
 								</div>
@@ -64,14 +71,23 @@
 								<div id="collapseTwo" class="collapse show" data-parent="#accordionExample">
 									<div class="card-body">
 										<div class="shop__sidebar__brand">
-											<form action="/product" method="GET">
-												<ul>
-													{{#each brands}}
-														<input type="hidden" name="brand" value="{{this}}">
-														<button type="submit" class="btn btn-light">{{this}}</button>
-													{{/each}}
-												</ul>
-											</form>
+											<ul>
+												<button type="button" onclick="getProductByField('brand1', 'brand')"
+														class="btn btn-light">brand1
+												</button>
+												<button type="button" onclick="getProductByField('brand2', 'brand')"
+														class="btn btn-light">brand2
+												</button>
+												<button type="button" onclick="getProductByField('brand3', 'brand')"
+														class="btn btn-light">brand3
+												</button>
+												<button type="button" onclick="getProductByField('brand4', 'brand')"
+														class="btn btn-light">brand4
+												</button>
+												<button type="button" onclick="getProductByField('brand5', 'brand')"
+														class="btn btn-light">brand5
+												</button>
+											</ul>
 										</div>
 									</div>
 								</div>
@@ -84,22 +100,24 @@
 								<div id="collapseThree" class="collapse show" data-parent="#accordionExample">
 									<div class="card-body">
 										<div class="shop__sidebar__price">
-											<form action="/product" method="GET">
-												<ul>
-													<button type="submit" name="price" value="0" class="btn btn-light">
-														$0 - $50
-													</button>
-													<button type="submit" name="price" value="50" class="btn btn-light">
-														$50 - $100
-													</button>
-													<button type="submit" name="price" value="100"
-															class="btn btn-light">$100 - $150
-													</button>
-													<button type="submit" name="price" value="150"
-															class="btn btn-light">$150+
-													</button>
-												</ul>
-											</form>
+											<ul>
+												<button type="button" name="price" value="0" class="btn btn-light"
+														onclick="getProductByField(0,'price')">
+													$0 - $50
+												</button>
+												<button type="button" name="price" value="50" class="btn btn-light"
+														onclick="getProductByField(50,'price')">
+													$50 - $100
+												</button>
+												<button type="button" name="price" value="100"
+														class="btn btn-light"
+														onclick="getProductByField(100,'price')">$100 - $150
+												</button>
+												<button type="button" name="price" value="150"
+														class="btn btn-light"
+														onclick="getProductByField(null,'price')">$150+
+												</button>
+											</ul>
 										</div>
 									</div>
 								</div>
@@ -111,24 +129,33 @@
 								<div id="collapseFour" class="collapse show" data-parent="#accordionExample">
 									<div class="card-body">
 										<div class="shop__sidebar__size">
-											<form action="/product" method="GET">
-												<button type="submit" name="size" value="XS" class="btn btn-light">XS
-												</button>
-												<button type="submit" name="size" value="S" class="btn btn-light">S
-												</button>
-												<button type="submit" name="size" value="M" class="btn btn-light">M
-												</button>
-												<button type="submit" name="size" value="L" class="btn btn-light">L
-												</button>
-												<button type="submit" name="size" value="XL" class="btn btn-light">XL
-												</button>
-												<button type="submit" name="size" value="2XL" class="btn btn-light">
-													2XL
-												</button>
-												<button type="submit" name="size" value="3XL" class="btn btn-light">
-													3XL
-												</button>
-											</form>
+											<button type="button" name="size" value="XS" class="btn btn-light"
+													onclick="getProductByField('XS','size')">XS
+											</button>
+											<button type="button" name="size" value="S" class="btn btn-light"
+													onclick="getProductByField('S','size')">S
+											</button>
+											<button type="button" name="size" value="M" class="btn btn-light"
+													onclick="getProductByField('M','size')">M
+											</button>
+											<button type="button" name="size" value="L" class="btn btn-light"
+													onclick="getProductByField('L','size')">L
+											</button>
+											<button type="button" name="size" value="XL" class="btn btn-light"
+													onclick="getProductByField('XL','size')">XL
+											</button>
+											<button type="button" name="size" value="2XL" class="btn btn-light"
+													onclick="getProductByField('2XL','size')">
+												2XL
+											</button>
+											<button type="button" name="size" value="3XL" class="btn btn-light"
+													onclick="getProductByField('3XL','size')">
+												3XL
+											</button>
+											<button type="button" name="size" value="3XL" class="btn btn-light"
+													onclick="getProductByField('4XL','size')">
+												4XL
+											</button>
 										</div>
 									</div>
 								</div>
@@ -175,7 +202,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-lg-9"  >
+			<div class="col-lg-9">
 				<div class="shop__product__option" id="stat-end">
 					<div class="row">
 						<div class="col-lg-6 col-md-6 col-sm-6">
@@ -188,19 +215,11 @@
 				<div class="row" id="product-list">
 					{{#each products.data}}
 						<div class="col-lg-4 col-md-6 col-sm-6">
-							<div class="product__item sale">
-								<div class="product__item__pic set-bg" data-setbg={{thumb}}>
-									<span class="label">Sale</span>
-									<ul class="product__hover">
-										<li><a href="#"><img src="/img/icon/heart.png" alt=""/></a></li>
-										<li><a href="#"><img src="/img/icon/compare.png" alt=""/>
-											<span>Compare</span></a>
-										</li>
-										<li><a href="/product/{{_id}}"><img src="/img/icon/search.png" alt=""/></a>
-										</li>
-									</ul>
-								</div>
-								<div class="product__item__text">
+							<div class="card" style="width: 18rem;">
+								<a href="/product/{{_id}}">
+									<img class="card-img-top" src="{{thumb}}" alt="Card image cap">
+								</a>
+								<div class="card-body">
 									<h6>{{name}}</h6>
 									<input type="hidden" name="id" value="{{_id}}">
 									<a href="javascript:{}" id="add-product-{{_id}}" class="add-cart"
@@ -211,10 +230,11 @@
 									<div class="product__color__select">
 										{{#each color}}
 											<label for="pc-17" style="background-color: {{this}};">
-												<input type="radio" id="pc-17"/>
+
 											</label>
 										{{/each}}
 									</div>
+
 								</div>
 							</div>
 						</div>
@@ -258,14 +278,5 @@
 		</div>
 	</div>
 	<script src="/vendors/jquery/jquery-3.3.1.min.js"></script>
-	<script src="/vendors/magnific-popup/jquery.magnific-popup.min.js"></script>
-	<script src="/vendors/slicknav/jquery.slicknav.js"></script>
-	<script src="/vendors/nice-select/jquery.nice-select.min.js"></script>
-	<script src="/vendors/jquery.nicescroll.min.js"></script>
-	<script src="/vendors/jquery.countdown.min.js"></script>
-	<script src="/vendors/mixitup.min.js"></script>
-	<script src="/vendors/owl-carousel/owl.carousel.min.js"></script>
-	<script src="/js/main.js"></script>
-	<script src="/vendors/bootstrap/bootstrap.min.js"></script>
 	<script src="/js/productAjax.js"></script>
 </section>

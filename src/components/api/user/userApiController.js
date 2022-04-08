@@ -1,32 +1,49 @@
-const userModel = require("../../user/userModel");
-const checkoutModel = require("../../checkout/checkoutModel");
+const checkoutService = require("../../checkout/check-outService");
 const userService = require("../../user/userService");
 
+/**
+ * get order history
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
 exports.getOrder = async (req, res) => {
-    console.log("--- user api get order ---");
-
-    const orders = await userService.getUserOrder(req.user._id);
-
-    res.send(orders);
+    try{
+        const orders = await userService.getUserOrder(req.user._id);
+        res.send(orders);
+    }catch (err){
+        res.status(500).json({ message: err.message });
+    }
 }
 
+/**
+ * delete order
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
 exports.deleteOrder = async (req, res) => {
-    console.log("--- user api delete order ---");
-    console.log("req.params.orderID:", req.params.orderID);
+    try {
+        await checkoutService.deleteOrderById(req.params.orderID);
+        res.status(200);
+    }catch (err){
+        res.status(500).json({ message: err.message });
+    }
 
-    await checkoutModel.findByIdAndDelete(req.params.orderID);
-
-    res.status(200);
 }
 
+/**
+ * get profile of user
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
 exports.getProfile = async (req, res) => {
-    console.log("--- user api get profile ---");
-
-    const user = await userModel.findById(req.user._id).lean();
-
-    console.log("user: ", user);
-
-    res.send(user);
-
+    try {
+        const user = await userService.getUserByID(req.user._id);
+        res.send(user);
+    }catch (err){
+        res.status(500).json({ message: err.message });
+    }
 }
 

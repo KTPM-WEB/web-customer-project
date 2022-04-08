@@ -18,7 +18,12 @@ module.exports.render = async (req, res) => {
     }
 };
 
-
+/**
+ * delete a product from the cart
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
 module.exports.deleteProduct = async (req, res) => {
     try {
         const number_of_quantity_delete = await cartService.deleteProduct(req.user._id, req.params.productID);

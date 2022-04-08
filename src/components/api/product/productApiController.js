@@ -1,17 +1,28 @@
 const productService = require("../../product/productService");
 const productUtils = require("../../product/productUtils");
 
+/**
+ * search name of product
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
 exports.search = async (req, res) => {
     try {
         let payload = req.body.payload.trim();
         let search = await productService.getProductByName(payload);
-
         res.send({ payload: search });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 };
 
+/**
+ * render product detail
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
 exports.render = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
@@ -23,6 +34,12 @@ exports.render = async (req, res) => {
     }
 };
 
+/**
+ * render product by field
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
 exports.renderByField = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
@@ -36,18 +53,17 @@ exports.renderByField = async (req, res) => {
     }
 };
 
+/**
+ * add product to cart
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
 exports.addToCart = async (req, res) => {
     try {
-        // console.log("--- products api add to cart ---");
-        // console.log("req.body", req.body);
-        // console.log("req.user", req.user);
-
         req.session.user = await productService.addToCart(req.body.id, req.user._id);
         req.session.number_product += 1;
-
-        console.log("req.user:", req.user);
         res.status(200);
-
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

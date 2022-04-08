@@ -1,6 +1,6 @@
 const productModel = require('./model/productModel');
 const userModel = require('../user/userModel');
-const productReview = require('./model/productReviewModel');
+const ReviewModel = require('./model/productReviewModel');
 
 /**
  * get all product
@@ -102,7 +102,7 @@ module.exports.getRelatedList = async (categoryValue) => {
  */
 module.exports.getAllReviewByProductID = (productID) => {
     try {
-        return productReview.find({productID: productID}).lean();
+        return ReviewModel.find({productID: productID}).lean();
     } catch (err) {
         throw err;
     }
@@ -117,7 +117,7 @@ module.exports.getAllReviewByProductID = (productID) => {
  */
 module.exports.createReview = async (userName, productID, content) => {
     try {
-        await new productReview({
+        await new ReviewModel({
             userName: userName,
             productID: productID,
             content: content,
@@ -139,7 +139,7 @@ module.exports.createReview = async (userName, productID, content) => {
 module.exports.addToCart = async (productID, user_id, quantity = 1) => {
     try {
         console.log("service add to cart");
-        var user = await userModel.findOne({_id: user_id});
+        let user = await userModel.findOne({_id: user_id});
         const product = await productModel.findOne({_id: productID});
 
         if (user && product) {

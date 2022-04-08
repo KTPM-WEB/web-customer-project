@@ -1,6 +1,5 @@
-const express = require("express");
-const router = express.Router();
-const checkoutController = require("./checkoutController");
+const router = require("express").Router();
+const checkoutController = require("./check-outController");
 
 /*************************** GET methods ***************************/
 //render check out page
@@ -9,8 +8,6 @@ router.get("/", checkoutController.render);
 /*************************** POST methods ***************************/
 // place order
 router.post("/order", checkoutController.placeOrder);
-
-
 
 /*************************** PUT methods ***************************/
 

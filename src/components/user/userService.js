@@ -1,6 +1,6 @@
 const userModel = require('./userModel');
-const orderModel = require("../checkout/checkoutModel");
-const productService = require("../product/productService");
+const orderModel = require("../checkout/check-outModel");
+const productModel = require("../product/model/productModel");
 
 /**
  * get user by ID
@@ -15,20 +15,21 @@ module.exports.getUserByID = (userID) => {
     }
 }
 
-
+/**
+ * get user order by ID
+ * @param userID {string}
+ * @returns {Promise<*>}
+ */
 module.exports.getUserOrder = async (userID) => {
     try {
-        console.log("--- user service get order ---");
         const orders = await orderModel.find({ customer_id: userID }).lean();
 
-
-
         for (let i = 0; i < orders.length; i++) {
-            var total = 0;
-            var products = orders[i].products;
+            let total = 0;
+            let products = orders[i].products;
 
             for (let j = 0; j < products.length; j++) {
-                const product = await productService.getProductByID(products[j].product_id);
+                const product = await productModel.findById(products[j].product_id).lean();
 
                 products[j].name = product.name;
                 products[j].price = product.price;
@@ -40,16 +41,12 @@ module.exports.getUserOrder = async (userID) => {
             orders[i].thumb = products[0].img;
             orders[i].total = total;
         }
-
-        console.log("orders: ", orders);
-
         return orders;
 
     } catch (err) {
         throw err;
     }
 }
-
 
 /**
  * display profile page
@@ -83,6 +80,32 @@ module.exports.updateCart = async (id, cart, total) => {
                     total: total
                 }
             });
+    } catch (err) {
+        throw err;
+    }
+}
+
+/**
+ * check if user exist
+ * @param username{string}
+ * @returns {Promise<*>}
+ */
+module.exports.checkUserName = async (username) => {
+    try {
+        return await userModel.findOne({ username: username });
+    } catch (err) {
+        throw err;
+    }
+}
+
+/**
+ * check if gmail exist
+ * @param email{string}
+ * @returns {Promise<*>}
+ */
+module.exports.checkEmail = async (email) => {
+    try {
+        return await userModel.findOne({ email: email });
     } catch (err) {
         throw err;
     }

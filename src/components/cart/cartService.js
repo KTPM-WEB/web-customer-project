@@ -1,6 +1,11 @@
 const productModel = require("../product/model/productModel");
 const userModel = require("../user/userModel");
 
+/**
+ * delete a product from the cart
+ * @param cart{Object}
+ * @returns {Promise<*>}
+ */
 module.exports.getProducts = async (cart) => {
     try{
         const productsID = await cart.map(item => item.productID);
@@ -22,30 +27,22 @@ module.exports.getProducts = async (cart) => {
 
 }
 
+/**
+ * delete a product from the cart
+ * @param userID{String}
+ * @param productID{String}
+ * @returns {Promise<*>}
+ */
 module.exports.deleteProduct = async (userID, productID) => {
     try {
         const user = await userModel.findById(userID).lean();
-        let number_of_quantity_delete = 0;
-        // product exist in cart
         let itemIdx = user.cart.findIndex(item => item.productID === productID);
-
         if (itemIdx > -1) {
-            // product exist in cart, delete quantity
-            // console.log("delete quantity");
-            number_of_quantity_delete = user.cart[itemIdx].quantity;
-
-            // console.log("number_of_quantity_delete:", number_of_quantity_delete);
-            // console.log('user.total:', user.total);
-            // console.log('user.cart[itemIdx].total:', user.cart[itemIdx].total);
-
             const product = await productModel.findById(productID);
-
             user.total = Math.round((user.total - user.cart[itemIdx].quantity * product.price) * 100) / 100;
             user.cart.splice(itemIdx, 1);
-
             await userModel.findByIdAndUpdate({ _id: userID }, { $set: { cart: user.cart, total: user.total } });
         }
-
         return user;
     } catch (err) {
        throw err;

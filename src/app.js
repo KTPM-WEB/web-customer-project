@@ -13,7 +13,7 @@ const userRouter = require('./components/user/userRouter');
 const shopRouter = require('./components/product/productRouter');
 const contactRouter = require('./components/contact/contactRouter');
 const cartRouter = require('./components/cart/cartRouter');
-const checkoutRouter = require('./components/checkout/checkoutRouter')
+const checkoutRouter = require('./components/checkout/check-outRouter')
 const apiRouter = require('./components/api/apiRouter');
 
 const db = require('./config/database.config');

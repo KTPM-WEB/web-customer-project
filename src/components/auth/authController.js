@@ -67,7 +67,12 @@ exports.Register = async (req, res) => {
     }
 };
 
-
+/**
+ * redirect register page
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
 exports.logout = async (req, res) => {
     try {
         req.session.user = null;

@@ -1,5 +1,5 @@
 const cartService = require("../cart/cartService");
-const checkoutService = require("./checkoutService");
+const checkoutService = require("./check-outService");
 const userService = require("../user/userService");
 
 /*************************** GET methods ***************************/

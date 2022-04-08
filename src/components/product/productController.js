@@ -69,25 +69,25 @@ module.exports.postReview = async (req, res) => {
     }
 }
 
-/**
- * add to cart
- * @param req
- * @param res
- * @returns {Promise<*>}
- */
-module.exports.addToCart = async (req, res) => {
-    try{
-        console.log("controller add to cart");
-        console.log("req.body", req.body);
-        console.log("req.user", req.user);
-
-        req.session.user = await productService.addToCart(req.body.id, req.user._id);
-        req.session.number_product += 1;
-
-        console.log("req.user:", req.user);
-
-        res.redirect('/product');
-    }catch (err) {
-        res.status(500).json({message: err.message});
-    }
-}
+// /**
+//  * add to cart
+//  * @param req
+//  * @param res
+//  * @returns {Promise<*>}
+//  */
+// module.exports.addToCart = async (req, res) => {
+//     try{
+//         console.log("controller add to cart");
+//         console.log("req.body", req.body);
+//         console.log("req.user", req.user);
+//
+//         req.session.user = await productService.addToCart(req.body.id, req.user._id);
+//         req.session.number_product += 1;
+//
+//         console.log("req.user:", req.user);
+//
+//         res.redirect('/product');
+//     }catch (err) {
+//         res.status(500).json({message: err.message});
+//     }
+// }

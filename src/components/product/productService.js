@@ -1,5 +1,5 @@
 const productModel = require('./model/productModel');
-const userModel = require('../auth/authModel');
+const userModel = require('../user/userModel');
 const productReview = require('./model/productReviewModel');
 
 /**
@@ -177,7 +177,6 @@ module.exports.addToCart = async (productID, user_id, quantity = 1) => {
             return user;
         }
     } catch (err) {
-        console.log("err:", err);
         throw err;
     }
 }

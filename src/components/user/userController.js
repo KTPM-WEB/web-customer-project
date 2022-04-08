@@ -18,13 +18,13 @@ module.exports.displayProfile = async (req, res) => {
     }
 }
 
+/************************************* PUT methods *************************************/
 /**
  * change profile of user
  * @param req
  * @param res
  * @returns {Promise<*>}
  */
-/************************************* PUT methods *************************************/
 module.exports.editProfile = async (req, res) => {
     try {
         await userService.updateUser(req.user.username, req.body.field, req.body.value)

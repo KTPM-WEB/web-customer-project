@@ -1,4 +1,4 @@
-const userModel = require('./authModel');
+const userModel = require('../user/userModel');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -22,17 +22,15 @@ module.exports.Register = async (body) => {
         if (email) return "email_exist";
 
         /*console.log('req.body: ', body);*/
-        const salt = bcrypt.genSaltSync(saltRounds);
-        const hash_pass = bcrypt.hashSync(body.password, salt);
+        const salt = await bcrypt.genSaltSync(saltRounds);
+        const hash_pass = await bcrypt.hashSync(body.password, salt);
 
         // get datetime
         const now = (new Date()).toString().split(" ");
 
         const user = {
             username: body.username,
-            firstName: body.firstName,
-            lastName: body.lastName,
-            fullname: body.firstName + ' ' + body.lastName,
+            fullname: '',
             password: hash_pass,
             email: body.email,
             role: "User",
@@ -43,10 +41,8 @@ module.exports.Register = async (body) => {
             total: 0,
             avatar_url: "https://res.cloudinary.com/web-hcmus/image/upload/v1648341181/Default_avatar/default-avtar_wmf6yf.jpg", //default avatar
         }
-
         // insert 
         await userModel.insertMany(user)
-
         return "success";
 
     } catch (err) {
@@ -63,16 +59,11 @@ module.exports.Register = async (body) => {
 module.exports.addUserGoogle = async (profile) => {
     try {
         if (!this.verifyGoogle(profile)) {
-            // create new user
-            // get datetime
             const now = (new Date()).toString().split(" ");
-
             const user = {
                 googleId: profile.id,
                 username: profile.displayName,
                 fullname: profile.name.familyName + ' ' + profile.name.givenName,
-                firstName: profile.name.familyName,
-                lastName: profile.name.givenName,
                 email: profile.email,
                 role: "User",
                 employed: now[2] + ' ' + now[1] + ',' + now[3],
@@ -82,7 +73,6 @@ module.exports.addUserGoogle = async (profile) => {
                 total: 0,
                 avatar_url: profile.picture || "https://res.cloudinary.com/web-hcmus/image/upload/v1648341181/Default_avatar/default-avtar_wmf6yf.jpg", //default avatar
             }
-
             // insert
             const result = await userModel.insertMany(user)
 
@@ -105,10 +95,9 @@ module.exports.addUserGoogle = async (profile) => {
  */
 module.exports.verifyUser = async (username, password) => {
     try {
-        /*console.log('verify usser');*/
         const user = await userModel.findOne({username: username});
         if (!user) return false;
-        if (bcrypt.compareSync(password, user.password)) return user;
+        else if (await bcrypt.compareSync(password, user.password)) return user;
         return false;
     } catch (err) {
         throw err;
@@ -121,14 +110,9 @@ module.exports.verifyUser = async (username, password) => {
  * @returns {Promise<user||false>}
  */
 module.exports.verifyGoogle = async (profile) => {
-    /*console.log('Verify google');*/
-    // console.log("accessToken:", accessToken);
-    // console.log("refreshToken:", refreshToken);
-    // Check if google profile exist.
     try{
         if (profile.id) {
             const user = await userModel.findOne({googleId: profile.id})
-            /*console.log("find user: ", user);*/
             if (user) return user;
         }
         return false;

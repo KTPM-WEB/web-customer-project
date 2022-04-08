@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const authController = require("./authController");
-const passport = require("../../middlewares/passport");
+const passport = require("../../config/passport");
 
 /*************************** GET methods ***************************/
 //render login page
@@ -56,7 +56,7 @@ router.get("/google/callback", (req, res, next) => {
 /*************************** POST methods ***************************/
 router.post("/register", authController.Register);
 
-// get login infor from client
+// get login info from client
 router.post('/login', passport.authenticate('local', {
     successRedirect: '/', //login success, save user in req.user
     failureRedirect: '/auth/login?message=Account%20dont%20exist' //login fail, redirect to login page

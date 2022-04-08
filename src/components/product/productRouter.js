@@ -16,8 +16,8 @@ router.get("/:id", productController.renderDetail);
 // post review to product
 router.post("/:id/reviews", productController.postReview);
 
-//add products to cart
-router.post("/", productController.addToCart);
+// //add products to cart
+// router.post("/", productController.addToCart);
 
 /*************************** PUT methods ***************************/
 

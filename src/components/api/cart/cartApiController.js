@@ -1,15 +1,14 @@
 const cartService = require("../../cart/cartService")
-const userModel = require("../../auth/authModel");
-const productModel = require("../../product/model/productModel");
+const userService = require("../../user/userService");
+const productService = require("../../product/productService");
 
 exports.getProducts = async (req, res) => {
     try {
-        console.log("--- cart api: get products ---");
-        const user = await userModel.findById(req.user._id).lean();
+        const user = await userService.getUserByID(req.user._id);
 
         const products = await cartService.getProducts(user.cart);
 
-        var total = 0;
+        let total = 0;
 
         console.log("products:", products);
         for (let i = 0; i < products.length; i++) {
@@ -28,7 +27,7 @@ exports.getProducts = async (req, res) => {
 exports.changeQuantity = async (req, res) => {
     try {
         console.log("--- cart api: change quantity ---");
-        const user = await userModel.findById(req.user._id);
+        const user = await productService.getProductByID(req.user._id);
 
         const products = user.cart;
 
@@ -37,7 +36,7 @@ exports.changeQuantity = async (req, res) => {
 
         // product exist in cart, update quantity
         if (itemIdx > -1) {
-            if (req.params.type == 'plus') {
+            if (req.params.type === 'plus') {
                 products[itemIdx].quantity += 1;
             } else {
                 products[itemIdx].quantity -= 1;
@@ -45,13 +44,13 @@ exports.changeQuantity = async (req, res) => {
                     products[itemIdx].quantity = 1;
                 }
             }
-            const product = await productModel.findById(req.params.productID).lean();
+            const product = await productService.getProductByID(req.params.productID);
 
             products[itemIdx].total = products[itemIdx].quantity * product.price;
         }
 
 
-        var total = 0;
+        let total = 0;
 
         console.log("products:", products);
         for (let i = 0; i < products.length; i++) {
@@ -61,14 +60,7 @@ exports.changeQuantity = async (req, res) => {
         // round total
         total = Math.round(total * 100) / 100;
 
-        await userModel.findByIdAndUpdate(
-            { _id: req.user._id },
-            {
-                $set: {
-                    cart: products,
-                    total: total
-                }
-            });
+        await userService.updateCart(user._id, products, total);
 
         console.log("send products:", products);
         console.log("total:", total);

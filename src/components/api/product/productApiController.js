@@ -12,12 +12,24 @@ exports.search = async (req, res) => {
     }
 };
 
+exports.render = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const getProducts = await productService.getAllProducts();
+        const products = productUtils.paging(getProducts, page);
+        res.json(products);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
 exports.renderByField = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const getProducts = await productService.getProductByField(req.query.field, req.query.type);
         const products = productUtils.paging(getProducts, page);
         products.field = req.query.field;
+        products.type = req.query.type;
         res.json(products);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -26,9 +38,9 @@ exports.renderByField = async (req, res) => {
 
 exports.addToCart = async (req, res) => {
     try {
-        console.log("--- products api add to cart ---");
-        console.log("req.body", req.body);
-        console.log("req.user", req.user);
+        // console.log("--- products api add to cart ---");
+        // console.log("req.body", req.body);
+        // console.log("req.user", req.user);
 
         req.session.user = await productService.addToCart(req.body.id, req.user._id);
         req.session.number_product += 1;

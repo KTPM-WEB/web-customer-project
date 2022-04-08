@@ -9,5 +9,7 @@ router.post("/search", controller.search);
 
 router.get("/field", controller.renderByField);
 
+router.get("/", controller.render);
+
 module.exports = router;
 

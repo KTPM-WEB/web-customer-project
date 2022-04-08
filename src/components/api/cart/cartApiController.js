@@ -84,13 +84,11 @@ exports.changeQuantity = async (req, res) => {
 exports.deleteProduct = async (req, res) => {
     try {
         console.log("--- products api delete product from cart ---");
-        console.log("req.user:", req.user);
-        console.log("req.params:", req.params);
 
         const user = await cartService.deleteProduct(req.user._id, req.params.productID);
 
-
         console.log("send user:", user);
+
         res.send(user.cart);
 
     } catch (err) {

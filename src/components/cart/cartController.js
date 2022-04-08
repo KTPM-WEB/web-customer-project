@@ -7,10 +7,6 @@ const productModel = require("../product/model/productModel")
 exports.render = async (req, res) => {
     console.log("render cart");
     const user = await userModel.findById(req.user._id);
-    // const products = await cartService.getProducts(user.cart);
-
-    // console.log('-------');
-    // console.log("user", user);
 
     const total = user.total;
 

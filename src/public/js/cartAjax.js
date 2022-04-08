@@ -11,6 +11,7 @@ function loadProduct() {
     }).then(r => r.json()).then(data => {
         console.log('-- Ajax get products --');
         console.log("data: ", data);
+
         const $product_table = $("#cart-table");
 
         console.log("data.products: ", data.products);
@@ -51,7 +52,6 @@ function loadProduct() {
 
             $product_table.append($.parseHTML(html));
 
-            // update total
             $("#cart-total").html(data.total);
         });
     });

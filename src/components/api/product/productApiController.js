@@ -12,18 +12,6 @@ exports.search = async (req, res) => {
     }
 };
 
-exports.renderByName = async (req, res) => {
-    try{
-        const page = parseInt(req.query.page) || 1;
-        const getProducts = await productService.getProductByName(req.query.name);
-        const products = productUtils.paging(getProducts, page);
-        products.name = req.query.name;
-        res.json(products);
-    }catch (err){
-        res.status(500).json({message: err.message});
-    }
-};
-
 exports.renderByField = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;

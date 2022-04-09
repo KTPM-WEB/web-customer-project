@@ -10,17 +10,9 @@ const productUtils = require('./productUtils');
  */
 exports.render = async (req, res) => {
     try {
-        const page = parseInt(req.query.page) || 1;
-        const products = (await productService.getAllProducts());
-        const data = productUtils.paging(products, page);
-        res.render("product/views/products", {
-            active: { Shop: true },
-            page: page,
-            products: data,
-            totalProduct: products.length
-        });
+        res.render("product/views/products", {active: {Shop: true}});
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({message: err.message});
     }
 };
 
@@ -38,9 +30,9 @@ exports.renderDetail = async (req, res) => {
 
         console.log("relatedProduct:", relatedProduct);
 
-        res.render("product/views/product_detail", { product: product, review: review, relatedProduct: relatedProduct });
+        res.render("product/views/product_detail", {product: product, review: review, relatedProduct: relatedProduct});
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({message: err.message});
     }
 
 };
@@ -61,7 +53,7 @@ module.exports.postReview = async (req, res) => {
             res.redirect('/product/' + req.body.productID)
         }
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({message: err.message});
     }
 }
 

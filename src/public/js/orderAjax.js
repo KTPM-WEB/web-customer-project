@@ -15,7 +15,7 @@ function loadUserOrder() {
 
 
         data.forEach((item, index) => {
-            var order_cart = `
+            let order_cart = `
                 <div class="card user-card-full">
                     <div class="row w-100">
                         <div class="col-10">

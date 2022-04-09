@@ -17,7 +17,7 @@ router.get('/', async (req, res, next) => {
     res.render('index', { number_product, message: "Place order successful" });
   }
 
-  const products = (await productService.getAllProducts()).slice(0, 6);
+  const products = (await productService.getAllProducts()).slice(0, 8);
 
   res.render('index', { number_product, products });
 });

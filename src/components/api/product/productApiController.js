@@ -27,7 +27,7 @@ exports.render = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const getProducts = await productService.getAllProducts();
-        const products = productUtils.paging(getProducts, page);
+        const products = productUtils.paging(getProducts, page, 6);
         res.json(products);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -44,7 +44,7 @@ exports.renderByField = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const getProducts = await productService.getProductByField(req.query.field, req.query.type);
-        const products = productUtils.paging(getProducts, page);
+        const products = productUtils.paging(getProducts, page, 6);
         products.field = req.query.field;
         products.type = req.query.type;
         res.json(products);
@@ -61,14 +61,9 @@ exports.renderByField = async (req, res) => {
  */
 exports.addToCart = async (req, res) => {
     try {
-        console.log("service add to cart");
         req.session.user = await productService.addToCart(req.body.id, req.user._id, req.body.quantity);
-
         req.session.number_product += parseInt(req.body.quantity);
-
         const number = req.session.number_product;
-
-        console.log("req number:", req.session.number_product);
         res.send({ number });
     } catch (err) {
         res.status(500).json({ message: err.message });

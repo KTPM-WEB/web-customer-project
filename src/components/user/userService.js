@@ -1,6 +1,7 @@
 const userModel = require('./userModel');
 const orderModel = require("../checkout/check-outModel");
 const productModel = require("../product/model/productModel");
+const bcrypt = require("bcrypt")
 
 /**
  * get user by ID
@@ -14,6 +15,36 @@ module.exports.getUserByID = (userID) => {
         throw err;
     }
 }
+
+/**
+*  change password of user
+*
+* @param newPass {string}
+* @param id {string}
+* @returns {Promise<void>}
+*/
+module.exports.changePassword = async (id, oldPass, newPass) => {
+    try {
+        const user = await userModel.findById(id)
+        console.log("user", user)
+
+        if (await !bcrypt.compareSync(oldPass, user.password)) {
+            return 'err400';
+        }
+
+        await bcrypt.hash(newPass, 4).then(async (hash) => {
+            await userModel.findOneAndUpdate(
+                { _id: id },
+                { $set: { password: hash } });
+        });
+
+        console.log('change password done');
+        return 'succ200';
+    } catch (err) {
+        throw err;
+    }
+
+};
 
 /**
  * get user order by ID

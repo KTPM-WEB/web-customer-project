@@ -8,10 +8,10 @@ const userService = require("../../user/userService");
  * @returns {Promise<*>}
  */
 exports.getOrder = async (req, res) => {
-    try{
+    try {
         const orders = await userService.getUserOrder(req.user._id);
         res.send(orders);
-    }catch (err){
+    } catch (err) {
         res.status(500).json({ message: err.message });
     }
 }
@@ -26,7 +26,7 @@ exports.deleteOrder = async (req, res) => {
     try {
         await checkoutService.deleteOrderById(req.params.orderID);
         res.status(200);
-    }catch (err){
+    } catch (err) {
         res.status(500).json({ message: err.message });
     }
 
@@ -42,8 +42,23 @@ exports.getProfile = async (req, res) => {
     try {
         const user = await userService.getUserByID(req.user._id);
         res.send(user);
-    }catch (err){
+    } catch (err) {
         res.status(500).json({ message: err.message });
     }
 }
 
+exports.changePass = async (req, res) => {
+    try {
+        console.log("-- change pass --");
+        console.log("req.body:", req.body);
+        console.log("req.user:", req.user);
+
+        const stt = await userService.changePassword(req.user._id, req.body.old_pass, req.body.new_pass);
+
+        console.log("stt:", stt);
+
+        res.send({ stt });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+}

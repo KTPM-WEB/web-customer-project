@@ -7,7 +7,88 @@
                         <div class="card user-card-full">
                             <div class="row mx-0" style="height: 600px;">
                                 <div class="col-sm-4 p-0" id="img-container">
-                                    <img id="profile-avatar" src="" class="img-radius" alt="User-Profile-Image">
+                                    <img id="profile-avatar" src="" class="img-radius mb-4" alt="User-Profile-Image">
+                                    <input type="file" id="input-product-image"
+                                        class="form-control mb-3 p-0 py-1 mx-auto w-75" name="avatar_url"
+                                        accept=".jpg,.jpeg,.png">
+
+                                    <!-- Button trigger modal -->
+                                    <div class="mx-auto w-75 mb-5">
+                                        <button type="button" class="btn btn-primary px-4 w-100" style="height:50px;"
+                                            data-toggle="modal" data-target="#change-password">
+                                            Change password
+                                        </button>
+                                    </div>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="change-password" tabindex="-1" role="dialog"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Change password</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="card-body">
+                                                        <div>
+                                                            <b>Old password:</b> <span class="red-start">*</span>
+                                                            <div class="input-group mb-3">
+                                                                <input type="password" class="form-control"
+                                                                    placeholder="Old password" id="old-passwd"
+                                                                    aria-label="Passwd" name="old_passwd">
+                                                                <span class="input-group-text">
+                                                                    <i class="far fa-eye-slash"
+                                                                        id="toggleOldPassword-passwd"></i>
+                                                                </span>
+                                                            </div>
+                                                            <b>New password:</b> <span class="red-start">*</span>
+                                                            <div class="mb-4">
+                                                                <div class="input-group mb-2">
+                                                                    <input type="password" class="form-control"
+                                                                        placeholder="New password" id="new-passwd"
+                                                                        aria-label="Passwd" name="new_passwd">
+                                                                    <span class="input-group-text">
+                                                                        <i class="far fa-eye-slash"
+                                                                            id="toggleNewPassword-passwd"></i>
+                                                                    </span>
+                                                                </div>
+                                                                <div class="input-group mb-1">
+                                                                    <input type="password" class="form-control"
+                                                                        id="confirm-passwd"
+                                                                        placeholder="Confirm new password"
+                                                                        aria-label="Passwd" name="confirm_passwd">
+                                                                    <span class="input-group-text">
+                                                                        <i class="far fa-eye-slash"
+                                                                            id="togglePassword-confirmPasswd"></i>
+                                                                    </span>
+                                                                </div>
+
+                                                                <span id="change-passwd-announce"
+                                                                    style="color: red; visibility:hidden">
+                                                                    New password and confirm password are not match
+                                                                </span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="w-100 d-flex flex-row justify-content-end ">
+                                                            <button type="button" id="cancle-pass"
+                                                                class="btn btn-secondary me-2" data-dismiss="modal"
+                                                                aria-label="Close" onclick="clearForm()">Cancle
+                                                            </button>
+                                                            <button type="submit" id="submit-pass"
+                                                                class="btn btn-primary ml-2" onmousedown="changePass()">
+                                                                Submit
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-sm-8">
                                     <div class="card-block">
@@ -108,5 +189,119 @@
     </div>
 </section>
 
-<script src="/js/profile.js"></script>
-<script src="/js/userAjax.js"></script>
+{{!-- load image from <file> to <img> --}}
+    <script>
+        document.getElementById('input-product-image').onchange = function (evt) {
+            const tgt = evt.target || window.event.srcElement,
+                files = tgt.files;
+
+            // FileReader support
+            if (FileReader && files && files.length) {
+                const fr = new FileReader();
+                fr.onload = function () {
+                    document.getElementById("profile-avatar").src = fr.result;
+                }
+                fr.readAsDataURL(files[0]);
+            }
+
+            // Not supported
+            else {
+                // fallback -- perhaps submit the input to an iframe and temporarily store
+                // them on the server until the user's session ends.
+            }
+        }
+    </script>
+
+    {{!-- show - hide password --}}
+    <script>
+        const toggleOldPassword = document.querySelector("#toggleOldPassword-passwd");
+        const toggleNewPassword = document.querySelector("#toggleNewPassword-passwd");
+        const toggleConfirmPassword = document.querySelector("#togglePassword-confirmPasswd");
+        const old_password = document.querySelector("#old-passwd");
+        const new_password = document.querySelector("#new-passwd");
+        const confirm_password = document.querySelector("#confirm-passwd");
+
+        toggleOldPassword.addEventListener("click", function () {
+            // toggle the type attribute
+            const type = old_password.getAttribute("type") === "password" ? "text" : "password";
+            old_password.setAttribute("type", type);
+            // toggle the eye icon
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+
+        });
+
+        toggleNewPassword.addEventListener("click", function () {
+            // toggle the type attribute
+            const type = new_password.getAttribute("type") === "password" ? "text" : "password";
+            new_password.setAttribute("type", type);
+            // toggle the eye icon
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+
+        });
+
+        toggleConfirmPassword.addEventListener("click", function () {
+            // toggle the type attribute
+            const type = confirm_password.getAttribute("type") === "password" ? "text" : "password";
+            confirm_password.setAttribute("type", type);
+            // toggle the eye icon
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+
+        });
+    </script>
+
+    {{!-- change password script --}}
+    <script>
+        const newPass = document.getElementById("new-passwd");
+        const confirmPass = document.getElementById("confirm-passwd");
+
+        function checkSamePass() {
+            var announce = document.getElementById("change-passwd-announce");
+            const submit_btn = document.getElementById('submit-pass');
+            $("#change-passwd-announce").text("New password and confirm password are not match!");
+
+            if (newPass.value != confirmPass.value) {
+                announce.style.visibility = "visible";
+                submit_btn.innerHTML = '<i class="fa fa-times" aria-hidden="true"></i>&nbsp; Submit';
+                submit_btn.disabled = true;
+                return false;
+            } else {
+                submit_btn.innerHTML = 'Submit';
+                submit_btn.disabled = false;
+                return true;
+            }
+        }
+
+        confirmPass.addEventListener("blur", function () {
+            var announce = document.getElementById("change-passwd-announce");
+            const submit_btn = document.getElementById('submit-pass');
+
+            if (newPass.value != confirmPass.value) {
+                announce.style.visibility = "visible";
+                submit_btn.innerHTML = '<i class="fa fa-times" aria-hidden="true"></i>&nbsp; Submit';
+                submit_btn.disabled = true;
+            } else {
+                submit_btn.innerHTML = 'Submit';
+                submit_btn.disabled = false;
+            }
+        });
+
+        function clearForm() {
+            console.log("clear form")
+            const submit_btn = document.getElementById('submit-pass');
+
+            submit_btn.innerHTML = 'Submit';
+            submit_btn.disabled = false;
+
+            $("#old-passwd").val("")
+            $("#new-passwd").val("");
+            $("#confirm-passwd").val("");
+
+            document.getElementById("change-passwd-announce").style.visibility = "hidden";
+        }
+    </script>
+
+    <script src="/js/profile.js"></script>
+    <script src="/js/userAjax.js"></script>

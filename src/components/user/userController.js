@@ -38,6 +38,25 @@ module.exports.renderOrder = async (req, res) => {
     }
 }
 
+/************************************* POST methods *************************************/
+/**
+ * change profile avatar
+ * @param req
+ * @param res
+ * @returns { Promise <*>}
+ **/
+module.exports.changeAvatar = async (req, res) => {
+    try {
+
+        console.log("--- user controller change avatar ---");
+        await userService.changeAvatar(req.user._id, req.file);
+
+        res.redirect('back');
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+}
+
 /************************************* PUT methods *************************************/
 /**
  * change profile of user

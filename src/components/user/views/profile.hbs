@@ -8,9 +8,43 @@
                             <div class="row mx-0" style="height: 600px;">
                                 <div class="col-sm-4 p-0" id="img-container">
                                     <img id="profile-avatar" src="" class="img-radius mb-4" alt="User-Profile-Image">
-                                    <input type="file" id="input-product-image"
-                                        class="form-control mb-3 p-0 py-1 mx-auto w-75" name="avatar_url"
-                                        accept=".jpg,.jpeg,.png">
+
+                                    <div class="mx-auto w-75 mb-3">
+                                        <button type="button" class="btn btn-primary px-4 w-100" style="height:50px;"
+                                            data-toggle="modal" data-target="#modalChangeAvatar">
+                                            Change avatar
+                                        </button>
+                                    </div>
+                                    <form action="/user/profile/change-avatar" method="POST" id="change-avatar-form"
+                                        enctype="multipart/form-data">
+                                        <div class="modal fade" id="modalChangeAvatar" tabindex="-1"
+                                            aria-labelledby="modalChangeAvatar" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Change avatar
+                                                        </h5>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <b>Avatar:</b>
+                                                        <input type="file" id="input-product-image"
+                                                            class="form-control p-0 pt-1" name="avatar_url"
+                                                            accept=".jpg,.jpeg,.png">
+                                                        <div class="w-100 d-flex flex-row justify-content-end mt-3">
+                                                            <button type="reset" id="cancle-btn"
+                                                                class="btn btn-secondary me-2" data-dismiss="modal"
+                                                                aria-label="Close">Cancle
+                                                            </button>
+                                                            <button type="submit" id="submit-img-btn"
+                                                                class="ml-2 btn btn-primary">
+                                                                Submit
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
 
                                     <!-- Button trigger modal -->
                                     <div class="mx-auto w-75 mb-5">

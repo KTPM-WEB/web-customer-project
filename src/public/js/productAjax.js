@@ -34,7 +34,7 @@ function sendData(e) {
     }
 }
 
-function addProduct(productID) {
+function addProduct(productID, quantity = 1) {
     const url = '/api/products/add/' + productID;
     fetch(url, {
         method: 'POST',
@@ -42,9 +42,15 @@ function addProduct(productID) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            id: productID
+            id: productID,
+            quantity: quantity
         })
-    })
+    }).then(r => r.json()).then(data => {
+        console.log("-- Ajax add product --");
+        console.log("data:", data);
+
+        $("#number-product-incart").html(data.number);
+    });
 
     alert(`Add ${productID} to cart successfully`);
 }
@@ -71,7 +77,8 @@ function getProductByField(field, type, page) {
                 return;
             }
 
-            $start.append(`<div class="row">
+            $start.append(`
+            <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6">
                     <div class="shop__product__option__left">
                         <p>Showing ${products.start}–${products.end} of ${products.total} results</p>
@@ -80,20 +87,22 @@ function getProductByField(field, type, page) {
             </div>`);
 
             products.data.forEach((item, index) => {
-                const str = `<div class="col-lg-4 col-md-6 col-sm-6">
+                const str = `
+                <div class="col-lg-4 col-md-6 col-sm-6">
                     <div class="card" style="width: 18rem;">
                         <a href="/product/${item._id}">
                             <img class="card-img-top" src="${item.thumb}" alt="Card image cap">
                         </a>
-                        <div class="card-body">
-                            <h6>${item.name}</h6>
-                            <input type="hidden" name="id" value="${item._id}">
-                                <a href="javascript:{}" id="add-product-${item._id}" class="add-cart"
-                                   onClick="addProduct('${item._id}')">+ Add
-                                    To
-                                    Cart</a>
-                                <h5>$${item.price}</h5>
-
+                        <div class="card-body" id="card-body">
+                            <a href="/product/${item._id}">
+                                <h5 id="product-name"><b>${item.name}</b></h5>
+                            </a>
+                            <input type="hidden" name="id" value="${item._id}" />
+                            <a href="javascript:{}" id="add-product-${item._id}" class="add-cart"
+                                onClick="addProduct('${item._id}')">
+                                + Add to cart
+                            </a>
+                            <h5>$${item.price}</h5>
                         </div>
                     </div>
                 </div>`;

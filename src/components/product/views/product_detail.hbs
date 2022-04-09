@@ -1,6 +1,6 @@
 <!-- Shop Details Section Begin -->
 <section class="shop-details">
-		<div class="product__details__pic">
+	<div class="product__details__pic">
 		<div class="container" style="height: 720px;">
 			<div class="row">
 				<div class="col-lg-12">
@@ -60,19 +60,26 @@
 			<div class="row d-flex justify-content-center">
 				<div class="col-lg-8">
 					<div class="product__details__text">
-						<h4>{{product.name}}</h4>
+						<h2 class="mb-1"><b>{{product.name}}</b></h2>
 
-						<h3>${{product.price}} <span>${{product.price}}</span></h3>
+						<h3 class="mb-3">${{product.price}} <span>${{product.price}}</span></h3>
 						<p>{{product.introduction}}</p>
+						<div class="product__details__last__option mb-4" style="margin-top: -60px !important; ">
+							<ul>
+								<li><span>SKU:</span> {{product.SKU}}</li>
+								<li><span>Brand:</span> {{product.brand}}</li>
+								<li><span>Categories:</span> {{product.category}}</li>
+							</ul>
+						</div>
 						<div class="product__details__option">
 							<div class="product__details__option__size">
 								{{#if product.size}}
-									<span>Size:</span>
-									{{#each product.size}}
-									<label for="{{this}}">{{this}}
-										<input type="radio" id="{{this}}">
-									</label>
-									{{/each}}
+								<span>Size:</span>
+								{{#each product.size}}
+								<label for="{{this}}">{{this}}
+									<input type="radio" id="{{this}}">
+								</label>
+								{{/each}}
 								{{/if}}
 							</div>
 							<div class="product__details__option__color">
@@ -84,27 +91,19 @@
 								{{/each}}
 							</div>
 						</div>
-						<div class="product__details__cart__option">
+						<div class="product__details__cart__option mb-4">
 							<div class="quantity">
-								<div class="pro-qty">
-									<input type="text" value="1">
+								<div class="pro-qty-2">
+									<input id="input-quantity" type="number" value="1"
+										style="width: 50px; text-align:center;">
+
 								</div>
 							</div>
-							<a href="#" class="primary-btn">add to cart</a>
+							<a href="#" onclick="addProduct('{{product._id}}', $('#input-quantity').val())"
+								class="primary-btn">add to cart</a>
 						</div>
-						<div class="product__details__btns__option">
-							<a href="#"><i class="fa fa-heart"></i> add to wishlist</a>
-							<a href="#"><i class="fa fa-exchange"></i> Add To Compare</a>
-						</div>
-						<div class="product__details__last__option">
-							<h5><span>Guaranteed Safe Checkout</span></h5>
-							<img src="/img/shop-details/details-payment.png" alt="">
-							<ul>
-								<li><span>SKU:</span> {{product.SKU}}</li>
-								<li><span>Brand:</span> {{product.brand}}</li>
-								<li><span>Categories:</span> {{product.category}}</li>
-							</ul>
-						</div>
+
+
 					</div>
 				</div>
 			</div>
@@ -114,7 +113,7 @@
 						<ul class="nav nav-tabs" role="tablist">
 							<li class="nav-item">
 								<a class="nav-link active" data-toggle="tab" href="#tabs-description"
-								   role="tab">Description</a>
+									role="tab">Description</a>
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" data-toggle="tab" href="#tabs-comment" role="tab">Reviews</a>
@@ -127,37 +126,38 @@
 										<h5>Products Infomation</h5>
 										<p>{{product.infomation}}</p>
 									</div>
-									<div class="product__details__tab__content__item">
-										<h5>Material used</h5>
-										<p>{{product.infomation}}</p>
-									</div>
 								</div>
 							</div>
 							<div class="tab-pane" id="tabs-comment" role="tabpanel">
 								<div class="row product__details__tab__content">
-                                    <div class="product__details__tab__content__item col-5">
-                                        <h2 style="font-weight: bold">Review</h2>
-                                        <form id="comment-form" method="post" action="/product/{{product._id}}/reviews">
-                                            <input type="hidden" name="productID" value="{{product._id}}">
-                                            <input id="content" type="text" name="content" placeholder="Write a review here...">
-                                            <input class="primary-btn" type="submit" value="Review">
-                                        </form>
-                                    </div>
+									<div class="product__details__tab__content__item col-5">
+										<h2 style="font-weight: bold">Review</h2>
+										<form id="comment-form" method="post" action="/product/{{product._id}}/reviews">
+											<input type="hidden" name="productID" value="{{product._id}}">
+											<input id="content" type="text" name="content"
+												placeholder="Write a review here...">
+											<input class="primary-btn" type="submit" value="Review">
+										</form>
+									</div>
 
-                                    {{#if review}}
-                                    <div class="product__details__tab__content__item col-7" style="position: relative; left: 120px">
-                                        {{#each review}}
-                                            <h3>{{userName}}</h3>
-                                            <span style="font-size:10px; font-weight: lighter; font-style: italic; color: gray; position: relative; top:-10px">{{createdAt}}</span>
-                                            <p style="font-size: 16px">{{content}}</p>
-                                            <hr>
-                                        {{/each}}
-                                    </div>
-                                    {{else}}
-                                    <div class="product__details__tab__content__item col-7" style="text-align: center; padding-top: 70px">
-                                        <p style="font-weight: bold; font-size: 20px">Sorry, this product doesn't have any reviews yet...</p>
-                                    </div>
-                                    {{/if}}
+									{{#if review}}
+									<div class="product__details__tab__content__item col-7"
+										style="position: relative; left: 120px">
+										{{#each review}}
+										<h3>{{userName}}</h3>
+										<span
+											style="font-size:10px; font-weight: lighter; font-style: italic; color: gray; position: relative; top:-10px">{{createdAt}}</span>
+										<p style="font-size: 16px">{{content}}</p>
+										<hr>
+										{{/each}}
+									</div>
+									{{else}}
+									<div class="product__details__tab__content__item col-7"
+										style="text-align: center; padding-top: 70px">
+										<p style="font-weight: bold; font-size: 20px">Sorry, this product doesn't have
+											any reviews yet...</p>
+									</div>
+									{{/if}}
 								</div>
 							</div>
 						</div>
@@ -184,14 +184,16 @@
 					<div class="product__item__pic set-bg" data-setbg="{{thumb}}">
 						<span class="label">New</span>
 						<ul class="product__hover">
-							<li><a href="#"><img src="/img/icon/heart.png" alt=""></a></li>
-							<li><a href="#"><img src="/img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-							<li><a href="/product/{{_id}}"><img src="/img/icon/search.png" alt=""></a></li>
+							<li>
+								<a href="/product/{{_id}}">
+									<img src="/img/icon/search.png" alt="">
+								</a>
+							</li>
 						</ul>
 					</div>
 					<div class="product__item__text">
 						<h6>{{name}}</h6>
-						<a href="#" class="add-cart">+ Add To Cart</a>
+						<a href="#" class="add-cart" onclick="addProduct('{{_id}}')">+ Add To Cart</a>
 						<h5>${{price}}</h5>
 						<div class="product__color__select">
 							{{#each relatedProduct.color}}
@@ -203,10 +205,10 @@
 					</div>
 				</div>
 			</div>
-		{{/each}}
+			{{/each}}
 		</div>
 
-		</div>
+	</div>
 	</div>
 </section>
 <!-- Related Section End -->

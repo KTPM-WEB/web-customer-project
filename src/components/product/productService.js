@@ -34,7 +34,7 @@ module.exports.getProductByID = (id) => {
  */
 module.exports.getProductByName = async (name) => {
     try {
-        return await productModel.find({name: {$regex: new RegExp('^' + name + '.*', 'i')}}).exec();
+        return await productModel.find({ name: { $regex: new RegExp('^' + name + '.*', 'i') } }).exec();
     } catch (err) {
         throw err;
     }
@@ -49,17 +49,17 @@ module.exports.getProductByName = async (name) => {
 module.exports.getProductByField = async (field, type) => {
     try {
         if (type === 'name') {
-            return await productModel.find({name: {$regex: new RegExp('^' + field + '.*', 'i')}}).exec();
+            return await productModel.find({ name: { $regex: new RegExp('^' + field + '.*', 'i') } }).exec();
         } else if (type === 'category') {
-            return await productModel.find({category: {$regex: new RegExp('^' + field + '.*', 'i')}}).exec();
+            return await productModel.find({ category: { $regex: new RegExp('^' + field + '.*', 'i') } }).exec();
         } else if (type === 'brand') {
-            return await productModel.find({brand: {$regex: new RegExp('^' + field + '.*', 'i')}}).exec();
+            return await productModel.find({ brand: { $regex: new RegExp('^' + field + '.*', 'i') } }).exec();
         } else if (type === 'price') {
-            return await productModel.find({price: {$lte: field + 49 || 1000000000, $gte: field || 150}}).exec();
+            return await productModel.find({ price: { $lte: field + 49 || 1000000000, $gte: field || 150 } }).exec();
         } else if (type === 'size') {
-            return await productModel.find({size: {$regex: new RegExp('^' + field + '.*', 'i')}}).exec();
+            return await productModel.find({ size: { $regex: new RegExp('^' + field + '.*', 'i') } }).exec();
         } else if (type === 'color') {
-            return await productModel.find({color: [{$regex: new RegExp('^' + field + '.*', 'i')}]}).exec();
+            return await productModel.find({ color: [{ $regex: new RegExp('^' + field + '.*', 'i') }] }).exec();
         }
     } catch (err) {
         throw err;
@@ -87,8 +87,8 @@ module.exports.getDistinctByField = (field) => {
 module.exports.getRelatedList = async (categoryValue) => {
     try {
         return productModel.aggregate([
-            {"$match": {"category": {"$eq": categoryValue}}},
-            {"$sample": {"size": 4}}
+            { "$match": { "category": { "$eq": categoryValue } } },
+            { "$sample": { "size": 4 } }
         ])
     } catch (err) {
         throw err;
@@ -102,7 +102,7 @@ module.exports.getRelatedList = async (categoryValue) => {
  */
 module.exports.getAllReviewByProductID = (productID) => {
     try {
-        return ReviewModel.find({productID: productID}).lean();
+        return ReviewModel.find({ productID: productID }).lean();
     } catch (err) {
         throw err;
     }
@@ -132,15 +132,17 @@ module.exports.createReview = async (userName, productID, content) => {
 /**
  * add product to cart
  * @param productID {string}
- * @param user_id {string}
+ * @param userID {string}
  * @param quantity {number}
  * @returns {Promise<*>}
  */
-module.exports.addToCart = async (productID, user_id, quantity = 1) => {
+module.exports.addToCart = async (productID, userID, quantity = 1) => {
     try {
         console.log("service add to cart");
-        let user = await userModel.findOne({_id: user_id});
-        const product = await productModel.findOne({_id: productID});
+        console.log("quantity:", quantity);
+
+        let user = await userModel.findOne({ _id: userID });
+        const product = await productModel.findOne({ _id: productID });
 
         if (user && product) {
 
@@ -151,14 +153,14 @@ module.exports.addToCart = async (productID, user_id, quantity = 1) => {
             if (itemIdx > -1) {
                 // product exist in cart, update quantity
                 console.log("update quantity");
-                user.cart[itemIdx].quantity += quantity;
+                user.cart[itemIdx].quantity += parseInt(quantity);
                 user.cart[itemIdx].total = user.cart[itemIdx].quantity * product.price;
             } else {
                 // product not exist in cart, add new item
                 console.log("push new product");
                 user.cart.push({
                     productID: productID,
-                    quantity: 1,
+                    quantity: parseInt(quantity),
                     total: product.price
                 });
             }
@@ -166,7 +168,7 @@ module.exports.addToCart = async (productID, user_id, quantity = 1) => {
             user.total = 0;
 
             for (let i = 0; i < user.cart.length; i++) {
-                const product_total = await productModel.findOne({_id: user.cart[i].productID});
+                const product_total = await productModel.findOne({ _id: user.cart[i].productID });
                 user.total += user.cart[i].quantity * product_total.price;
             }
 

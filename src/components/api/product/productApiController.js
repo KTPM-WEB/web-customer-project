@@ -61,9 +61,15 @@ exports.renderByField = async (req, res) => {
  */
 exports.addToCart = async (req, res) => {
     try {
-        req.session.user = await productService.addToCart(req.body.id, req.user._id);
-        req.session.number_product += 1;
-        res.status(200);
+        console.log("service add to cart");
+        req.session.user = await productService.addToCart(req.body.id, req.user._id, req.body.quantity);
+
+        req.session.number_product += parseInt(req.body.quantity);
+
+        const number = req.session.number_product;
+
+        console.log("req number:", req.session.number_product);
+        res.send({ number });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

@@ -9,14 +9,19 @@ exports.getProducts = async (req, res) => {
         const products = await cartService.getProducts(user.cart);
 
         let total = 0;
+        var number_products = 0;
 
         console.log("products:", products);
         for (let i = 0; i < products.length; i++) {
             total = Math.round((total + products[i].total) * 100) / 100;
+            number_products += products[i].quantity;
         }
 
         console.log("send products:", products);
-        res.send({ total, products });
+
+        req.session.number_product = number_products;
+
+        res.send({ number_products, total, products });
 
     } catch (err) {
         res.status(500).json({ message: err.message });

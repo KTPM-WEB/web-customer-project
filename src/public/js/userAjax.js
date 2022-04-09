@@ -12,8 +12,10 @@ function getProfile() {
 
         $("#profile-avatar").attr("src", data.avatar_url);
         $("#profile-username").html(data.username);
-        $("#firstName").html(data.firstName);
-        $("#lastName").html(data.lastName);
+        $("#fullname").html(data.fullname);
+        $("#intro").html(data.intro);
+        $("#employed").html(data.employed);
+        $("#role").html(data.role);
         $("#email").html(data.email);
         $("#phone").html(data.phone);
         $("#address").html(data.address);

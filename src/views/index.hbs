@@ -10,7 +10,7 @@
 							<h2>Fall - Winter Collections 2030</h2>
 							<p>A specialist label creating luxury essentials. Ethically crafted with an unwavering
 								commitment to exceptional quality.</p>
-							<a href="#" class="primary-btn">Shop now <span class="arrow_right"></span></a>
+							<a href="/product" class="primary-btn">Shop now <span class="arrow_right"></span></a>
 							<div class="hero__social">
 								<a href="#"><i class="fa-brands fa-facebook"></i></a>
 								<a href="#"><i class="fa-brands fa-twitter"></i></a>
@@ -32,7 +32,7 @@
 							<h2>Fall - Winter Collections 2030</h2>
 							<p>A specialist label creating luxury essentials. Ethically crafted with an unwavering
 								commitment to exceptional quality.</p>
-							<a href="#" class="primary-btn">Shop now <span class="arrow_right"></span></a>
+							<a href="/product" class="primary-btn">Shop now <span class="arrow_right"></span></a>
 							<div class="hero__social">
 								<a href="#"><i class="fa-brands fa-facebook"></i></a>
 								<a href="#"><i class="fa-brands fa-twitter"></i></a>
@@ -59,28 +59,29 @@
 		</div>
 		<div class="row product__filter" style="display: flex; justify-content: space-between;">
 			{{#each products}}
-				<div class="col-lg-4 col-md-6 col-sm-6">
-					<div class="card" style="width: 18rem;">
+			<div class="col-lg-4 col-md-6 col-sm-6">
+				<div class="card" style="width: 18rem;">
+					<a href="/product/{{_id}}">
+						<img class="card-img-top" src="{{thumb}}" alt="Card image cap">
+					</a>
+					<div class="card-body" id="card-body">
 						<a href="/product/{{_id}}">
-							<img class="card-img-top" src="{{thumb}}" alt="Card image cap">
+							<h5 id="product-name"><b>{{name}}</b></h5>
 						</a>
-						<div class="card-body">
-							<h6>{{name}}</h6>
-							<input type="hidden" name="id" value="{{_id}}">
-							<a href="javascript:{}" id="add-product-{{_id}}" class="add-cart"
-							   onclick="addProduct('{{_id}}')">+ Add
-								To
-								Cart</a>
-							<h5>${{price}}</h5>
-							<div class="product__color__select">
-								{{#each color}}
-									<label for="pc-17" style="background-color: {{this}};">
-									</label>
-								{{/each}}
-							</div>
+						<input type="hidden" name="id" value="{{_id}}">
+						<a href="javascript:{}" id="add-product-{{_id}}" class="add-cart"
+							onclick="addProduct('{{_id}}')">
+							+ Add to cart</a>
+						<h5>${{price}}</h5>
+						<div class="product__color__select">
+							{{#each color}}
+							<label for="pc-17" style="background-color: {{this}};">
+							</label>
+							{{/each}}
 						</div>
 					</div>
 				</div>
+			</div>
 			{{/each}}
 		</div>
 	</div>

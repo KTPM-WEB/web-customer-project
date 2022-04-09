@@ -43,10 +43,10 @@ h6{
     background: linear-gradient(to right, #ee5a6f, #f29263)
 }*/
 
-.user-profile {
+/* .user-profile {
     padding: 20px 0;
     background: url("https://giaiphapexcel.net/wp-content/uploads/2022/03/background-duong-pho-buon_081746696.jpeg") no-repeat center center ;
-}
+} */
 
 .card-block {
     padding: 1.25rem
@@ -152,15 +152,22 @@ h6 {
     letter-spacing: 2px;
 }
 
-#profile-avatar
-{
-    width: 100px
+#img-container {
+    overflow: hidden;
 }
 
-#profile-username
+#profile-avatar
 {
-    font-size: 30px; position: relative; top: -15px
+    width: 100%;
+    object-fit: cover;
+
 }
+
+#profile-avatar:hover {
+    transform: scale(1.1);
+    transition: 1s all ease;
+}
+
 
 .profile-header-section
 {

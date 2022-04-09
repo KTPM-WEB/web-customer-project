@@ -23,18 +23,15 @@
 			<div class="col-lg-3">
 				<div class="shop__sidebar">
 					<div class="shop__sidebar__search">
-						<div class="input-group">
-							<div class="col-12">
-								<input class="form-control" id="myInput" type="text" name="name" placeholder="Search.."
-									   onkeyup="sendData(this)"/>
-							</div>
-							<div class="col-6">
-								<button class="btn btn-outline-secondary"
-										onclick="getProductByField(document.getElementById('myInput').value,'name')"
-										type="button"><i
-										class="fa fa-search"></i></button>
-							</div>
+						<div class="d-flex">
+							<input class="form-control" id="myInput" type="text" name="name" placeholder="Search.."
+								onkeyup="sendData(this)" />
+							<button class="btn btn-outline-secondary"
+								style="height: 38px; border:1px solid lightgray; border-radius: 0px 5px 5px 0px;"
+								onclick="getProductByField(document.getElementById('myInput').value,'name')"
+								type="button"><i class="fa fa-search"></i></button>
 						</div>
+
 						<ul class="list-group" id="myList">
 
 						</ul>
@@ -50,16 +47,14 @@
 										<div class="shop__sidebar__categories">
 											<ul class="nice-scroll">
 												<button type="button"
-														onclick="getProductByField('Accessories','category')"
-														class="btn btn-light">Accessories
+													onclick="getProductByField('Accessories','category')"
+													class="btn btn-light">Accessories
 												</button>
-												<button type="button"
-														onclick="getProductByField('Bags','category')"
-														class="btn btn-light">Bags
+												<button type="button" onclick="getProductByField('Bags','category')"
+													class="btn btn-light">Bags
 												</button>
-												<button type="button"
-														onclick="getProductByField('Clothing','category')"
-														class="btn btn-light">Clothing
+												<button type="button" onclick="getProductByField('Clothing','category')"
+													class="btn btn-light">Clothing
 												</button>
 											</ul>
 										</div>
@@ -75,19 +70,19 @@
 										<div class="shop__sidebar__brand">
 											<ul>
 												<button type="button" onclick="getProductByField('brand1', 'brand')"
-														class="btn btn-light">brand1
+													class="btn btn-light">brand1
 												</button>
 												<button type="button" onclick="getProductByField('brand2', 'brand')"
-														class="btn btn-light">brand2
+													class="btn btn-light">brand2
 												</button>
 												<button type="button" onclick="getProductByField('brand3', 'brand')"
-														class="btn btn-light">brand3
+													class="btn btn-light">brand3
 												</button>
 												<button type="button" onclick="getProductByField('brand4', 'brand')"
-														class="btn btn-light">brand4
+													class="btn btn-light">brand4
 												</button>
 												<button type="button" onclick="getProductByField('brand5', 'brand')"
-														class="btn btn-light">brand5
+													class="btn btn-light">brand5
 												</button>
 											</ul>
 										</div>
@@ -104,20 +99,18 @@
 										<div class="shop__sidebar__price">
 											<ul>
 												<button type="button" name="price" value="0" class="btn btn-light"
-														onclick="getProductByField(0,'price')">
+													onclick="getProductByField(0,'price')">
 													$0 - $50
 												</button>
 												<button type="button" name="price" value="50" class="btn btn-light"
-														onclick="getProductByField(50,'price')">
+													onclick="getProductByField(50,'price')">
 													$50 - $100
 												</button>
-												<button type="button" name="price" value="100"
-														class="btn btn-light"
-														onclick="getProductByField(100,'price')">$100 - $150
+												<button type="button" name="price" value="100" class="btn btn-light"
+													onclick="getProductByField(100,'price')">$100 - $150
 												</button>
-												<button type="button" name="price" value="150"
-														class="btn btn-light"
-														onclick="getProductByField(null,'price')">$150+
+												<button type="button" name="price" value="150" class="btn btn-light"
+													onclick="getProductByField(null,'price')">$150+
 												</button>
 											</ul>
 										</div>
@@ -132,30 +125,30 @@
 									<div class="card-body">
 										<div class="shop__sidebar__size">
 											<button type="button" name="size" value="XS" class="btn btn-light"
-													onclick="getProductByField('XS','size')">XS
+												onclick="getProductByField('XS','size')">XS
 											</button>
 											<button type="button" name="size" value="S" class="btn btn-light"
-													onclick="getProductByField('S','size')">S
+												onclick="getProductByField('S','size')">S
 											</button>
 											<button type="button" name="size" value="M" class="btn btn-light"
-													onclick="getProductByField('M','size')">M
+												onclick="getProductByField('M','size')">M
 											</button>
 											<button type="button" name="size" value="L" class="btn btn-light"
-													onclick="getProductByField('L','size')">L
+												onclick="getProductByField('L','size')">L
 											</button>
 											<button type="button" name="size" value="XL" class="btn btn-light"
-													onclick="getProductByField('XL','size')">XL
+												onclick="getProductByField('XL','size')">XL
 											</button>
 											<button type="button" name="size" value="2XL" class="btn btn-light"
-													onclick="getProductByField('2XL','size')">
+												onclick="getProductByField('2XL','size')">
 												2XL
 											</button>
 											<button type="button" name="size" value="3XL" class="btn btn-light"
-													onclick="getProductByField('3XL','size')">
+												onclick="getProductByField('3XL','size')">
 												3XL
 											</button>
 											<button type="button" name="size" value="3XL" class="btn btn-light"
-													onclick="getProductByField('4XL','size')">
+												onclick="getProductByField('4XL','size')">
 												4XL
 											</button>
 										</div>
@@ -170,31 +163,31 @@
 									<div class="card-body">
 										<div class="shop__sidebar__color">
 											<label class="c-1" for="sp-1">
-												<input type="radio" id="sp-1"/>
+												<input type="radio" id="sp-1" />
 											</label>
 											<label class="c-2" for="sp-2">
-												<input type="radio" id="sp-2"/>
+												<input type="radio" id="sp-2" />
 											</label>
 											<label class="c-3" for="sp-3">
-												<input type="radio" id="sp-3"/>
+												<input type="radio" id="sp-3" />
 											</label>
 											<label class="c-4" for="sp-4">
-												<input type="radio" id="sp-4"/>
+												<input type="radio" id="sp-4" />
 											</label>
 											<label class="c-5" for="sp-5">
-												<input type="radio" id="sp-5"/>
+												<input type="radio" id="sp-5" />
 											</label>
 											<label class="c-6" for="sp-6">
-												<input type="radio" id="sp-6"/>
+												<input type="radio" id="sp-6" />
 											</label>
 											<label class="c-7" for="sp-7">
-												<input type="radio" id="sp-7"/>
+												<input type="radio" id="sp-7" />
 											</label>
 											<label class="c-8" for="sp-8">
-												<input type="radio" id="sp-8"/>
+												<input type="radio" id="sp-8" />
 											</label>
 											<label class="c-9" for="sp-9">
-												<input type="radio" id="sp-9"/>
+												<input type="radio" id="sp-9" />
 											</label>
 										</div>
 									</div>
@@ -216,30 +209,30 @@
 				</div>
 				<div class="row" id="product-list">
 					{{#each products.data}}
-						<div class="col-lg-4 col-md-6 col-sm-6">
-							<div class="card" style="width: 18rem;">
-								<a href="/product/{{_id}}">
-									<img class="card-img-top" src="{{thumb}}" alt="Card image cap">
+					<div class="col-lg-4 col-md-6 col-sm-6">
+						<div class="card" style="width: 18rem;">
+							<a href="/product/{{_id}}">
+								<img class="card-img-top" src="{{thumb}}" alt="Card image cap">
+							</a>
+							<div class="card-body" id="card-body">
+								<h6>{{name}}</h6>
+								<input type="hidden" name="id" value="{{_id}}" />
+								<a href="javascript:{}" id="add-product-{{_id}}" class="add-cart"
+									onclick="addProduct('{{_id}}')">
+									+ Add to cart
 								</a>
-								<div class="card-body">
-									<h6>{{name}}</h6>
-									<input type="hidden" name="id" value="{{_id}}">
-									<a href="javascript:{}" id="add-product-{{_id}}" class="add-cart"
-									   onclick="addProduct('{{_id}}')">+ Add
-										To
-										Cart</a>
-									<h5>${{price}}</h5>
-									<div class="product__color__select">
-										{{#each color}}
-											<label for="pc-17" style="background-color: {{this}};">
+								<h5>${{price}}</h5>
+								<div class="product__color__select">
+									{{#each color}}
+									<label for="pc-17" style="background-color: {{this}};">
 
-											</label>
-										{{/each}}
-									</div>
-
+									</label>
+									{{/each}}
 								</div>
+
 							</div>
 						</div>
+					</div>
 					{{/each}}
 				</div>
 				<div class="row">
@@ -248,8 +241,8 @@
 							<ul class="pagination" style="display: flex; justify-content: right;">
 								<li class="page-item" style="{{products.disablePrev}} ">
 									<a class="page-link" style="color: #0b0b0b" href="/product?page={{products.prev}}"
-									aria-label="Previous">
-									<span aria-hidden="true">&laquo;</span>
+										aria-label="Previous">
+										<span aria-hidden="true">&laquo;</span>
 									</a>
 								</li>
 								<li class="page-item {{products.hiddenPrev}}"
@@ -268,8 +261,8 @@
 								</li>
 								<li class="page-item" style="{{products.disableNext}} color: #0b0b0b">
 									<a class="page-link" style="color: #0b0b0b" href="/product?page={{products.next}}"
-									aria-label="Next">
-									<span aria-hidden="true">&raquo;</span>
+										aria-label="Next">
+										<span aria-hidden="true">&raquo;</span>
 									</a>
 								</li>
 							</ul>

@@ -70,7 +70,8 @@ function getProductByField(field, type) {
                 return;
             }
 
-            $start.append(`<div class="row">
+            $start.append(`
+            <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6">
                     <div class="shop__product__option__left">
                         <p>Showing ${products.start}–${products.end} of ${products.total} results</p>
@@ -79,20 +80,20 @@ function getProductByField(field, type) {
             </div>`);
 
             products.data.forEach((item, index) => {
-                const str = `<div class="col-lg-4 col-md-6 col-sm-6">
+                const str = `
+                <div class="col-lg-4 col-md-6 col-sm-6">
                     <div class="card" style="width: 18rem;">
                         <a href="/product/${item._id}">
                             <img class="card-img-top" src="${item.thumb}" alt="Card image cap">
                         </a>
-                        <div class="card-body">
+                        <div class="card-body" id="card-body">
                             <h6>${item.name}</h6>
-                            <input type="hidden" name="id" value="${item._id}">
-                                <a href="javascript:{}" id="add-product-${item._id}" class="add-cart"
-                                   onClick="addProduct('${item._id}')">+ Add
-                                    To
-                                    Cart</a>
-                                <h5>$${item.price}</h5>
-
+                            <input type="hidden" name="id" value="${item._id}" />
+                            <a href="javascript:{}" id="add-product-${item._id}" class="add-cart"
+                                onClick="addProduct('${item._id}')">
+                                + Add to cart
+                            </a>
+                            <h5>$${item.price}</h5>
                         </div>
                     </div>
                 </div>`;

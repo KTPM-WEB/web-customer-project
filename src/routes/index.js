@@ -1,7 +1,7 @@
 const express = require('express');
-const async = require('hbs/lib/async');
 const router = express.Router();
 const indexService = require("./indexService")
+const productService = require("../components/product/productService");
 
 /* GET home page. */
 router.get('/', async (req, res, next) => {
@@ -17,7 +17,9 @@ router.get('/', async (req, res, next) => {
     res.render('index', { number_product, message: "Place order successful" });
   }
 
-  res.render('index', { number_product });
+  const products = (await productService.getAllProducts()).slice(0, 6);
+
+  res.render('index', { number_product, products });
 });
 
 module.exports = router;

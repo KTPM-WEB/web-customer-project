@@ -13,6 +13,7 @@ function loadProduct() {
         console.log("data: ", data);
 
         const $product_table = $("#cart-table");
+        $product_table.html("");
 
         console.log("data.products: ", data.products);
         data.products.forEach((item, index) => {
@@ -23,8 +24,10 @@ function loadProduct() {
             <tr>
                 <td class="product__cart__item">
                     <div class="product__cart__item__pic">
-                        <img src="${item.thumb}" style="width: 150px; object-fit: contain;"
-                            alt="thumbnail">
+                        <a href="/product/${item._id}">
+                            <img src="${item.thumb}" style="width: 150px; object-fit: contain;"
+                                alt="thumbnail">
+						</a>
                     </div>
                     <div class="product__cart__item__text">
                         <h6>${item.name}</h6>
@@ -52,6 +55,8 @@ function loadProduct() {
 
             $product_table.append($.parseHTML(html));
 
+
+            $("#number-product-incart").html(data.number_products);
             $("#cart-total").html(data.total);
         });
     });

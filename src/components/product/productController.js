@@ -9,7 +9,7 @@ const productUtils = require('./productUtils');
  * @returns {Promise<*>}
  */
 exports.render = async (req, res) => {
-    try{
+    try {
         const page = parseInt(req.query.page) || 1;
         const products = (await productService.getAllProducts());
         const data = productUtils.paging(products, page);
@@ -19,15 +19,15 @@ exports.render = async (req, res) => {
         await productService.getRelatedList("Clothing");
 
         res.render("product/views/products", {
-            active: {Shop: true},
+            active: { Shop: true },
             page: page,
             categories: categories,
             brands: brands,
             products: data,
             totalProduct: products.length
         });
-    }catch (err){
-        res.status(500).json({message: err.message});
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
 };
 
@@ -38,13 +38,16 @@ exports.render = async (req, res) => {
  * @returns {Promise<*>}
  */
 exports.renderDetail = async (req, res) => {
-    try{
+    try {
         const product = await productService.getProductByID(req.params.id);
         const review = await productService.getAllReviewByProductID(req.params.id);
-        const relatedProduct = await productService.getRelatedList(product.category)
-        res.render("product/views/product_detail", {product: product, review: review, relatedProduct: relatedProduct});
-    }catch (err) {
-        res.status(500).json({message: err.message});
+        const relatedProduct = await productService.getRelatedList(product.category);
+
+        console.log("relatedProduct:", relatedProduct);
+
+        res.render("product/views/product_detail", { product: product, review: review, relatedProduct: relatedProduct });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
 
 };
@@ -57,15 +60,15 @@ exports.renderDetail = async (req, res) => {
  * @returns {Promise<*>}
  */
 module.exports.postReview = async (req, res) => {
-    try{
+    try {
         if (!req.user)
             res.redirect('/auth/login')
         else {
             await productService.createReview(req.user.username, req.body.productID, req.body.content)
             res.redirect('/product/' + req.body.productID)
         }
-    }catch (err) {
-        res.status(500).json({message: err.message});
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
 }
 

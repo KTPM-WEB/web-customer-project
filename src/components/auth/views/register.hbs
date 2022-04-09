@@ -12,9 +12,8 @@
 							</span>
 						</div>
 						<input type="text" class="form-control" placeholder="Username" aria-label="Username"
-							name="username" aria-describedby="basic-addon1">
+							name="username" aria-describedby="basic-addon1" onkeyup="checkUsername(this)">
 					</div>
-
 
 					<div class="input-group mb-3">
 						<div class="input-group-prepend">
@@ -22,7 +21,7 @@
 								<i class="zmdi zmdi-email"></i>
 							</span>
 						</div>
-						<input type="email" class="form-control" placeholder="Email" name="email"
+						<input type="email" class="form-control" placeholder="Email" name="email" onkeyup="checkGmail(this)"
 							aria-describedby="basic-addon1">
 					</div>
 
@@ -39,6 +38,8 @@
 								<i class="far fa-eye-slash" id="togglePassword-passwd"></i>
 							</span>
 						</div>
+						<div id="username-error"></div>
+						<div id="gmail-error"></div>
 					</div>
 
 					{{!-- <form action="/auth/register/google" method="POST"> --}}
@@ -53,7 +54,6 @@
 					<div class="form-group form-button">
 						<input type="submit" name="signup" id="signup" class="form-submit" value="Register" />
 					</div>
-
 					{{#if message}}
 					{{#if state}}
 					<div class="alert alert-success" role="alert">
@@ -90,3 +90,5 @@
 
 	});
 </script>
+<script src="/vendors/jquery/jquery-3.3.1.min.js"></script>
+<script src="/js/registerAjax.js"></script>

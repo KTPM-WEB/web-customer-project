@@ -56,6 +56,9 @@
 												<button type="button" onclick="getProductByField('Clothing','category')"
 													class="btn btn-light">Clothing
 												</button>
+												<button type="button" onclick="getProductByField('Shoes','category')"
+													class="btn btn-light">Shoes
+												</button>
 											</ul>
 										</div>
 									</div>
@@ -69,19 +72,19 @@
 									<div class="card-body">
 										<div class="shop__sidebar__brand">
 											<ul>
-												<button type="button" onclick="getProductByField('brand1', 'brand')"
+												<button type="button" onclick="getProductByField('brand1', 'brand',1)"
 													class="btn btn-light">brand1
 												</button>
-												<button type="button" onclick="getProductByField('brand2', 'brand')"
+												<button type="button" onclick="getProductByField('brand2', 'brand',1)"
 													class="btn btn-light">brand2
 												</button>
-												<button type="button" onclick="getProductByField('brand3', 'brand')"
+												<button type="button" onclick="getProductByField('brand3', 'brand',1)"
 													class="btn btn-light">brand3
 												</button>
-												<button type="button" onclick="getProductByField('brand4', 'brand')"
+												<button type="button" onclick="getProductByField('brand4', 'brand',1)"
 													class="btn btn-light">brand4
 												</button>
-												<button type="button" onclick="getProductByField('brand5', 'brand')"
+												<button type="button" onclick="getProductByField('brand5', 'brand',1)"
 													class="btn btn-light">brand5
 												</button>
 											</ul>
@@ -99,18 +102,18 @@
 										<div class="shop__sidebar__price">
 											<ul>
 												<button type="button" name="price" value="0" class="btn btn-light"
-													onclick="getProductByField(0,'price')">
+													onclick="getProductByField(0,'price',1)">
 													$0 - $50
 												</button>
 												<button type="button" name="price" value="50" class="btn btn-light"
-													onclick="getProductByField(50,'price')">
+													onclick="getProductByField(50,'price',1)">
 													$50 - $100
 												</button>
 												<button type="button" name="price" value="100" class="btn btn-light"
-													onclick="getProductByField(100,'price')">$100 - $150
+													onclick="getProductByField(100,'price',1)">$100 - $150
 												</button>
 												<button type="button" name="price" value="150" class="btn btn-light"
-													onclick="getProductByField(null,'price')">$150+
+													onclick="getProductByField(null,'price',1)">$150+
 												</button>
 											</ul>
 										</div>
@@ -125,30 +128,30 @@
 									<div class="card-body">
 										<div class="shop__sidebar__size">
 											<button type="button" name="size" value="XS" class="btn btn-light"
-												onclick="getProductByField('XS','size')">XS
+												onclick="getProductByField('XS','size',1)">XS
 											</button>
 											<button type="button" name="size" value="S" class="btn btn-light"
-												onclick="getProductByField('S','size')">S
+												onclick="getProductByField('S','size',1)">S
 											</button>
 											<button type="button" name="size" value="M" class="btn btn-light"
-												onclick="getProductByField('M','size')">M
+												onclick="getProductByField('M','size',1)">M
 											</button>
 											<button type="button" name="size" value="L" class="btn btn-light"
-												onclick="getProductByField('L','size')">L
+												onclick="getProductByField('L','size',1)">L
 											</button>
 											<button type="button" name="size" value="XL" class="btn btn-light"
-												onclick="getProductByField('XL','size')">XL
+												onclick="getProductByField('XL','size',1)">XL
 											</button>
 											<button type="button" name="size" value="2XL" class="btn btn-light"
-												onclick="getProductByField('2XL','size')">
+												onclick="getProductByField('2XL','size',1)">
 												2XL
 											</button>
 											<button type="button" name="size" value="3XL" class="btn btn-light"
-												onclick="getProductByField('3XL','size')">
+												onclick="getProductByField('3XL','size',1)">
 												3XL
 											</button>
 											<button type="button" name="size" value="3XL" class="btn btn-light"
-												onclick="getProductByField('4XL','size')">
+												onclick="getProductByField('4XL','size',1)">
 												4XL
 											</button>
 										</div>
@@ -214,9 +217,12 @@
 							<a href="/product/{{_id}}">
 								<img class="card-img-top" src="{{thumb}}" alt="Card image cap">
 							</a>
+
 							<div class="card-body" id="card-body">
-								<h6>{{name}}</h6>
-								<input type="hidden" name="id" value="{{_id}}" />
+								<a href="/product/{{_id}}">
+									<h5 id="product-name"><b>{{name}}</b></h5>
+								</a>
+								<input type="hidden" name="id" value="{{_id}}">
 								<a href="javascript:{}" id="add-product-{{_id}}" class="add-cart"
 									onclick="addProduct('{{_id}}')">
 									+ Add to cart
@@ -225,11 +231,9 @@
 								<div class="product__color__select">
 									{{#each color}}
 									<label for="pc-17" style="background-color: {{this}};">
-
 									</label>
 									{{/each}}
 								</div>
-
 							</div>
 						</div>
 					</div>

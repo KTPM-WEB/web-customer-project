@@ -34,7 +34,7 @@ function sendData(e) {
     }
 }
 
-function addProduct(productID) {
+function addProduct(productID, quantity = 1) {
     const url = '/api/products/add/' + productID;
     fetch(url, {
         method: 'POST',
@@ -42,14 +42,20 @@ function addProduct(productID) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            id: productID
+            id: productID,
+            quantity: quantity
         })
-    })
+    }).then(r => r.json()).then(data => {
+        console.log("-- Ajax add product --");
+        console.log("data:", data);
+
+        $("#number-product-incart").html(data.number);
+    });
 
     alert(`Add ${productID} to cart successfully`);
 }
 
-function getProductByField(field, type) {
+function getProductByField(field, type, page) {
     const $product = $('#product-list');
     const $start = $('#stat-end');
     const $pagination = $('#pagination');
@@ -58,7 +64,8 @@ function getProductByField(field, type) {
         type: 'GET',
         data: {
             field: field,
-            type: type
+            type: type,
+            page: page
         },
         dateType: "JSON",
         success: function (products) {
@@ -87,7 +94,9 @@ function getProductByField(field, type) {
                             <img class="card-img-top" src="${item.thumb}" alt="Card image cap">
                         </a>
                         <div class="card-body" id="card-body">
-                            <h6>${item.name}</h6>
+                            <a href="/product/${item._id}">
+                                <h5 id="product-name"><b>${item.name}</b></h5>
+                            </a>
                             <input type="hidden" name="id" value="${item._id}" />
                             <a href="javascript:{}" id="add-product-${item._id}" class="add-cart"
                                 onClick="addProduct('${item._id}')">
@@ -102,32 +111,31 @@ function getProductByField(field, type) {
             });
             $pagination.append(`<ul class="pagination" style="display: flex; justify-content: right;">
                 <li class="page-item" style="${products.disablePrev} ">
-                    <a class="page-link" style="color: #0b0b0b" href="/product?name=${products.field}&page=${products.prev}"
-                       aria-label="Previous">
+                    <button class="page-link" style="color: #0b0b0b" href="#"
+                       aria-label="Previous" onclick="getProductByField('${products.field}','${products.type}','${products.prev}')">
                         <span aria-hidden="true">&laquo;</span>
-                    </a>
+                    </button>
                 </li>
                 <li class="page-item ${products.hiddenPrev}"
                     style="${products.disablePrev} ${products.numberPrev} color: #0b0b0b;">
-                    <a class="page-link" style="color: #0b0b0b" href="/product?name=${products.field}&page=${products.prev}
-									"> ${products.prev} </a>
+                    <button class="page-link" style="color: #0b0b0b" onclick="getProductByField('${products.field}','${products.type}','${products.prev}')"> ${products.prev} </button>
                 </li>
                 <li class="page-item active" style="color: #0b0b0b;">
-                    <a class="page-link" style="color: #0b0b0b" href="/product?name=${products.field}&page=${products.page}
-									"> ${products.page} </a>
+                    <button class="page-link" disabled style="color: #0b0b0b" onclick="getProductByField('${products.field}','${products.type}','${products.page}')"> ${products.page} </button>
                 </li>
                 <li class="page-item ${products.hiddenNext}"
                     style="${products.disableNext} ${products.numberNext} color: #0b0b0b">
-                    <a class="page-link" style="color: #0b0b0b" href="/product?name=${products.field}&page=${products.next}
-									"> ${products.next} </a>
+                    <button class="page-link" style="color: #0b0b0b" onclick="getProductByField('${products.field}','${products.type}','${products.next}')""> ${products.next} </button>
                 </li>
                 <li class="page-item" style="${products.disableNext} color: #0b0b0b">
-                    <a class="page-link" style="color: #0b0b0b" href="/product?name=${products.field}&page=${products.next}"
+                    <button class="page-link" style="color: #0b0b0b" onclick="getProductByField('${products.field}','${products.type}','${products.next}')"
                        aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
-                    </a>
+                    </button>
                 </li>
             </ul>`);
         }
     });
 }
+
+

@@ -26,15 +26,7 @@ router.get('/login/google', passport.authenticate('google', {
 // get google callback
 router.get("/google/callback", (req, res, next) => {
     passport.authenticate('google', {}, (err, user, info) => {
-
-        console.log('--------------');
-        console.log("google callback");
-        console.log('user:', user);
-        console.log('info:', info);
-
         info = info.message;
-
-
         if (info === 'login: account dont exist') {
             res.redirect('/auth/login?state=false&message=Account%20dont%20exist');
         }

@@ -1,6 +1,7 @@
 const userModel = require('./userModel');
 const orderModel = require("../checkout/check-outModel");
 const productModel = require("../product/model/productModel");
+const cloudinary = require('../../config/cloudinary.config');
 const bcrypt = require("bcrypt")
 
 /**
@@ -141,3 +142,23 @@ module.exports.checkEmail = async (email) => {
         throw err;
     }
 }
+
+/**
+ *  change avatar of user
+ *
+ * @param file {object}
+ * @param id {string}
+ * @returns {Promise<void>}
+ */
+module.exports.changeAvatar = async (id, file) => {
+    try {
+        console.log("file.path: ", file.path);
+        // upload image
+        if (!file) return;
+        console.log(file);
+        const url = await cloudinary.upload(file.path, 'user_avatar');
+        await userModel.findByIdAndUpdate(id, { avatar_url: url });
+    } catch (err) {
+        throw err;
+    }
+};

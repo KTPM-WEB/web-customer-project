@@ -13,16 +13,9 @@ exports.render = async (req, res) => {
         const page = parseInt(req.query.page) || 1;
         const products = (await productService.getAllProducts());
         const data = productUtils.paging(products, page);
-
-        const categories = await productService.getDistinctByField("category");
-        const brands = await productService.getDistinctByField("brand");
-        await productService.getRelatedList("Clothing");
-
         res.render("product/views/products", {
             active: {Shop: true},
             page: page,
-            categories: categories,
-            brands: brands,
             products: data,
             totalProduct: products.length
         });

@@ -27,15 +27,15 @@ function loadUserOrder() {
                                     <div class="mb-2">$${item.total}</div>
                                     <div class="row">`
 
-            if (item.status == "In Progress") {
+            if (item.status == "Processing") {
                 order_cart += `<div class="status btn-warning">${item.status}</div>`
-            } else if (item.status == "Fail") {
+            } else if (item.status == "Cancel") {
                 order_cart += `<div class="status btn-danger">${item.status}</div>`
-            } else if (item.status == "Delivered") {
+            } else if (item.status == "Completed") {
                 order_cart += `<div class="status btn-success">${item.status}</div>`
             }
 
-            if (item.status === "In Progress") {
+            if (item.status === "Processing") {
                 order_cart += `
                         <button style="border-radius: 7px;" class="ml-3 btn btn-danger btn-sm"
                             data-toggle="modal" data-target="#cancle-order-${item._id}">

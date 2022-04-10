@@ -180,19 +180,13 @@ h6 {
     font-weight: bold;
 }
 
-.infomation-row
-{
-    display: flex;
-    flex-direction: row;
-}
-
-.infomation-row:hover i
+.current-info:hover i
 {
     transition: 0.25s;
     opacity: 0.9;
 }
 
-.infomation-row i
+.current-info i
 {
     position: relative;
     left: 10px;
@@ -201,7 +195,7 @@ h6 {
 
 .container .edit-form
 {
-    padding: 0px
+    padding: 0px;
 }
 
 .edit-input

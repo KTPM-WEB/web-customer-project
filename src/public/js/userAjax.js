@@ -20,7 +20,6 @@ function getProfile() {
         $("#address").html(data.address);
     });
 }
-
 function changePasswordForm() {
     const url = '/api/auth/change-password';
     fetch(url, {
@@ -33,3 +32,4 @@ function changePasswordForm() {
         })
     }).then(r => r.json()).then(data => {});
 }
+

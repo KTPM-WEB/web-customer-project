@@ -68,9 +68,9 @@ module.exports.getUserOrder = async (userID) => {
                 const product = await productModel.findById(products[j].product_id).lean();
 
                 products[j].name = product.name;
-                products[j].price = product.price;
+                products[j].price = Math.round(product.price * 100) / 100;
                 products[j].img = product.img[0];
-                products[j].total = products[j].price * products[j].quantity;
+                products[j].total = Math.round(products[j].price * products[j].quantity * 100) / 100;
                 total += products[j].total;
             }
 

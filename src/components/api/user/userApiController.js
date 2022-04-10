@@ -62,3 +62,18 @@ exports.changePass = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 }
+
+exports.aaa = async (req, res) => {
+    try {
+        if (req.user==null)
+        {
+            res.status(401).json({"message":"UnAuthorized"})
+            return;
+        }
+
+        await userService.updateUser(req.user.username,req.body.field,req.body.new_val)
+        res.status(200)
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+}

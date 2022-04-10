@@ -5,6 +5,7 @@ router.get("/profile", userApiController.getProfile);
 router.get("/order", userApiController.getOrder);
 
 router.post("/profile/change-pass", userApiController.changePass);
+router.post("/profile/edit", userApiController.aaa);
 
 router.delete("/order/delete/:orderID", userApiController.deleteOrder);
 

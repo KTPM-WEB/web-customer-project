@@ -10,7 +10,7 @@ router.get("/profile", userController.renderProfile);
 router.get("/order", userController.renderOrder);
 
 /*************************** POST methods ***************************/
-router.post("/profile/edit", userController.editProfile)
+
 
 //change avatar
 router.post("/profile/change-avatar", upload.single('avatar_url'), userController.changeAvatar);

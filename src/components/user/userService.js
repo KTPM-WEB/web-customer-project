@@ -71,7 +71,7 @@ module.exports.getUserOrder = async (userID) => {
             }
 
             orders[i].thumb = products[0].img;
-            orders[i].total = total;
+            orders[i].total = Math.round(total * 100) / 100;
         }
         return orders;
 

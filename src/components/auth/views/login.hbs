@@ -11,19 +11,24 @@
 				<h2 class="form-title">Sign In</h2>
 				<form method="POST" action="/auth/login" class="register-form" id="login-form">
 					<div class="form-group">
-						<label id="username-check" for="your_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
-						<input type="text" name="username" id="your_name" placeholder="Your Username" onkeyup="checkUsername(this)"/>
+						<label id="username-check" for="your_name"><i
+								class="zmdi zmdi-account material-icons-name"></i></label>
+						<input type="text" name="username" id="your_name" placeholder="Your Username"
+							onkeyup="checkUsername(this)" />
 
 					</div>
 					<div class="form-group">
 						<label for="your_pass"><i class="zmdi zmdi-lock"></i></label>
 						<input type="password" name="password" id="your_pass" placeholder="Password" />
 					</div>
-					<div class="form-group">
-						<input type="checkbox" name="remember-me" id="remember-me" class="agree-term" />
-						<label for="remember-me" class="label-agree-term"><span><span></span></span>Remember me</label>
-					</div>
-					<a class="btn btn-light w-100 mb-0" href="/auth/login/google" value="google">
+
+
+					<a href="#" style="color: blue;" onmouseover="this.style.color='lightblue'"
+						onmouseout="this.style.color='blue';" onclick="$('#forgot-pass-form').submit()">
+						Forgot password?
+					</a>
+
+					<a class="btn btn-light w-100 mt-4  mb-0" href="/auth/login/google" value="google">
 						<img src="/img/auth/google.png" style="width: 25px; height: 25px;" alt="sing up image">
 						Login with Google
 					</a>
@@ -31,6 +36,7 @@
 						<input type="submit" name="signin" id="signin" class="form-submit" value="Login" />
 					</div>
 				</form>
+				<form action="/auth/forgot-pass" id="forgot-pass-form" method="post"></form>
 				{{#if message}}
 				{{#if state}}
 				<div class="alert alert-success" role="alert">
@@ -42,9 +48,6 @@
 				</div>
 				{{/if}}
 				{{/if}}
-				<div class="social-login">
-					<a href="#" class="signup-image-link"> Forgot password</a>
-				</div>
 			</div>
 		</div>
 	</div>

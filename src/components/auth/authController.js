@@ -10,9 +10,9 @@ const service = require('./authService');
 exports.renderLogin = (req, res) => {
     try {
         req.query.state = req.query.state === 'true';
-        res.render("auth/views/login", {message: req.query.message, state: req.query.state});
+        res.render("auth/views/login", { message: req.query.message, state: req.query.state });
     } catch (err) {
-        res.status(500).json({message: err.message});
+        res.status(500).json({ message: err.message });
     }
 
 };
@@ -26,9 +26,9 @@ exports.renderLogin = (req, res) => {
 exports.renderRegister = (req, res) => {
     try {
         req.query.state = req.query.state === 'true';
-        res.render("auth/views/register", {message: req.query.message, state: req.query.state});
+        res.render("auth/views/register", { message: req.query.message, state: req.query.state });
     } catch (err) {
-        res.status(500).json({message: err.message});
+        res.status(500).json({ message: err.message });
     }
 };
 
@@ -63,7 +63,7 @@ exports.Register = async (req, res) => {
         }
         res.redirect("/auth/register?state=" + state + "&message=" + message);
     } catch (err) {
-        res.status(500).json({message: err.message});
+        res.status(500).json({ message: err.message });
     }
 };
 
@@ -79,6 +79,22 @@ exports.logout = async (req, res) => {
         await req.logout();
         res.redirect('/');
     } catch (err) {
-        res.status(500).json({message: err.message});
+        res.status(500).json({ message: err.message });
     }
 };
+
+
+/**
+ * check if the user exists
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
+exports.forgotPass = async (req, res) => {
+    try {
+        console.log("-- api forgot pass --");
+
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+}

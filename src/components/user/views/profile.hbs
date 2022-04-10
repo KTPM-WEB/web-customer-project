@@ -100,6 +100,18 @@
                                                                             id="togglePassword-confirmPasswd"></i>
                                                                     </span>
                                                                 </div>
+                                                                <div>
+                                                                    <form action="/auth/forgot-pass"
+                                                                        id="forgot-pass-form" method="post">
+                                                                        <a href="#" style="color: blue;"
+                                                                            onmouseover="this.style.color='lightblue'"
+                                                                            onmouseout="this.style.color='blue';"
+                                                                            onclick="$('#forgot-pass-form').submit()">
+                                                                            Forgot password?
+                                                                        </a>
+                                                                    </form>
+                                                                </div>
+                                                                <hr>
 
                                                                 <span id="change-passwd-announce"
                                                                     style="color: red; visibility:hidden">

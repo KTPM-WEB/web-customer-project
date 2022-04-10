@@ -1,3 +1,8 @@
+.input-group-text {
+    border-width: 0px !important;
+    border-bottom: 1px solid rgb(144, 144, 144) !important;
+}
+
 .signup a:focus, a:active {
     text-decoration: none;
     outline: none;

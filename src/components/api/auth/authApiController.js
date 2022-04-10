@@ -10,12 +10,12 @@ exports.checkUserName = async (req, res) => {
     try {
         const check = await userService.checkUserName(req.body.username);
         if (check) {
-            res.json({check: true});
+            res.json({ check: true });
         } else {
-            res.json({check: false});
+            res.json({ check: false });
         }
-    }catch (err) {
-        res.status(500).json({message: err.message});
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
 }
 
@@ -29,11 +29,11 @@ exports.checkEmail = async (req, res) => {
     try {
         const check = await userService.checkEmail(req.body.email);
         if (check) {
-            res.json({check: true});
+            res.json({ check: true });
         } else {
-            res.json({check: false});
+            res.json({ check: false });
         }
-    }catch (err) {
-        res.status(500).json({message: err.message});
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
 }

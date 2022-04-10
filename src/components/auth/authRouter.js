@@ -23,6 +23,8 @@ router.get('/login/google', passport.authenticate('google', {
     state: 'login'
 }));
 
+
+
 // get google callback
 router.get("/google/callback", (req, res, next) => {
     passport.authenticate('google', {}, (err, user, info) => {
@@ -56,6 +58,8 @@ router.post('/login', passport.authenticate('local', {
 
 router.post('/logout', authController.logout)
 
+// forgot pass
+router.post("/forgot-pass", authController.forgotPass);
 
 /*************************** PUT methods ***************************/
 

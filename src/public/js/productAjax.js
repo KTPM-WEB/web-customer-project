@@ -1,5 +1,3 @@
-const { create } = require("../../components/user/userModel");
-
 function sendData(e) {
     const $searchResult = $('#myList');
     let match = e.value.match(/^[a-zA-Z0-9]*/);
@@ -128,7 +126,6 @@ function getProductByField(field, type, page) {
             });
 
             $pagination.append(`
-                a
                     <button class="page-link" style="color: #0b0b0b" href="#"
                        aria-label="Previous" onclick="getProductByField('${products.field}','${products.type}','${products.prev}')">
                         <span aria-hidden="true">&laquo;</span>
@@ -183,11 +180,11 @@ function postReview()
             review_list.attr("id","review-list")
         }
 
-        const createAt = new Date(data.createAt)
+        const date = new Date(data.createAt)
 
         review_list.prepend(`
         <h4 style="font-weight: bold;">${data.fullname}</h4>
-        <span>${createAt}</span>
+        <span>${date}</span>
         <p style="font-size: 16px">${content}</p>
         <hr>
         </div>

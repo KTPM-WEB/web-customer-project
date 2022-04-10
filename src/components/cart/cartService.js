@@ -1,4 +1,5 @@
 const productModel = require("../product/model/productModel");
+const promoModel = require("./promoModel");
 const userModel = require("../user/userModel");
 
 /**
@@ -7,7 +8,7 @@ const userModel = require("../user/userModel");
  * @returns {Promise<*>}
  */
 module.exports.getProducts = async (cart) => {
-    try{
+    try {
         const productsID = await cart.map(item => item.productID);
 
         const products = [];
@@ -21,10 +22,9 @@ module.exports.getProducts = async (cart) => {
             }
         }
         return products;
-    }catch (err){
+    } catch (err) {
         throw err;
     }
-
 }
 
 /**
@@ -45,6 +45,50 @@ module.exports.deleteProduct = async (userID, productID) => {
         }
         return user;
     } catch (err) {
-       throw err;
+        throw err;
+    }
+}
+
+
+/**
+ * get promotion
+ * @param cart{Object}
+ * @returns {Promise<*>}
+ */
+module.exports.getPromo = async (promoCode) => {
+    try {
+        const promo = await promoModel.findOne({ code: promoCode }).lean();
+
+        return promo;
+    } catch (err) {
+        throw err;
+    }
+}
+
+
+
+/**
+ * update promotion
+ * @param cart{Object}
+ * @returns {Promise<*>}
+ */
+module.exports.usePromo = async (promoCode) => {
+    try {
+        console.log("--- cart api use promo ---");
+        console.log("promoCode: ", promoCode);
+        const promo = await promoModel.findOne({ code: promoCode }).lean();
+
+        console.log(promo);
+
+        await promoModel.findOneAndUpdate(
+            { code: promoCode },
+            {
+                $set: {
+                    slot: promo.slot - 1
+                }
+            });
+
+    } catch (err) {
+        throw err;
     }
 }

@@ -1,15 +1,15 @@
 const orderModel = require("./check-outModel");
 const userModel = require("../user/userModel");
+const promoModel = require("../cart/promoModel");
 
 /**
  * order
  * @param user {object}
  * @returns {Promise<*>}
  */
-module.exports.order = async (user) => {
+module.exports.order = async (user, promo = null) => {
     try {
         const now = (new Date()).toString().split(" ");
-
         const products = [];
         for (let i = 0; i < user.cart.length; i++) {
             const product = {
@@ -19,16 +19,34 @@ module.exports.order = async (user) => {
             products.push(product);
         }
 
-        const order = {
+        let order = {
             customer_id: user._id,
             create_date: now[2] + ' ' + now[1] + ',' + now[3],
             products: products,
             status: "Processing"
         }
 
+        if (promo !== null) {
+            console.log("promo:", promo);
+            order.promo = promo.discount;
+            pro = await promoModel.findOne({ code: promo.code }).lean();
+
+            console.log(pro);
+
+            await promoModel.findOneAndUpdate(
+                { code: promo.code },
+                {
+                    $set: {
+                        slot: pro.slot - 1
+                    }
+                });
+        }
+
+        // console.log("order:", order);
+
         await orderModel.create(order);
-        await userModel.findByIdAndUpdate({_id: user._id}, {$set: {cart: []}});
-    }catch (err) {
+        await userModel.findByIdAndUpdate({ _id: user._id }, { $set: { cart: [] } });
+    } catch (err) {
         throw err;
     }
 }
@@ -41,7 +59,7 @@ module.exports.order = async (user) => {
 module.exports.deleteOrderById = async (id) => {
     try {
         await orderModel.findByIdAndDelete(id);
-    }catch (err) {
+    } catch (err) {
         throw err;
     }
 }

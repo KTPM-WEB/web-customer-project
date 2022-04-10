@@ -177,9 +177,23 @@
 								<div class="col-10">
 									Total
 								</div>
-								<div class="product-total col-2 d-flex align-items-center"
-									style="font-size:20px; font-weight: bold; color: red">
-									${{total}}
+								<div class="product-total col-2 d-flex flex-column align-items-center">
+									{{#if discount}}
+									<div style="font-size:18px;">
+										${{total}}
+									</div>
+									<div style="color: gray;">
+										{{discount}}
+									</div>
+									<div style="border: 0.2px solid lightgray; width:100%"></div>
+									<div class="mt-3" style="font-weight: bold; font-size:20px; color: red;">
+										${{result}}
+									</div>
+									{{else}}
+									<div style="font-size:120x; font-weight: bold; color: red;">
+										${{total}}
+									</div>
+									{{/if}}
 								</div>
 							</div>
 						</ul>

@@ -55,6 +55,27 @@ function loadProduct() {
     });
 }
 
+function changeQuantity(productID, type) {
+    const url = '/api/cart/change-quantity/' + productID + '/' + type;
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            id: productID,
+            type: type,
+            quantity: $("#" + productID).val()
+        })
+    }).then(r => r.json()).then(data => {
+        console.log("data:", data);
+
+        $("#number-product-incart").html(data.number_product);
+        $("#cart-total").html(data.total);
+        $("#" + productID).val(data.product_quantity);
+        $("#" + productID + "-total").text("$" + data.product_total);
+    });
+}
 
 function deleteProductInCart(productID) {
     const url = '/api/cart/delete/' + productID;
@@ -78,24 +99,45 @@ function deleteProductInCart(productID) {
     });
 }
 
-function changeQuantity(productID, type) {
-    const url = '/api/cart/change-quantity/' + productID + '/' + type;
+function checkInputCoupon() {
+    console.log("check input")
+    coupon = $('#input-coupon').val();
+    console.log("coupon: " + coupon)
+
+    if (coupon === "") {
+        $("#discount").html(``);
+        $("#coupon-announce").html(``);
+    }
+
+}
+
+function applyCoupon() {
+    console.log("apply coupon");
+    const coupon = $("#input-coupon").val();
+    const url = '/api/cart/apply-coupon/' + coupon;
+
     fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            id: productID,
-            type: type,
-            quantity: $("#" + productID).val()
-        })
+        }
     }).then(r => r.json()).then(data => {
         console.log("data:", data);
 
-        $("#number-product-incart").html(data.number_product);
-        $("#cart-total").html(data.total);
-        $("#" + productID).val(data.product_quantity);
-        $("#" + productID + "-total").text("$" + data.product_total);
+        if (data.stt == false) {
+            $("#coupon-announce").css("color", "red");
+            $("#discount").html(" ");
+
+        } else {
+            const html = `Discount <span id="">${data.total}</span>`;
+
+            $("#coupon-announce").css("color", "green");
+            $("#discount").html(html);
+        }
+
+        console.log("f:", coupon);
+
+
+        $("#coupon-announce").text(data.msg);
     });
 }

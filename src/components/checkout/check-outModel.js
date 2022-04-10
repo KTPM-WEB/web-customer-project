@@ -9,6 +9,7 @@ const order = new Schema({
         product_id: String,
         quantity: Number
     }],
+    promo: String,
     status: String
 }, {
     versionKey: false // You should be aware of the outcome after set to false

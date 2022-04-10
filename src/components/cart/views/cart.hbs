@@ -52,16 +52,16 @@
             <div class="col-lg-4">
                 <div class="cart__discount">
                     <h6>Discount codes</h6>
-                    <form action="#">
-                        <input type="text" placeholder="Coupon code">
-                        <button type="submit">Apply</button>
-                    </form>
+                    <input type="text" placeholder="Coupon code" id="input-coupon" onfocusout="checkInputCoupon()">
+                    <button type="submit" onclick="applyCoupon()">Apply</button>
+                    <p id="coupon-announce"></p>
                 </div>
                 <div class="cart__total">
                     <h6>Cart total</h6>
                     <ul>
                         {{!-- <li>Subtotal <span>$ {{subtotal}}</span></li> --}}
-                        <li>Total <span id="cart-total">${{total}}</span></li>
+                        <li>Total <span id="cart-total"></span></li>
+                        <li id="discount"> </li>
                     </ul>
                     <a href="/checkout" class="primary-btn">Proceed to checkout</a>
                 </div>

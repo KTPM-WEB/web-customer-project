@@ -7,6 +7,7 @@ const hbs = require("hbs");
 
 const userModel = require('./userModel');
 const orderModel = require("../checkout/check-outModel");
+const promoModel = require("../cart/promoModel")
 const productModel = require("../product/model/productModel");
 const cloudinary = require('../../config/cloudinary.config');
 const bcrypt = require("bcrypt")
@@ -42,8 +43,8 @@ module.exports.changePassword = async (id, oldPass, newPass) => {
 
         await bcrypt.hash(newPass, 4).then(async (hash) => {
             await userModel.findOneAndUpdate(
-                {_id: id},
-                {$set: {password: hash}});
+                { _id: id },
+                { $set: { password: hash } });
         });
         return 'succ200';
     } catch (err) {
@@ -58,11 +59,11 @@ module.exports.changePassword = async (id, oldPass, newPass) => {
  */
 module.exports.getUserOrder = async (userID) => {
     try {
-        const orders = await orderModel.find({customer_id: userID}).lean();
-
+        const orders = await orderModel.find({ customer_id: userID }).lean();
         for (let i = 0; i < orders.length; i++) {
             let total = 0;
             let products = orders[i].products;
+            console.log(orders[i]);
 
             for (let j = 0; j < products.length; j++) {
                 const product = await productModel.findById(products[j].product_id).lean();
@@ -76,6 +77,15 @@ module.exports.getUserOrder = async (userID) => {
 
             orders[i].thumb = products[0].img;
             orders[i].total = Math.round(total * 100) / 100;
+
+            if (orders[i].promo !== undefined) {
+                let discount = parseInt((orders[i].promo).replace("%", ""));
+
+                console.log("discount:", discount);
+                orders[i].discount = Math.round(orders[i].total * discount) / 100;
+
+                console.log("-- discount:", orders[i].discount);
+            }
         }
         return orders;
 
@@ -93,7 +103,7 @@ module.exports.getUserOrder = async (userID) => {
  */
 module.exports.updateUser = async (username, field, new_value) => {
     try {
-        return await userModel.findOneAndUpdate({username: username}, {$set: {[field]: new_value}}, {new: true});
+        return await userModel.findOneAndUpdate({ username: username }, { $set: { [field]: new_value } }, { new: true });
     } catch (err) {
         throw err;
     }
@@ -109,7 +119,7 @@ module.exports.updateUser = async (username, field, new_value) => {
 module.exports.updateCart = async (id, cart, total) => {
     try {
         await userModel.findByIdAndUpdate(
-            {_id: id},
+            { _id: id },
             {
                 $set: {
                     cart: cart,
@@ -128,7 +138,7 @@ module.exports.updateCart = async (id, cart, total) => {
  */
 module.exports.checkUserName = async (username) => {
     try {
-        return await userModel.findOne({username: username}).lean();
+        return await userModel.findOne({ username: username }).lean();
     } catch (err) {
         throw err;
     }
@@ -141,7 +151,7 @@ module.exports.checkUserName = async (username) => {
  */
 module.exports.checkEmail = async (email) => {
     try {
-        return await userModel.findOne({email: email});
+        return await userModel.findOne({ email: email });
     } catch (err) {
         throw err;
     }
@@ -160,7 +170,7 @@ module.exports.changeAvatar = async (id, file) => {
         if (!file) return;
         const url = await cloudinary.upload(file.path, 'user_avatar');
         console.log(url);
-        await userModel.findByIdAndUpdate(id, {avatar_url: url});
+        await userModel.findByIdAndUpdate(id, { avatar_url: url });
     } catch (err) {
         throw err;
     }
@@ -175,10 +185,10 @@ module.exports.Register = async (body) => {
     try {
 
         if (!body.username || !body.password || !body.email) return "input_error";
-        const find_user = await userModel.findOne({username: body.username});
+        const find_user = await userModel.findOne({ username: body.username });
         if (find_user !== null) return "existed";
 
-        const email = await userModel.findOne({email: body.email});
+        const email = await userModel.findOne({ email: body.email });
 
         if (email) return "email_exist";
 
@@ -219,7 +229,7 @@ module.exports.Register = async (body) => {
  */
 module.exports.verifyUser = async (username, password) => {
     try {
-        const user = await userModel.findOne({username: username});
+        const user = await userModel.findOne({ username: username });
         if (!user) return false;
         else if (await bcrypt.compareSync(password, user.password)) return user;
         return false;
@@ -264,8 +274,8 @@ module.exports.changePasswordByEmail = async (email, newPass) => {
     try {
         await bcrypt.hash(newPass, 4).then(async (hash) => {
             await userModel.findOneAndUpdate(
-                {email: email},
-                {$set: {password: hash}});
+                { email: email },
+                { $set: { password: hash } });
         });
     } catch (err) {
         throw err;
@@ -278,7 +288,7 @@ module.exports.changePasswordByEmail = async (email, newPass) => {
  * @param email {string}
  * @returns {Promise<user||false>}
  */
-module.exports.confirmForm = async (username,email) => {
+module.exports.confirmForm = async (username, email) => {
     try {
         // Send email confirm
         const template = fs.readFileSync(
@@ -310,8 +320,8 @@ module.exports.confirmForm = async (username,email) => {
 module.exports.confirm = async (username) => {
     try {
         await userModel.findOneAndUpdate(
-            {username: username},
-            {$set: {confirm: true}});
+            { username: username },
+            { $set: { confirm: true } });
     } catch (err) {
         throw err;
     }

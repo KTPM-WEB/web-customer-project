@@ -13,7 +13,6 @@ function loadUserOrder() {
 
         $("#show-orders").html("");
 
-
         data.forEach((item, index) => {
             let order_cart = `
                 <div class="card user-card-full">
@@ -23,9 +22,18 @@ function loadUserOrder() {
                                 <img src="${item.thumb}"
                                     style="width: 150px; object-fit:cover" alt="logo">
                                 <div class="ml-3 p-3">
-                                    <h4 style="font-weight: bold;">${item.products[0].name},...</h4>
-                                    <div class="mb-2">$${item.total}</div>
+                                    <h4 style="font-weight: bold;">${item.products[0].name},...</h4>`
+
+            if (item.discount !== undefined) {
+                let final_pricee = Math.round((item.total - item.discount) * 100) / 100;
+
+                order_cart += `<div class="mb-2" id="item-total">$${final_pricee}</div>
                                     <div class="row">`
+            } else {
+                order_cart += `<div class="mb-2" id="item-total">$${item.total}</div>
+                                    <div class="row">`
+            }
+
 
             if (item.status == "Processing") {
                 order_cart += `<div class="status btn-warning">${item.status}</div>`
@@ -147,16 +155,40 @@ function loadUserOrder() {
                                     <hr>`
             });
 
-            order_cart += `
+            if (item.discount !== undefined) {
+                let final_price = Math.round((item.total - item.discount) * 100) / 100;
+                console.log("final_price", final_price);
+
+                order_cart += `
+                                    <div class="row">
+                                        <h6 class="col">Total:</h6>
+                                        <div class="col-3">
+                                            <h6 class="text-secondary font-weight-bold">
+                                                $${item.total}
+                                            </h6>
+                                            <h6 class="text-secondary font-weight-bold">
+                                                - $${item.discount}
+                                            </h6>
+                                            <hr>
+                                            <h5 class="font-weight-bold">
+                                                $${final_price}
+                                            </h5>
+                                        </div>
+                                    </div>`
+
+            } else {
+                order_cart += `
                                     <div class="row">
                                         <h6 class="col">Total:</h6>
                                         <div class="col-3">
                                             <h6 class="text-secondary font-weight-bold">
                                                 $${item.total}</h6>
                                         </div>
-                                    </div>
-                                </div>
+                                    </div>`
+            }
 
+            order_cart += `
+                        </div>
                             </div>
                             <div class="m-3 d-flex justify-content-end">
                                 <button type="button" class="btn btn-secondary" style="width: 120px;"
@@ -166,7 +198,7 @@ function loadUserOrder() {
                     </div>
                 </div>
                 `;
-            console.log(order_cart);
+
             $("#show-orders").append(order_cart);
         });
     });

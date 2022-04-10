@@ -1,7 +1,6 @@
 // pagination function
-module.exports.paging = (data, page) => {
+module.exports.paging = (data, page, limit) => {
     // get the total number of pages
-    const limit = 9;
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
     const result = {};

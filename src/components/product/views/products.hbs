@@ -16,7 +16,7 @@
 </section>
 <!-- Breadcrumb Section End -->
 <!-- Shop Section Begin -->
-<section class="shop spad">
+<section class="shop spad" style="background:white;">
 
 	<div class="container">
 		<div class="row">
@@ -27,7 +27,7 @@
 							<input class="form-control" id="myInput" type="text" name="name" placeholder="Search.."
 								onkeyup="sendData(this)" />
 							<button class="btn btn-outline-secondary"
-								style="height: 38px; border:1px solid lightgray; border-radius: 0px 5px 5px 0px;"
+								style="height: 38px; border:1px solid lightgray; border-radius: 0 5px 5px 0;"
 								onclick="getProductByField(document.getElementById('myInput').value,'name')"
 								type="button"><i class="fa fa-search"></i></button>
 						</div>
@@ -202,73 +202,17 @@
 			</div>
 			<div class="col-lg-9">
 				<div class="shop__product__option" id="stat-end">
-					<div class="row">
-						<div class="col-lg-6 col-md-6 col-sm-6">
-							<div class="shop__product__option__left">
-								<p>Showing {{products.start}}–{{products.end}} of {{totalProduct}} results</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row" id="product-list">
-					{{#each products.data}}
-					<div class="col-lg-4 col-md-6 col-sm-6">
-						<div class="card" style="width: 18rem;">
-							<a href="/product/{{_id}}">
-								<img class="card-img-top" src="{{thumb}}" alt="Card image cap">
-							</a>
 
-							<div class="card-body" id="card-body">
-								<a href="/product/{{_id}}">
-									<h5 id="product-name"><b>{{name}}</b></h5>
-								</a>
-								<input type="hidden" name="id" value="{{_id}}">
-								<a href="javascript:{}" id="add-product-{{_id}}" class="add-cart"
-									onclick="addProduct('{{_id}}')">
-									+ Add to cart
-								</a>
-								<h5>${{price}}</h5>
-								<div class="product__color__select">
-									{{#each color}}
-									<label for="pc-17" style="background-color: {{this}};">
-									</label>
-									{{/each}}
-								</div>
-							</div>
-						</div>
-					</div>
-					{{/each}}
 				</div>
+
+
+				<div class="row" id="product-list">
+				</div>
+
 				<div class="row">
 					<div class="col-lg-12">
-						<nav aria-label="Page navigation example" id="pagination">
-							<ul class="pagination" style="display: flex; justify-content: right;">
-								<li class="page-item" style="{{products.disablePrev}} ">
-									<a class="page-link" style="color: #0b0b0b" href="/product?page={{products.prev}}"
-										aria-label="Previous">
-										<span aria-hidden="true">&laquo;</span>
-									</a>
-								</li>
-								<li class="page-item {{products.hiddenPrev}}"
-									style="{{products.disablePrev}} {{products.numberPrev}} color: #0b0b0b;">
-									<a class="page-link" style="color: #0b0b0b" href="/product?page={{products.prev}}
-									"> {{products.prev}} </a>
-								</li>
-								<li class="page-item active" style="color: #0b0b0b;">
-									<a class="page-link" style="color: #0b0b0b" href="/product?page={{products.page}}
-									"> {{products.page}} </a>
-								</li>
-								<li class="page-item {{products.hiddenNext}}"
-									style="{{products.disableNext}} {{products.numberNext}} color: #0b0b0b">
-									<a class="page-link" style="color: #0b0b0b" href="/product?page={{products.next}}
-									"> {{products.next}} </a>
-								</li>
-								<li class="page-item" style="{{products.disableNext}} color: #0b0b0b">
-									<a class="page-link" style="color: #0b0b0b" href="/product?page={{products.next}}"
-										aria-label="Next">
-										<span aria-hidden="true">&raquo;</span>
-									</a>
-								</li>
+						<nav aria-label="Page navigation example">
+							<ul class="pagination" style="display: flex; justify-content: right;" id="pagination">
 							</ul>
 						</nav>
 					</div>

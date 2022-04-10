@@ -2,7 +2,7 @@ const orderModel = require("./check-outModel");
 const userModel = require("../user/userModel");
 
 /**
- * register
+ * order
  * @param user {object}
  * @returns {Promise<*>}
  */
@@ -23,7 +23,7 @@ module.exports.order = async (user) => {
             customer_id: user._id,
             create_date: now[2] + ' ' + now[1] + ',' + now[3],
             products: products,
-            status: "In Progress"
+            status: "Processing"
         }
 
         await orderModel.create(order);

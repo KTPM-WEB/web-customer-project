@@ -60,6 +60,12 @@ module.exports.getProductByField = async (field, type) => {
             return await productModel.find({ size: { $regex: new RegExp('^' + field + '.*', 'i') } }).exec();
         } else if (type === 'color') {
             return await productModel.find({ color: [{ $regex: new RegExp('^' + field + '.*', 'i') }] }).exec();
+        }else if (type === ''){
+            return await productModel.find({}).exec();
+        }else if (type === 'sort' && field === 'Low to High'){
+            return await productModel.find({}).sort({price:1}).exec();
+        }else if (type === 'sort' && field === 'High to Low'){
+            return await productModel.find({}).sort({price:-1}).exec();
         }
     } catch (err) {
         throw err;

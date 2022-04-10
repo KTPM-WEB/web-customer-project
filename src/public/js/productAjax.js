@@ -69,6 +69,7 @@ function getProductByField(field, type, page) {
         },
         dateType: "JSON",
         success: function (products) {
+            console.log(products);
             $product.html('');
             $start.html('');
             $pagination.html('');
@@ -84,7 +85,25 @@ function getProductByField(field, type, page) {
                         <p>Showing ${products.start}–${products.end} of ${products.total} results</p>
                     </div>
                 </div>
-            </div>`);
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="shop__product__option__right">
+                         <p>Sort by Price:</p>
+                            <select style="display: none;">
+                                <option>Random</option>
+                                <option>Low to High</option>
+                                <option>High to Low</option>
+                            </select><div class="nice-select" tabindex="0">
+                            <span class="current">${products.field}</span>
+                            <ul class="list">
+                            <li data-value="" class="option selected" onclick="getProductByField('Random','',1)">Random</li>
+                            <li data-value="" class="option" onclick="getProductByField('Low to High','sort',1)">Low to High</li>
+                            <li data-value="" class="option" onclick="getProductByField('High to Low','sort',1)">High to Low</li>
+                            </ul></div>
+                    </div>
+                </div>
+            </div>
+
+           `);
 
             products.data.forEach((item, index) => {
                 const str = `
@@ -109,7 +128,8 @@ function getProductByField(field, type, page) {
                 const html = $.parseHTML(str);
                 $product.append(html);
             });
-            $pagination.append(`<ul class="pagination" style="display: flex; justify-content: right;">
+
+            $pagination.append(`
                 <li class="page-item" style="${products.disablePrev} ">
                     <button class="page-link" style="color: #0b0b0b" href="#"
                        aria-label="Previous" onclick="getProductByField('${products.field}','${products.type}','${products.prev}')">
@@ -133,9 +153,11 @@ function getProductByField(field, type, page) {
                         <span aria-hidden="true">&raquo;</span>
                     </button>
                 </li>
-            </ul>`);
+            `);
         }
     });
 }
 
-
+window.onload = function () {
+    getProductByField('Random', '', 1);
+}

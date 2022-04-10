@@ -9,6 +9,7 @@ const cors = require('cors');
 const passport = require("./config/passport");
 const indexRouter = require('./routes/index');
 const authRouter = require('./components/auth/authRouter');
+const googleRouter = require('./components/google/googleRouter');
 const userRouter = require('./components/user/userRouter');
 const shopRouter = require('./components/product/productRouter');
 const contactRouter = require('./components/contact/contactRouter');
@@ -55,6 +56,7 @@ app.use(function (req, res, next) {
 
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
+app.use('/google', googleRouter);
 app.use('/user', userRouter);
 app.use('/product', shopRouter);
 app.use('/contact', contactRouter);

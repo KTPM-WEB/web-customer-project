@@ -40,38 +40,26 @@ exports.renderDetail = async (req, res) => {
  * @param res
  * @returns {Promise<*>}
  */
-module.exports.postReview = async (req, res) => {
-    try {
-        if (!req.user)
-            res.redirect('/auth/login')
-        else {
-            await productService.createReview(req.user.username, req.body.productID, req.body.content)
-            res.redirect('/product/' + req.body.productID)
-        }
-    } catch (err) {
+
+/**
+ * add to cart
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
+module.exports.addToCart = async (req, res) => {
+    try{
+        console.log("controller add to cart");
+        console.log("req.body", req.body);
+        console.log("req.user", req.user);
+
+        req.session.user = await productService.addToCart(req.body.id, req.user._id);
+        req.session.number_product += 1;
+
+        console.log("req.user:", req.user);
+
+        res.redirect('/product');
+    }catch (err) {
         res.status(500).json({message: err.message});
     }
 }
-
-// /**
-//  * add to cart
-//  * @param req
-//  * @param res
-//  * @returns {Promise<*>}
-//  */
-// module.exports.addToCart = async (req, res) => {
-//     try{
-//         console.log("controller add to cart");
-//         console.log("req.body", req.body);
-//         console.log("req.user", req.user);
-//
-//         req.session.user = await productService.addToCart(req.body.id, req.user._id);
-//         req.session.number_product += 1;
-//
-//         console.log("req.user:", req.user);
-//
-//         res.redirect('/product');
-//     }catch (err) {
-//         res.status(500).json({message: err.message});
-//     }
-// }

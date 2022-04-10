@@ -42,8 +42,8 @@ function signUp() {
     }).then(r => r.json()).then(function(data) {
         if(data.state)
             $('#mess-error').html(`<div class="alert alert-success" style="background:green;" role="alert"> ${data.message} </div>`)
-        else
+        else{
             $('#mess-error').html(`<div class="alert alert-danger" role="alert"> ${data.message} </div>`)
+        }
     })
-
 }

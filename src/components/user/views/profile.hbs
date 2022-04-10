@@ -1,377 +1,174 @@
 <section>
-    <div class="container">
-        <div class="page-content page-container" id="page-content">
-            <div class="padding">
-                <div class="row container d-flex justify-content-center">
-                    <div class="col-xl-12 col-md-12">
-                        <div class="card user-card-full">
-                            <div class="row mx-0" style="height: 600px;">
-                                <div class="col-sm-4 p-0" id="img-container">
-                                    <img id="profile-avatar" src="" class="img-radius mb-4" alt="User-Profile-Image">
+	<div class="container">
+		<div class="page-content page-container" id="page-content">
+			<div class="padding">
+				<div class="row container d-flex justify-content-center">
+					<div class="col-xl-12 col-md-12">
+						<div class="card user-card-full">
+							<div class="row mx-0" style="height: 600px;">
+								<div class="col-sm-4 p-0" id="img-container">
+									<img id="profile-avatar" src="" class="img-radius mb-4" alt="User-Profile-Image">
 
-                                    <div class="mx-auto w-75 mb-3">
-                                        <button type="button" class="btn btn-primary px-4 w-100" style="height:50px;"
-                                            data-toggle="modal" data-target="#modalChangeAvatar">
-                                            Change avatar
-                                        </button>
-                                    </div>
-                                    <form action="/user/profile/change-avatar" method="POST" id="change-avatar-form"
-                                        enctype="multipart/form-data">
-                                        <div class="modal fade" id="modalChangeAvatar" tabindex="-1"
-                                            aria-labelledby="modalChangeAvatar" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Change avatar
-                                                        </h5>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <b>Avatar:</b>
-                                                        <input type="file" id="input-product-image"
-                                                            class="form-control p-0 pt-1" name="avatar_url"
-                                                            accept=".jpg,.jpeg,.png">
-                                                        <div class="w-100 d-flex flex-row justify-content-end mt-3">
-                                                            <button type="reset" id="cancle-btn"
-                                                                class="btn btn-secondary me-2" data-dismiss="modal"
-                                                                aria-label="Close">Cancle
-                                                            </button>
-                                                            <button type="submit" id="submit-img-btn"
-                                                                class="ml-2 btn btn-primary">
-                                                                Submit
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
+									<div class="mx-auto w-75 mb-3">
+										<button type="button" class="btn btn-primary px-4 w-100" style="height:50px;"
+												data-toggle="modal" data-target="#modalChangeAvatar">
+											Change avatar
+										</button>
+									</div>
+									<form action="/user/profile/change-avatar" method="POST" id="change-avatar-form"
+										  enctype="multipart/form-data">
+										<div class="modal fade" id="modalChangeAvatar" tabindex="-1"
+											 aria-labelledby="modalChangeAvatar" aria-hidden="true">
+											<div class="modal-dialog">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title" id="exampleModalLabel">Change avatar
+														</h5>
+													</div>
+													<div class="modal-body">
+														<b>Avatar:</b>
+														<input type="file" id="input-product-image"
+															   class="form-control p-0 pt-1" name="avatar_url"
+															   accept=".jpg,.jpeg,.png">
+														<div class="w-100 d-flex flex-row justify-content-end mt-3">
+															<button type="reset" id="cancle-btn"
+																	class="btn btn-secondary me-2" data-dismiss="modal"
+																	aria-label="Close">Cancle
+															</button>
+															<button type="submit" id="submit-img-btn"
+																	class="ml-2 btn btn-primary">
+																Submit
+															</button>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</form>
 
-                                    <!-- Button trigger modal -->
-                                    <div class="mx-auto w-75 mb-5">
-                                        <button type="button" class="btn btn-primary px-4 w-100" style="height:50px;"
-                                            data-toggle="modal" data-target="#change-password">
-                                            Change password
-                                        </button>
-                                    </div>
+									<input type="hidden" id="username"/>
+									<div class="mx-auto w-75 mb-5">
+										<button type="button" data-toggle="modal" data-target="#exampleModal" onclick="changePasswordForm()" class="btn btn-primary px-4 w-100" style="height:50px;">
+											Change password
+										</button>
+									</div>
 
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="change-password" tabindex="-1" role="dialog"
-                                        aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Change password</h5>
-                                                    <button type="button" class="close" data-dismiss="modal"
-                                                        aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="card-body">
-                                                        <div>
-                                                            <b>Old password:</b> <span class="red-start">*</span>
-                                                            <div class="input-group mb-3">
-                                                                <input type="password" class="form-control"
-                                                                    placeholder="Old password" id="old-passwd"
-                                                                    aria-label="Passwd" name="old_passwd">
-                                                                <span class="input-group-text">
-                                                                    <i class="far fa-eye-slash"
-                                                                        id="toggleOldPassword-passwd"></i>
-                                                                </span>
-                                                            </div>
-                                                            <b>New password:</b> <span class="red-start">*</span>
-                                                            <div class="mb-4">
-                                                                <div class="input-group mb-2">
-                                                                    <input type="password" class="form-control"
-                                                                        placeholder="New password" id="new-passwd"
-                                                                        aria-label="Passwd" name="new_passwd">
-                                                                    <span class="input-group-text">
-                                                                        <i class="far fa-eye-slash"
-                                                                            id="toggleNewPassword-passwd"></i>
-                                                                    </span>
-                                                                </div>
-                                                                <div class="input-group mb-1">
-                                                                    <input type="password" class="form-control"
-                                                                        id="confirm-passwd"
-                                                                        placeholder="Confirm new password"
-                                                                        aria-label="Passwd" name="confirm_passwd">
-                                                                    <span class="input-group-text">
-                                                                        <i class="far fa-eye-slash"
-                                                                            id="togglePassword-confirmPasswd"></i>
-                                                                    </span>
-                                                                </div>
-                                                                <div>
-                                                                    <form action="/auth/forgot-pass"
-                                                                        id="forgot-pass-form" method="post">
-                                                                        <a href="#" style="color: blue;"
-                                                                            onmouseover="this.style.color='lightblue'"
-                                                                            onmouseout="this.style.color='blue';"
-                                                                            onclick="$('#forgot-pass-form').submit()">
-                                                                            Forgot password?
-                                                                        </a>
-                                                                    </form>
-                                                                </div>
-                                                                <hr>
+									<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+										<div class="modal-dialog" role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="exampleModalLabel"><strong>Change password</strong></h5>
+													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+													</button>
+												</div>
+												<div class="modal-body" id="modal-body">
+													Check email for change password
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-8">
+									<div class="card-block">
+										<h6 class="m-b-20 p-b-5 b-b-default f-w-600 profile-header-section">General</h6>
+										<div class="row">
+											<div class="col-sm-6">
+												<p class="m-b-10 f-w-600 profile-header-field">Full Name</p>
+												<div class="infomation-row">
+													<h6 class="text-muted f-w-400" id="fullname"></h6>
+													<i class="fa-solid fa-pen-to-square"></i>
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<p class="m-b-10 f-w-600 profile-header-field">Role</p>
+												<div class="infomation-row">
+													<h6 class="text-muted f-w-400" id="role"></h6>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-sm-6">
+												<p class="mt-2 m-b-10 f-w-600 profile-header-field">Username</p>
+												<div class="infomation-row">
+													<h6 class="text-muted f-w-400" id="profile-username"></h6>
+												</div>
+											</div>
+										</div>
 
-                                                                <span id="change-passwd-announce"
-                                                                    style="color: red; visibility:hidden">
-                                                                    New password and confirm password are not match
-                                                                </span>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="w-100 d-flex flex-row justify-content-end ">
-                                                            <button type="button" id="cancle-pass"
-                                                                class="btn btn-secondary me-2" data-dismiss="modal"
-                                                                aria-label="Close" onclick="clearForm()">Cancle
-                                                            </button>
-                                                            <button type="submit" id="submit-pass"
-                                                                class="btn btn-primary ml-2" onmousedown="changePass()">
-                                                                Submit
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-8">
-                                    <div class="card-block">
-                                        <h6 class="m-b-20 p-b-5 b-b-default f-w-600 profile-header-section">General</h6>
-                                        <div class="row">
-                                            <div class="col-sm-6 fullname">
-                                                <p class="m-b-10 f-w-600 profile-header-field">Full Name</p>
-                                                <div class="current-info" style="display: flex; flex-direction: row;">
-                                                    <h6 class="text-muted f-w-400" id="fullname"></h6>
-                                                    <i class="fa-solid fa-pen-to-square" onclick="showForm('fullname')"></i>
-                                                </div>
-                                                <form method="post" class="edit-form" style="display: none">
-                                                    <div class="container edit-form">
-                                                        <input class="edit-input" type="text"; name="fullname">
-                                                        <input type="submit" value="Apply" class="sub-btn" onclick="edit('fullname')">
-                                                    </div>
-                                                </form>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <p class="m-b-10 f-w-600 profile-header-field">Role</p>
-                                                <div class="current-info">
-                                                    <h6 class="text-muted f-w-400" id="role"></h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <p class="mt-2 m-b-10 f-w-600 profile-header-field">Username</p>
-                                                <div class="current-info">
-                                                    <h6 class="text-muted f-w-400" id="profile-username"></h6>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <h6 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600 profile-header-section">
-                                            Detail</h6>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <p class="m-b-10 f-w-600 profile-header-field">Employed</p>
-                                                <div class="current-info">
-                                                    <h6 class="text-muted f-w-400" id="employed"></h6>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6 intro">
-                                                <p class="m-b-10 f-w-600 profile-header-field">Introduction</p>
-                                                <div class="current-info">
-                                                    <h6 class="text-muted f-w-400" id="intro"></h6>
-                                                    <i class="fa-solid fa-pen-to-square" onclick="showForm('intro')"></i>
-                                                </div>
-                                                <form method="post" class="edit-form" style="display: none">
-                                                    <div class="container edit-form">
-                                                        <input class="edit-input" type="text"; name="intro">
-                                                        <input type="submit" value="Apply" class="sub-btn" onclick="edit('intro')">
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
+										<h6 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600 profile-header-section">
+											Introduce</h6>
+										<div class="row">
+											<div class="col-sm-6">
+												<p class="m-b-10 f-w-600 profile-header-field">Employed</p>
+												<div class="infomation-row">
+													<h6 class="text-muted f-w-400" id="employed"></h6>
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<p class="m-b-10 f-w-600 profile-header-field">Introduce</p>
+												<div class="infomation-row">
+													<h6 class="text-muted f-w-400" id="intro"></h6>
+													<i class="fa-solid fa-pen-to-square"></i>
+												</div>
+											</div>
+										</div>
 
 
-                                        <h6 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600 profile-header-section">
-                                            Contact</h6>
-                                        <div class="row">
-                                            <div class="col-sm-6 phone">
-                                                <p class="m-b-10 f-w-600 profile-header-field">Phone</p>
-                                                <div class="current-info">
-                                                    <h6 class="text-muted f-w-400" id="phone"></h6>
-                                                    <i class="fa-solid fa-pen-to-square" onclick="showForm('phone')"></i>
-                                                </div>
-                                                <form method="post" class="edit-form" style="display: none">
-                                                    <div class="container edit-form">
-                                                        <input class="edit-input" type="text"; name="phone">
-                                                        <input type="submit" value="Apply" class="sub-btn" onclick="edit('phone')">
-                                                    </div>
-                                                </form>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <p class="m-b-10 f-w-600 profile-header-field">Email</p>
-                                                <div class="current-info pr-4">
-                                                    <h6 class="text-muted f-w-400 w-100" id="email"></h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-2">
-                                            <div class="col-sm-6 address">
-                                                <p class="m-b-10 f-w-600 profile-header-field">Address</p>
-                                                <div class="current-info">
-                                                    <h6 class="text-muted f-w-400" id="address"></h6>
-                                                    <i class="fa-solid fa-pen-to-square"  onclick="showForm('address')"></i>
-                                                </div>
-                                                <form method="post" class="edit-form" style="display: none">
-                                                    <div class="container edit-form">
-                                                        <input class="edit-input" type="text"; name="address">
-                                                        <input type="submit" value="Apply" class="sub-btn" onclick="edit('address')">
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
+										<h6 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600 profile-header-section">
+											Contact</h6>
+										<div class="row">
+											<div class="col-sm-6">
+												<p class="m-b-10 f-w-600 profile-header-field">Phone</p>
+												<div class="infomation-row">
+													<h6 class="text-muted f-w-400" id="phone"></h6>
+													<i class="fa-solid fa-pen-to-square"></i>
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<p class="m-b-10 f-w-600 profile-header-field">Email</p>
+												<div class="infomation-row pr-4">
+													<h6 class="text-muted f-w-400 w-100" id="email"></h6>
+												</div>
+											</div>
+										</div>
+										<div class="row mt-2">
+											<div class="col-sm-6">
+												<p class="m-b-10 f-w-600 profile-header-field">Address</p>
+												<div class="infomation-row">
+													<h6 class="text-muted f-w-400" id="address"></h6>
+													<i class="fa-solid fa-pen-to-square"></i>
+												</div>
+											</div>
+										</div>
 
 
-                                        <ul class="social-link list-unstyled m-t-40 m-b-10">
-                                            <li><a href="#!" data-toggle="tooltip" data-placement="bottom" title=""
-                                                    data-original-title="facebook" data-abc="true"><i
-                                                        class="mdi mdi-facebook feather icon-facebook facebook"
-                                                        aria-hidden="true"></i></a></li>
-                                            <li><a href="#!" data-toggle="tooltip" data-placement="bottom" title=""
-                                                    data-original-title="twitter" data-abc="true"><i
-                                                        class="mdi mdi-twitter feather icon-twitter twitter"
-                                                        aria-hidden="true"></i></a></li>
-                                            <li><a href="#!" data-toggle="tooltip" data-placement="bottom" title=""
-                                                    data-original-title="instagram" data-abc="true"><i
-                                                        class="mdi mdi-instagram feather icon-instagram instagram"
-                                                        aria-hidden="true"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+										<ul class="social-link list-unstyled m-t-40 m-b-10">
+											<li><a href="#!" data-toggle="tooltip" data-placement="bottom" title=""
+												   data-original-title="facebook" data-abc="true"><i
+													class="mdi mdi-facebook feather icon-facebook facebook"
+													aria-hidden="true"></i></a></li>
+											<li><a href="#!" data-toggle="tooltip" data-placement="bottom" title=""
+												   data-original-title="twitter" data-abc="true"><i
+													class="mdi mdi-twitter feather icon-twitter twitter"
+													aria-hidden="true"></i></a></li>
+											<li><a href="#!" data-toggle="tooltip" data-placement="bottom" title=""
+												   data-original-title="instagram" data-abc="true"><i
+													class="mdi mdi-instagram feather icon-instagram instagram"
+													aria-hidden="true"></i></a></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </section>
 
-{{!-- load image from <file> to <img> --}}
-    <script>
-        document.getElementById('input-product-image').onchange = function (evt) {
-            const tgt = evt.target || window.event.srcElement,
-                files = tgt.files;
-
-            // FileReader support
-            if (FileReader && files && files.length) {
-                const fr = new FileReader();
-                fr.onload = function () {
-                    document.getElementById("profile-avatar").src = fr.result;
-                }
-                fr.readAsDataURL(files[0]);
-            }
-
-            // Not supported
-            else {
-                // fallback -- perhaps submit the input to an iframe and temporarily store
-                // them on the server until the user's session ends.
-            }
-        }
-    </script>
-
-    {{!-- show - hide password --}}
-    <script>
-        const toggleOldPassword = document.querySelector("#toggleOldPassword-passwd");
-        const toggleNewPassword = document.querySelector("#toggleNewPassword-passwd");
-        const toggleConfirmPassword = document.querySelector("#togglePassword-confirmPasswd");
-        const old_password = document.querySelector("#old-passwd");
-        const new_password = document.querySelector("#new-passwd");
-        const confirm_password = document.querySelector("#confirm-passwd");
-
-        toggleOldPassword.addEventListener("click", function () {
-            // toggle the type attribute
-            const type = old_password.getAttribute("type") === "password" ? "text" : "password";
-            old_password.setAttribute("type", type);
-            // toggle the eye icon
-            this.classList.toggle('fa-eye');
-            this.classList.toggle('fa-eye-slash');
-
-        });
-
-        toggleNewPassword.addEventListener("click", function () {
-            // toggle the type attribute
-            const type = new_password.getAttribute("type") === "password" ? "text" : "password";
-            new_password.setAttribute("type", type);
-            // toggle the eye icon
-            this.classList.toggle('fa-eye');
-            this.classList.toggle('fa-eye-slash');
-
-        });
-
-        toggleConfirmPassword.addEventListener("click", function () {
-            // toggle the type attribute
-            const type = confirm_password.getAttribute("type") === "password" ? "text" : "password";
-            confirm_password.setAttribute("type", type);
-            // toggle the eye icon
-            this.classList.toggle('fa-eye');
-            this.classList.toggle('fa-eye-slash');
-
-        });
-    </script>
-
-    {{!-- change password script --}}
-    <script>
-        const newPass = document.getElementById("new-passwd");
-        const confirmPass = document.getElementById("confirm-passwd");
-
-        function checkSamePass() {
-            var announce = document.getElementById("change-passwd-announce");
-            const submit_btn = document.getElementById('submit-pass');
-            $("#change-passwd-announce").text("New password and confirm password are not match!");
-
-            if (newPass.value != confirmPass.value) {
-                announce.style.visibility = "visible";
-                submit_btn.innerHTML = '<i class="fa fa-times" aria-hidden="true"></i>&nbsp; Submit';
-                submit_btn.disabled = true;
-                return false;
-            } else {
-                submit_btn.innerHTML = 'Submit';
-                submit_btn.disabled = false;
-                return true;
-            }
-        }
-
-        confirmPass.addEventListener("blur", function () {
-            var announce = document.getElementById("change-passwd-announce");
-            const submit_btn = document.getElementById('submit-pass');
-
-            if (newPass.value != confirmPass.value) {
-                announce.style.visibility = "visible";
-                submit_btn.innerHTML = '<i class="fa fa-times" aria-hidden="true"></i>&nbsp; Submit';
-                submit_btn.disabled = true;
-            } else {
-                submit_btn.innerHTML = 'Submit';
-                submit_btn.disabled = false;
-            }
-        });
-
-        function clearForm() {
-            console.log("clear form")
-            const submit_btn = document.getElementById('submit-pass');
-
-            submit_btn.innerHTML = 'Submit';
-            submit_btn.disabled = false;
-
-            $("#old-passwd").val("")
-            $("#new-passwd").val("");
-            $("#confirm-passwd").val("");
-
-            document.getElementById("change-passwd-announce").style.visibility = "hidden";
-        }
-    </script>
-
-    <script src="/js/profile.js"></script>
-    <script src="/js/userAjax.js"></script>
+<script src="/js/userAjax.js"></script>

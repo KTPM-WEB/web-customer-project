@@ -1,5 +1,5 @@
-const checkoutService = require("../../checkout/check-outService");
-const userService = require("../../user/userService");
+const checkoutService = require("../../components/checkout/check-outService");
+const userService = require("../../components/user/userService");
 
 /**
  * get order history
@@ -63,7 +63,7 @@ exports.changePass = async (req, res) => {
     }
 }
 
-exports.aaa = async (req, res) => {
+exports.editProfile = async (req, res) => {
     try {
         if (req.user==null)
         {

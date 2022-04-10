@@ -15,6 +15,7 @@ const user = new Schema({
     phone: String,
     intro: String,
     total: Number,
+    confirm: Boolean,
     cart: [{
         productID: String,
         quantity: Number,

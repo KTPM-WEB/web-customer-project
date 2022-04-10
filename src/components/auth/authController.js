@@ -1,4 +1,4 @@
-const service = require('./authService');
+const service = require('../user/userService');
 
 /*************************** GET methods ***************************/
 /**
@@ -49,18 +49,29 @@ exports.logout = async (req, res) => {
     }
 };
 
-
-/**
- * check if the user exists
- * @param req
- * @param res
- * @returns {Promise<*>}
- */
-exports.forgotPass = async (req, res) => {
+exports.forgetPassword = async (req, res) => {
     try {
-        console.log("-- api forgot pass --");
+        await service.forgetPassword(req.body.email);
+        res.redirect("back");
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+};
 
+exports.changePassword = async (req, res) => {
+    try {
+        await service.changePasswordByEmail(req.body.email, req.body.newpass);
+        res.redirect("back");
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+};
+
+exports.confirm = async (req, res) => {
+    try {
+        await service.confirm(req.body.username);
+        res.render("auth/views/thank-you",{layout: false});
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
-}
+};

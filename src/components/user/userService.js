@@ -1,3 +1,10 @@
+require("dotenv").config();
+
+const fs = require("fs");
+const sgMail = require("../../config/sendgrid.config");
+const path = require("path");
+const hbs = require("hbs");
+
 const userModel = require('./userModel');
 const orderModel = require("../checkout/check-outModel");
 const productModel = require("../product/model/productModel");
@@ -9,9 +16,9 @@ const bcrypt = require("bcrypt")
  * @param userID {string}
  * @returns {Promise<*>}
  */
-module.exports.getUserByID = (userID) => {
+module.exports.getUserByID = async (userID) => {
     try {
-        return userModel.findById(userID).lean();
+        return await userModel.findById(userID).lean();
     } catch (err) {
         throw err;
     }
@@ -23,7 +30,7 @@ module.exports.getUserByID = (userID) => {
  * @param newPass {string}
  * @param id {string}
  * @param oldPass
- * @returns {Promise<void>}
+ * @returns {Promise<string>}
  */
 module.exports.changePassword = async (id, oldPass, newPass) => {
     try {
@@ -35,14 +42,13 @@ module.exports.changePassword = async (id, oldPass, newPass) => {
 
         await bcrypt.hash(newPass, 4).then(async (hash) => {
             await userModel.findOneAndUpdate(
-                { _id: id },
-                { $set: { password: hash } });
+                {_id: id},
+                {$set: {password: hash}});
         });
         return 'succ200';
     } catch (err) {
         throw err;
     }
-
 };
 
 /**
@@ -52,7 +58,7 @@ module.exports.changePassword = async (id, oldPass, newPass) => {
  */
 module.exports.getUserOrder = async (userID) => {
     try {
-        const orders = await orderModel.find({ customer_id: userID }).lean();
+        const orders = await orderModel.find({customer_id: userID}).lean();
 
         for (let i = 0; i < orders.length; i++) {
             let total = 0;
@@ -85,9 +91,9 @@ module.exports.getUserOrder = async (userID) => {
  * @param new_value
  * @returns {Promise<*>}
  */
-module.exports.updateUser = (username, field, new_value) => {
+module.exports.updateUser = async (username, field, new_value) => {
     try {
-        return userModel.findOneAndUpdate({ username: username }, { $set: { [field]: new_value } }, { new: true });
+        return await userModel.findOneAndUpdate({username: username}, {$set: {[field]: new_value}}, {new: true});
     } catch (err) {
         throw err;
     }
@@ -103,7 +109,7 @@ module.exports.updateUser = (username, field, new_value) => {
 module.exports.updateCart = async (id, cart, total) => {
     try {
         await userModel.findByIdAndUpdate(
-            { _id: id },
+            {_id: id},
             {
                 $set: {
                     cart: cart,
@@ -122,7 +128,7 @@ module.exports.updateCart = async (id, cart, total) => {
  */
 module.exports.checkUserName = async (username) => {
     try {
-        return await userModel.findOne({ username: username });
+        return await userModel.findOne({username: username}).lean();
     } catch (err) {
         throw err;
     }
@@ -135,7 +141,7 @@ module.exports.checkUserName = async (username) => {
  */
 module.exports.checkEmail = async (email) => {
     try {
-        return await userModel.findOne({ email: email });
+        return await userModel.findOne({email: email});
     } catch (err) {
         throw err;
     }
@@ -150,13 +156,163 @@ module.exports.checkEmail = async (email) => {
  */
 module.exports.changeAvatar = async (id, file) => {
     try {
-        console.log("file.path: ", file.path);
-        // upload image
+        console.log(id, file);
         if (!file) return;
-        console.log(file);
         const url = await cloudinary.upload(file.path, 'user_avatar');
-        await userModel.findByIdAndUpdate(id, { avatar_url: url });
+        console.log(url);
+        await userModel.findByIdAndUpdate(id, {avatar_url: url});
     } catch (err) {
         throw err;
     }
 };
+
+/**
+ * register
+ * @param body {object}
+ * @returns {Promise<*>}
+ */
+module.exports.Register = async (body) => {
+    try {
+
+        if (!body.username || !body.password || !body.email) return "input_error";
+        const find_user = await userModel.findOne({username: body.username});
+        if (find_user !== null) return "existed";
+
+        const email = await userModel.findOne({email: body.email});
+
+        if (email) return "email_exist";
+
+        const salt = await bcrypt.genSaltSync(10);
+        const hash_pass = await bcrypt.hashSync(body.password, salt);
+
+        const now = (new Date()).toString().split(" ");
+
+        const user = {
+            username: body.username,
+            fullname: '',
+            password: hash_pass,
+            email: body.email,
+            role: "User",
+            employed: now[2] + ' ' + now[1] + ',' + now[3],
+            address: "",
+            phone: "",
+            intro: "",
+            total: 0,
+            confirm: false,
+            avatar_url: "https://res.cloudinary.com/web-hcmus/image/upload/v1648341181/Default_avatar/default-avtar_wmf6yf.jpg", //default avatar
+        }
+        // insert
+        await userModel.insertMany(user)
+        return "success";
+
+    } catch (err) {
+        /*console.log(error);*/
+        throw err;
+    }
+}
+
+/**
+ * register
+ * @param username {string}
+ * @param password {string}
+ * @returns {Promise<user||false>}
+ */
+module.exports.verifyUser = async (username, password) => {
+    try {
+        const user = await userModel.findOne({username: username});
+        if (!user) return false;
+        else if (await bcrypt.compareSync(password, user.password)) return user;
+        return false;
+    } catch (err) {
+        throw err;
+    }
+}
+
+exports.forgetPassword = async (email) => {
+    try {
+        // Send email template
+        const template = fs.readFileSync(
+            path.resolve(__dirname, "../auth/views/forgetPassword.hbs"),
+            "utf8"
+        );
+
+        const compiledTemplate = hbs.compile(template);
+        const msg = {
+            to: email,
+            from: process.env.EMAIL_SENDER,
+            subject: "male shop reset password",
+            html: compiledTemplate({
+                domain: process.env.DOMAIN_NAME,
+                email,
+                curr_time: Date.now(),
+            }),
+        };
+        await sgMail.send(msg);
+    } catch (err) {
+        throw err;
+    }
+};
+
+/**
+ *  change password of user
+ *
+ * @param newPass {string}
+ * @param email {string}
+ * @returns {Promise<string>}
+ */
+module.exports.changePasswordByEmail = async (email, newPass) => {
+    try {
+        await bcrypt.hash(newPass, 4).then(async (hash) => {
+            await userModel.findOneAndUpdate(
+                {email: email},
+                {$set: {password: hash}});
+        });
+    } catch (err) {
+        throw err;
+    }
+};
+
+/**
+ * confirm email
+ * @param username {string}
+ * @param email {string}
+ * @returns {Promise<user||false>}
+ */
+module.exports.confirmForm = async (username,email) => {
+    try {
+        // Send email confirm
+        const template = fs.readFileSync(
+            path.resolve(__dirname, "../auth/views/confirm-email.hbs"),
+            "utf8"
+        );
+
+        const compiledTemplate = hbs.compile(template);
+        const msg = {
+            to: email,
+            from: process.env.EMAIL_SENDER,
+            subject: "male shop confirm account",
+            html: compiledTemplate({
+                domain: process.env.DOMAIN_NAME,
+                username
+            }),
+        };
+        await sgMail.send(msg);
+    } catch (err) {
+        throw err;
+    }
+}
+
+/**
+ * confirm email
+ * @param username {string}
+ * @returns {Promise<user||false>}
+ */
+module.exports.confirm = async (username) => {
+    try {
+        await userModel.findOneAndUpdate(
+            {username: username},
+            {$set: {confirm: true}});
+    } catch (err) {
+        throw err;
+    }
+}

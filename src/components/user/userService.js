@@ -18,18 +18,18 @@ module.exports.getUserByID = (userID) => {
 }
 
 /**
-*  change password of user
-*
-* @param newPass {string}
-* @param id {string}
-* @returns {Promise<void>}
-*/
+ *  change password of user
+ *
+ * @param newPass {string}
+ * @param id {string}
+ * @param oldPass
+ * @returns {Promise<void>}
+ */
 module.exports.changePassword = async (id, oldPass, newPass) => {
     try {
         const user = await userModel.findById(id)
-        console.log("user", user)
 
-        if (await !bcrypt.compareSync(oldPass, user.password)) {
+        if (!bcrypt.compareSync(oldPass, user.password)) {
             return 'err400';
         }
 
@@ -38,8 +38,6 @@ module.exports.changePassword = async (id, oldPass, newPass) => {
                 { _id: id },
                 { $set: { password: hash } });
         });
-
-        console.log('change password done');
         return 'succ200';
     } catch (err) {
         throw err;

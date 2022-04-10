@@ -22,12 +22,6 @@
 						<input type="password" name="password" id="your_pass" placeholder="Password" />
 					</div>
 
-
-					<a href="#" style="color: blue;" onmouseover="this.style.color='lightblue'"
-						onmouseout="this.style.color='blue';" onclick="$('#forgot-pass-form').submit()">
-						Forgot password?
-					</a>
-
 					<a class="btn btn-light w-100 mt-4  mb-0" href="/auth/login/google" value="google">
 						<img src="/img/auth/google.png" style="width: 25px; height: 25px;" alt="sing up image">
 						Login with Google
@@ -35,6 +29,11 @@
 					<div class="form-group form-button">
 						<input type="submit" name="signin" id="signin" class="form-submit" value="Login" />
 					</div>
+
+
+					<a href="#" class="signup-image-link" onclick="$('#forgot-pass-form').submit()">
+						Forgot password?
+					</a>
 				</form>
 				<form action="/auth/forgot-pass" id="forgot-pass-form" method="post"></form>
 				{{#if message}}

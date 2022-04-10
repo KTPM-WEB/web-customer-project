@@ -9,17 +9,10 @@ function loadProduct() {
             'Content-Type': 'application/json'
         }
     }).then(r => r.json()).then(data => {
-        console.log('-- Ajax get products --');
-        console.log("data: ", data);
-
         const $product_table = $("#cart-table");
         $product_table.html("");
 
-        console.log("data.products: ", data.products);
         data.products.forEach((item, index) => {
-            console.log('----------');
-            console.log("item: ", item);
-
             const html = `
             <tr>
                 <td class="product__cart__item">
@@ -74,8 +67,6 @@ function deleteProductInCart(productID) {
             id: productID
         })
     }).then(r => r.json()).then(data => {
-        console.log('-- Ajax delete products --');
-        console.log("data: ", data);
         const $product_table = $("#cart-table");
 
         // clear product table
@@ -99,8 +90,6 @@ function changeQuantity(productID, type) {
             type: type
         })
     }).then(r => r.json()).then(data => {
-        console.log('-- Ajax update products --');
-        console.log("data: ", data);
         const $product_table = $("#cart-table");
 
         // clear product table

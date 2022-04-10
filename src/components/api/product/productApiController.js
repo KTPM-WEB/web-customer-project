@@ -1,5 +1,5 @@
 const productService = require("../../product/productService");
-const productUtils = require("../../product/productUtils");
+const pagination = require("../../../public/js/paging");
 
 /**
  * search name of product
@@ -27,7 +27,7 @@ exports.render = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const getProducts = await productService.getAllProducts();
-        const products = productUtils.paging(getProducts, page, 6);
+        const products = pagination.paging(getProducts, page, 6);
         res.json(products);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -44,7 +44,7 @@ exports.renderByField = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const getProducts = await productService.getProductByField(req.query.field, req.query.type);
-        const products = productUtils.paging(getProducts, page, 6);
+        const products = pagination.paging(getProducts, page, 6);
         products.field = req.query.field;
         products.type = req.query.type;
         res.json(products);

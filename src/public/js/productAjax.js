@@ -46,9 +46,6 @@ function addProduct(productID, quantity = 1) {
             quantity: quantity
         })
     }).then(r => r.json()).then(data => {
-        console.log("-- Ajax add product --");
-        console.log("data:", data);
-
         $("#number-product-incart").html(data.number);
     });
 
@@ -69,7 +66,6 @@ function getProductByField(field, type, page) {
         },
         dateType: "JSON",
         success: function (products) {
-            console.log(products);
             $product.html('');
             $start.html('');
             $pagination.html('');
@@ -87,7 +83,7 @@ function getProductByField(field, type, page) {
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6">
                     <div class="shop__product__option__right">
-                         <p>Sort by Price:</p>
+                         <p>Sort by:</p>
                             <select style="display: none;">
                                 <option>Random</option>
                                 <option>Low to High</option>
@@ -95,9 +91,9 @@ function getProductByField(field, type, page) {
                             </select><div class="nice-select" tabindex="0">
                             <span class="current">${products.field}</span>
                             <ul class="list">
-                            <li data-value="" class="option selected" onclick="getProductByField('Random','',1)">Random</li>
-                            <li data-value="" class="option" onclick="getProductByField('Low to High','sort',1)">Low to High</li>
-                            <li data-value="" class="option" onclick="getProductByField('High to Low','sort',1)">High to Low</li>
+                                <li data-value="" class="option" onclick="getProductByField('Random','',1)">Random</li>
+                                <li data-value="" class="option" onclick="getProductByField('Low to High','sort',1)">Low to High</li>
+                                <li data-value="" class="option" onclick="getProductByField('High to Low','sort',1)">High to Low</li>
                             </ul></div>
                     </div>
                 </div>

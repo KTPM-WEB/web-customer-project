@@ -1,5 +1,4 @@
 const productService = require('./productService');
-const productUtils = require('./productUtils');
 
 /************************************* GET methods *************************************/
 /**
@@ -27,9 +26,6 @@ exports.renderDetail = async (req, res) => {
         const product = await productService.getProductByID(req.params.id);
         const review = await productService.getAllReviewByProductID(req.params.id);
         const relatedProduct = await productService.getRelatedList(product.category);
-
-        console.log("relatedProduct:", relatedProduct);
-
         res.render("product/views/product_detail", {product: product, review: review, relatedProduct: relatedProduct});
     } catch (err) {
         res.status(500).json({message: err.message});

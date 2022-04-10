@@ -11,21 +11,16 @@ module.exports.Register = async (body) => {
     try {
         // check input fields
         if (!body.username || !body.password || !body.email) return "input_error";
-
         const find_user = await userModel.findOne({username: body.username});
         if (find_user !== null) return "existed";
-
         //check email
         const email = await userModel.findOne({email: body.email});
 
-        /*console.log('email: ', email);*/
         if (email) return "email_exist";
 
-        /*console.log('req.body: ', body);*/
         const salt = await bcrypt.genSaltSync(saltRounds);
         const hash_pass = await bcrypt.hashSync(body.password, salt);
 
-        // get datetime
         const now = (new Date()).toString().split(" ");
 
         const user = {

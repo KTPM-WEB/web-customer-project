@@ -47,16 +47,13 @@ router.get("/google/callback", (req, res, next) => {
     })(req, res, next);
 });
 
-/*************************** POST methods ***************************/
-router.post("/register", authController.Register);
 
+/*************************** POST methods ***************************/
 // get login info from client
 router.post('/login', passport.authenticate('local', {
     successRedirect: '/', //login success, save user in req.user
     failureRedirect: '/auth/login?message=Account%20dont%20exist' //login fail, redirect to login page
 }));
-
-router.post('/logout', authController.logout)
 
 // forgot pass
 router.post("/forgot-pass", authController.forgotPass);

@@ -34,7 +34,6 @@ exports.changeQuantity = async (req, res) => {
         console.log("--- cart api: change quantity ---");
 
         const user = await userService.getUserByID(req.user._id);
-
         const products = user.cart;
 
         // product index in cart
@@ -44,21 +43,33 @@ exports.changeQuantity = async (req, res) => {
         if (itemIdx > -1) {
             if (req.params.type === 'plus') {
                 products[itemIdx].quantity += 1;
-            } else {
+                req.session.number_product += 1;
+            } else if (req.params.type === 'minus') {
                 products[itemIdx].quantity -= 1;
-                if (products[itemIdx].quantity < 1) {
-                    products[itemIdx].quantity = 1;
-                }
+                req.session.number_product -= 1;
+            } else {
+                let number = 0;
+                products[itemIdx].quantity = parseInt(req.body.quantity);
+
+                products.forEach(product => {
+                    number += product.quantity;
+                })
+
+                req.session.number_product = number;
             }
+
+            if (products[itemIdx].quantity < 1) {
+                products[itemIdx].quantity = 1;
+            }
+
             const product = await productService.getProductByID(req.params.productID);
 
-            products[itemIdx].total = products[itemIdx].quantity * product.price;
+            products[itemIdx].total = parseInt(products[itemIdx].quantity) * parseFloat(product.price);
         }
 
 
         let total = 0;
 
-        console.log("products:", products);
         for (let i = 0; i < products.length; i++) {
             total += parseFloat(products[i].total);
         }
@@ -68,10 +79,11 @@ exports.changeQuantity = async (req, res) => {
 
         await userService.updateCart(user._id, products, total);
 
-        console.log("send products:", products);
-        console.log("total:", total);
+        let number_product = req.session.number_product;
+        let product_quantity = products[itemIdx].quantity;
+        let product_total = Math.round(products[itemIdx].total * 100) / 100;
 
-        res.send({ total, products });
+        res.send({ number_product, total, product_quantity, product_total });
 
     } catch (err) {
         res.status(500).json({ message: err.message });

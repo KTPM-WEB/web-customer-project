@@ -10,18 +10,18 @@ const userService = require("../user/userService");
  * @returns {Promise<*>}
  */
 exports.render = async (req, res) => {
-    try{
+    try {
         const user = await userService.getUserByID(req.user._id);
         const products = await cartService.getProducts(user.cart);
         res.render("checkout/views/checkout", {
-            active: {Checkout: true},
+            active: { Checkout: true },
             page: "checkout",
             products,
             subtotal: 0,
-            total: user.total
+            total: Math.round(user.total * 100) / 100,
         });
-    }catch (err){
-        res.status(500).json({message: err.message});
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
 };
 
@@ -37,7 +37,7 @@ exports.placeOrder = async (req, res) => {
         await checkoutService.order(user);
         req.session.number_product = 0;
         res.redirect("/?checkout=true");
-    }catch (err){
-        res.status(500).json({message: err.message});
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
 }

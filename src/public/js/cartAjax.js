@@ -32,12 +32,12 @@ function loadProduct() {
                     <div class="quantity">
                         <div class="pro-qty-2 d-flex">
                             <button class="btn-minus" onclick="changeQuantity('${item._id}', 'minus')">-</button>
-                            <input type="number"  name="quantity" id=${item._id} value="${item.quantity}">
+                            <input type="number"  name="quantity" id=${item._id} value="${item.quantity}" onfocusout="changeQuantity('${item._id}')">
                             <button class="btn-plus"  onclick="changeQuantity('${item._id}', 'plus')">+</button>
                         </div>
                     </div>
                 </td>
-                <td class="cart__price">$${item.total}</td>
+                <td class="cart__price" id='${item._id}-total'> $${item.total}</td>
                 <td class="cart__close">
                     <a href="javascript:{}" onclick="deleteProductInCart('${item._id}')">
                         <i class="fa fa-close"></i>
@@ -87,16 +87,15 @@ function changeQuantity(productID, type) {
         },
         body: JSON.stringify({
             id: productID,
-            type: type
+            type: type,
+            quantity: $("#" + productID).val()
         })
     }).then(r => r.json()).then(data => {
-        const $product_table = $("#cart-table");
+        console.log("data:", data);
 
-        // clear product table
-        $product_table.html("");
-
-        // load product again
-        loadProduct();
-
+        $("#number-product-incart").html(data.number_product);
+        $("#cart-total").html(data.total);
+        $("#" + productID).val(data.product_quantity);
+        $("#" + productID + "-total").text("$" + data.product_total);
     });
 }

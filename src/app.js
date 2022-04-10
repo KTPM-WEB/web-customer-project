@@ -15,7 +15,7 @@ const shopRouter = require('./components/product/productRouter');
 const contactRouter = require('./components/contact/contactRouter');
 const cartRouter = require('./components/cart/cartRouter');
 const checkoutRouter = require('./components/checkout/check-outRouter')
-const apiRouter = require('./components/api/apiRouter');
+const apiRouter = require('./api/apiRouter');
 
 const db = require('./config/database.config');
 db.connect();
@@ -41,6 +41,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
 }));
+
 app.use(passport.authenticate('session'));
 
 app.use(function (req, res, next) {

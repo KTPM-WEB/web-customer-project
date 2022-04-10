@@ -16,12 +16,17 @@ router.get('/logout', authController.logout);
 // get login info from client
 router.post('/login', passport.authenticate('local', {
     successRedirect: '/', //login success, save user in req.user
-    failureRedirect: '/auth/login?message=Account%20dont%20exist' //login fail, redirect to login page
+    failureRedirect: '/auth/login?message=Login%20Fail%20' //login fail, redirect to login page
 }));
 
 // forgot pass
-router.post("/forgot-pass", authController.forgotPass);
+router.post("/confirm", authController.confirm);
 
+// forgot pass
+router.post("/forgot-pass", authController.forgetPassword);
+
+// reset pass
+router.post("/reset-password", authController.changePassword);
 /*************************** PUT methods ***************************/
 
 /*************************** DELETE methods ***************************/

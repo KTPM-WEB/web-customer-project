@@ -1,5 +1,5 @@
-const productService = require("../../product/productService");
-const pagination = require("../../../public/js/paging");
+const productService = require("../../components/product/productService");
+const pagination = require("../../public/js/paging");
 
 /**
  * search name of product

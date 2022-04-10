@@ -1,5 +1,5 @@
-const checkoutService = require("../../checkout/check-outService");
-const userService = require("../../user/userService");
+const checkoutService = require("../../components/checkout/check-outService");
+const userService = require("../../components/user/userService");
 
 /**
  * get order history

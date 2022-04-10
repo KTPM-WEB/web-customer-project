@@ -1,5 +1,5 @@
-const userService = require("../../user/userService");
-const authService = require("../../auth/authService");
+const userService = require("../../components/user/userService");
+const service = require("../../components/user/userService");
 
 /**
  * check if the user exists
@@ -47,12 +47,12 @@ exports.checkEmail = async (req, res) => {
  */
 exports.signup = async (req, res) => {
     try {
-        const register = await authService.Register(req.body);
-
+        const register = await userService.Register(req.body);
+        await userService.confirmForm(req.body.username, req.body.email);
         let message = register.message;
         let state = register.state;
         if (register === "success") {
-            message = "Create new account success";
+            message = "Please check your email to confirm your account";
             state = true;
         } else if (register === "existed") {
             message = "Account already exist";
@@ -68,6 +68,22 @@ exports.signup = async (req, res) => {
             state = false;
         }
         res.send({message, state});
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+}
+
+/**
+ * forgot password
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
+exports.forgotPassword = async (req, res) => {
+    try {
+        const user = await userService.checkUserName(req.body.username);
+        await userService.forgetPassword(user.email);
+        res.send({message: "Send email success", state: true});
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

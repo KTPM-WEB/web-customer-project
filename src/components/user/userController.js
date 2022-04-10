@@ -47,10 +47,7 @@ module.exports.renderOrder = async (req, res) => {
  **/
 module.exports.changeAvatar = async (req, res) => {
     try {
-
-        console.log("--- user controller change avatar ---");
         await userService.changeAvatar(req.user._id, req.file);
-
         res.redirect('back');
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -67,7 +64,6 @@ module.exports.changeAvatar = async (req, res) => {
 module.exports.editProfile = async (req, res) => {
     try {
         await userService.updateUser(req.user.username, req.body.field, req.body.value)
-
         res.redirect("/user/profile")
     } catch (err) {
         res.status(500).json({ message: err.message });

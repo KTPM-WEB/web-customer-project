@@ -8,10 +8,9 @@ function getProfile() {
             'Content-Type': 'application/json'
         },
     }).then(r => r.json()).then(data => {
-        console.log("data: ", data);
-
         $("#profile-avatar").attr("src", data.avatar_url);
         $("#profile-username").html(data.username);
+        $("#username").val(data.username);
         $("#fullname").html(data.fullname);
         $("#intro").html(data.intro);
         $("#employed").html(data.employed);
@@ -22,49 +21,15 @@ function getProfile() {
     });
 }
 
-function changePass() {
-    console.log("button change pass clicked");
-
-    const submit_btn = document.getElementById('submit-pass');
-    const cancle_btn = document.getElementById('cancle-pass');
-    submit_btn.disabled = true;
-
-    if (checkSamePass() === true) {
-        submit_btn.innerHTML = '<i class = "fa fa-spinner fa-spin"></i>&nbsp; Please wait...';
-        document.getElementById("change-passwd-announce").style.visibility = "hidden";
-
-        console.log("changing password...");
-        console.log("new pas:", $("#new-passwd").val());
-        const url = '/api/user/profile/change-pass';
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                new_pass: $("#new-passwd").val(),
-                old_pass: $("#old-passwd").val()
-            })
-        }).then(r => r.json()).then(data => {
-            console.log("change password");
-            console.log("data: ", data);
-
-            if (data.stt == 'err400') {
-                document.getElementById("change-passwd-announce").style.visibility = "visible";
-                document.getElementById("change-passwd-announce").innerHTML = "Wrong password!";
-                submit_btn.disabled = false;
-                cancle_btn.disabled = false;
-            } else {
-                $("#change-password").modal("hide");
-                clearForm();
-
-                setTimeout(() => alert("Change password success!"), 0);
-            }
-        });
-
-
-    } else {
-        submit_btn.innerHTML = '<i class="fa fa-times" aria-hidden="true"></i>&nbsp; Submit';
-
-    }
+function changePasswordForm() {
+    const url = '/api/auth/change-password';
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: $("#username").val(),
+        })
+    }).then(r => r.json()).then(data => {});
 }

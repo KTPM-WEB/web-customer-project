@@ -63,7 +63,7 @@ exports.changePass = async (req, res) => {
     }
 }
 
-exports.aaa = async (req, res) => {
+exports.editProfile = async (req, res) => {
     try {
         if (req.user==null)
         {

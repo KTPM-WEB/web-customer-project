@@ -1,3 +1,5 @@
+const { create } = require("../../components/user/userModel");
+
 function sendData(e) {
     const $searchResult = $('#myList');
     let match = e.value.match(/^[a-zA-Z0-9]*/);
@@ -126,7 +128,7 @@ function getProductByField(field, type, page) {
             });
 
             $pagination.append(`
-                <li class="page-item" style="${products.disablePrev} ">
+                a
                     <button class="page-link" style="color: #0b0b0b" href="#"
                        aria-label="Previous" onclick="getProductByField('${products.field}','${products.type}','${products.prev}')">
                         <span aria-hidden="true">&laquo;</span>
@@ -156,4 +158,45 @@ function getProductByField(field, type, page) {
 
 window.onload = function () {
     getProductByField('Random', '', 1);
+}
+
+function postReview()
+{
+    event.preventDefault()
+    const content = $('#review-form input[type=text]').val()
+
+    const productID = $('#review-form input[type=hidden]').val()
+    const url=`/api/products/review/${productID}`
+
+    $.post(url, {content: content}, function(data){
+        let review_list = $('#review-list')
+
+        if (!review_list.length) 
+        {
+            //reassign id element
+            review_list = $('#review-list-empty')
+
+            //clear child
+            review_list.empty()
+
+            //reassign id element
+            review_list.attr("id","review-list")
+        }
+
+        const createAt = new Date(data.createAt)
+
+        review_list.prepend(`
+        <h4 style="font-weight: bold;">${data.fullname}</h4>
+        <span>${createAt}</span>
+        <p style="font-size: 16px">${content}</p>
+        <hr>
+        </div>
+    `);
+
+    }).fail(function(data){
+        if(data.status==401)
+            window.location.href='/auth/login/'
+        else if(data.status==400)
+            alert("Please dont leave it blank")
+    })
 }

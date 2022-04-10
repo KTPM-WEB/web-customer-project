@@ -121,14 +121,15 @@ module.exports.getAllReviewByProductID = (productID) => {
  * @param content {string}
  * @returns {Promise<*>}
  */
-module.exports.createReview = async (userName, productID, content) => {
+module.exports.createReview = async (fullname, productID, content, createAt) => {
     try {
         await new ReviewModel({
-            userName: userName,
+            fullname: fullname,
             productID: productID,
             content: content,
-            createdAt: Date.now()
+            createdAt: createAt
         }).save();
+
     } catch (err) {
         throw err;
     }

@@ -40,18 +40,6 @@ exports.renderDetail = async (req, res) => {
  * @param res
  * @returns {Promise<*>}
  */
-module.exports.postReview = async (req, res) => {
-    try {
-        if (!req.user)
-            res.redirect('/auth/login')
-        else {
-            await productService.createReview(req.user.username, req.body.productID, req.body.content)
-            res.redirect('/product/' + req.body.productID)
-        }
-    } catch (err) {
-        res.status(500).json({message: err.message});
-    }
-}
 
 // /**
 //  * add to cart

@@ -1,5 +1,6 @@
 const productService = require("../../product/productService");
 const pagination = require("../../../public/js/paging");
+const { create } = require("hbs");
 
 /**
  * search name of product
@@ -68,4 +69,29 @@ exports.addToCart = async (req, res) => {
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
+}
+
+exports.postReview = async (req,res) =>
+{
+    if(!req.user)
+    {
+        res.status(401).json({message: "UnAuthorized"})
+        return;
+    }
+
+    const content = req.body.content
+
+    if (content.length==0)
+    {
+        res.status(400)
+        return;
+    }
+
+    const productID = req.params.productID
+    
+    const createAt = Date.now();
+
+    await productService.createReview(req.user.fullname, productID, content, createAt)
+
+    res.send({fullname: req.user.fullname, createAt: createAt})
 }

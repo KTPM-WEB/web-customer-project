@@ -5,11 +5,4 @@ const cartController = require("./cartController");
 //render cart page
 router.get("/", cartController.render);
 
-/*************************** POST methods ***************************/
-
-/*************************** PUT methods ***************************/
-
-/*************************** DELETE methods ***************************/
-// router.get("/delete/:productID", cartController.deleteProduct);
-
 module.exports = router;

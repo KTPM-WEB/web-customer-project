@@ -173,7 +173,7 @@ function postReview()
         
         let length = review_list.children('h4').length
 
-        if (length == 0) 
+        if (length === 0)
         {
             //reassign id element
             review_list = $('#review-list-empty')
@@ -185,7 +185,7 @@ function postReview()
             review_list.attr("id","review-list")
         }
 
-        else if (length == limit)
+        else if (length === limit)
         {
             const totalPage = data.reviews.length
             abcd(productID, totalPage, 1)
@@ -206,9 +206,9 @@ function postReview()
 
 
     }).fail(function(data){
-        if(data.status==401)
+        if(data.status===401)
             window.location.href='/auth/login/'
-        else if(data.status==400)
+        else if(data.status===400)
             alert("Please dont leave it blank")
     })
 }
@@ -230,7 +230,7 @@ function reviewPaging (productID,totalPage,page)
                 for (let i = 2; i <= Math.min(3, totalPage); i++)
                     buffer.push(`<a onclick="abcd('${productID}', ${totalPage},${i})">${i}</a>`);
 
-                if (page == 3) {
+                if (page === 3) {
                     if (totalPage > 3) {
                         buffer.push(`<a onclick="abcd('${productID}', ${totalPage},4)">4</a>`);
                     }
@@ -255,7 +255,7 @@ function reviewPaging (productID,totalPage,page)
                     buffer.push(`<a onclick="abcd('${productID}', ${totalPage},${totalPage})">${totalPage}</a>`);
                 }
                 else {
-                    if (page == totalPage - 2) {
+                    if (page === totalPage - 2) {
                         buffer.push(`<a onclick="abcd('${productID}', ${totalPage},${page - 1})">${page - 1}</a>`);
                     }
 
@@ -272,13 +272,11 @@ function reviewPaging (productID,totalPage,page)
 
         for(let i=1;i<buffer.length-1;i++)
         {
-            if (buffer.at(i).search(page.toString()) != -1)
+            if (buffer.at(i).search(page.toString()) !== -1)
             {
                 const index = buffer.at(i).lastIndexOf("\"")
                 const oldStr = buffer.at(i)
-                const newStr = [oldStr.slice(0, 2), ` class="active" ` , oldStr.slice(3)].join('');
-                console.log(newStr)
-                buffer[i]=newStr
+                buffer[i]=[oldStr.slice(0, 2), ` class="active" `, oldStr.slice(3)].join('')
                 break;
             }
 

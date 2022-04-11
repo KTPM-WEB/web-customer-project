@@ -26,11 +26,11 @@ module.exports.paging = (data, page, limit) => {
     // get the data for the current page
     result.page = page;
     result.data = data.slice(startIndex, endIndex);
-    result.start = startIndex+1;
+    result.start = startIndex + 1;
 
-    if(data.length > endIndex){
+    if (data.length > endIndex) {
         result.end = endIndex;
-    }else {
+    } else {
         result.end = data.length;
     }
     result.total = data.length;
@@ -38,9 +38,8 @@ module.exports.paging = (data, page, limit) => {
     return result;
 }
 
-exports.reviewPaging = (productID,totalPage,page) =>
-{
-    const buffer=[];
+module.exports.reviewPaging = (productID, totalPage, page) => {
+    const buffer = [];
 
     if (page <= totalPage) {
         buffer.push(`<a class="prev_page" onclick="abcd('${productID}', ${totalPage},${page - 1})">Prev</a>`);
@@ -55,7 +54,7 @@ exports.reviewPaging = (productID,totalPage,page) =>
                 for (let i = 2; i <= Math.min(3, totalPage); i++)
                     buffer.push(`<a onclick="abcd('${productID}', ${totalPage},${i})">${i}</a>`);
 
-                if (page == 3) {
+                if (page === 3) {
                     if (totalPage > 3) {
                         buffer.push(`<a onclick="abcd('${productID}', ${totalPage},4)">4</a>`);
                     }
@@ -65,9 +64,7 @@ exports.reviewPaging = (productID,totalPage,page) =>
                     buffer.push(`<span>...</span>`);
                     buffer.push(`<a onclick="abcd('${productID}', ${totalPage},${totalPage})">${totalPage}</a>`);
                 }
-            }
-
-            else if (page > 3) {
+            } else if (page > 3) {
                 buffer.push(`<span>...</span>`);
 
                 if (totalPage - page > 2) {
@@ -78,14 +75,13 @@ exports.reviewPaging = (productID,totalPage,page) =>
                     buffer.push(`<a  onclick="abcd('${productID}', ${totalPage},${page + 1})">${page + 1}</a>`);
                     buffer.push(`<span>...</span>`);
                     buffer.push(`<a onclick="abcd('${productID}', ${totalPage},${totalPage})">${totalPage}</a>`);
-                }
-                else {
-                    if (page == totalPage - 2) {
+                } else {
+                    if (page === totalPage - 2) {
                         buffer.push(`<a onclick="abcd('${productID}', ${totalPage},${page - 1})">${page - 1}</a>`);
                     }
 
                     for (let i = totalPage - 2; i <= totalPage; i++) {
-                        buffer.push( `<a onclick="abcd('${productID}', ${totalPage},${i})">${i}</a>`);
+                        buffer.push(`<a onclick="abcd('${productID}', ${totalPage},${i})">${i}</a>`);
                     }
                 }
 
@@ -95,15 +91,11 @@ exports.reviewPaging = (productID,totalPage,page) =>
         if (page < totalPage)
             buffer.push(`<a class="next_page" onclick="abcd('${productID}', ${totalPage},${page + 1})">Next</a>`);
 
-        for(let i=1;i<buffer.length-1;i++)
-        {
-            if (buffer.at(i).search(page.toString()) != -1)
-            {
+        for (let i = 1; i < buffer.length - 1; i++) {
+            if (buffer.at(i).search(page.toString()) !== -1) {
                 const index = buffer.at(i).lastIndexOf("\"")
                 const oldStr = buffer.at(i)
-                const newStr = [oldStr.slice(0, 2), ` class="active" ` , oldStr.slice(3)].join('');
-                console.log(newStr)
-                buffer[i]=newStr
+                buffer[i] = [oldStr.slice(0, 2), ` class="active" `, oldStr.slice(3)].join('')
                 break;
             }
 

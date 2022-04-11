@@ -9,26 +9,9 @@ const pagination = require("../../public/js/paging");
  */
 exports.search = async (req, res) => {
     try {
-        let payload = req.body.payload.trim();
-        let search = await productService.getProductByName(payload);
+        const payload = req.body.payload.trim();
+        const search = await productService.getProductByName(payload);
         res.send({ payload: search });
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-};
-
-/**
- * render product detail
- * @param req
- * @param res
- * @returns {Promise<*>}
- */
-exports.render = async (req, res) => {
-    try {
-        const page = parseInt(req.query.page) || 1;
-        const getProducts = await productService.getAllProducts();
-        const products = pagination.paging(getProducts, page, 6);
-        res.json(products);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
@@ -43,6 +26,7 @@ exports.render = async (req, res) => {
 exports.renderByField = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
+        console.log(1);
         const getProducts = await productService.getProductByField(req.query.field, req.query.type);
         const products = pagination.paging(getProducts, page, 6);
         products.field = req.query.field;
@@ -70,48 +54,67 @@ exports.addToCart = async (req, res) => {
     }
 }
 
-
+/**
+ * post comment
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
 exports.postReview = async (req,res) =>
 {
-    if(!req.user)
+    try {
+        if(!req.user)
+        {
+            res.status(401).json({message: "UnAuthorized"})
+            return;
+        }
+
+        const content = req.body.content
+        const productID = req.params.productID
+        const createAt = Date.now();
+
+        if (content.length===0)
+        {
+            res.status(400)
+            return;
+        }
+
+        await productService.createReview(req.user.fullname, productID, content, createAt)
+        const reviews = await productService.getAllReviewByProductID(productID)
+        res.send({reviews: reviews})
+    }catch (err)
     {
-        res.status(401).json({message: "UnAuthorized"})
-        return;
+        res.status(500).json({message: err.message})
     }
 
-    const content = req.body.content
-    const productID = req.params.productID
-    const createAt = Date.now();
-
-    if (content.length==0)
-    {
-        res.status(400)
-        return;
-    }
-
-    await productService.createReview(req.user.fullname, productID, content, createAt)
-
-    const reviews = await productService.getAllReviewByProductID(productID)
-
-    res.send({reviews: reviews})
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
 exports.switchPage = async (req,res) =>
 {
-    const limit = 3
-    const productID = req.params.productID
-    const page = parseInt(req.query.page)
+    try {
+        const limit = 3
+        const productID = req.params.productID
+        const page = parseInt(req.query.page)
 
-    let reviews = await productService.getAllReviewByProductID(productID)
-    reviews = Object.values(reviews)
+        let reviews = await productService.getAllReviewByProductID(productID)
+        reviews = Object.values(reviews)
 
-    let start = (page - 1) * limit;
-    let end = page * limit;
+        let start = (page - 1) * limit;
+        let end = page * limit;
 
-    if (end>=reviews.length)
-        end=reviews.length
-    
-    console.log(reviews)
-    reviews = reviews.slice(start,end)
-    res.send({reviews: reviews})
+        if (end>=reviews.length)
+            end=reviews.length
+
+        reviews = reviews.slice(start,end)
+        res.send({reviews: reviews})
+    }catch (err)
+    {
+        res.status(500).json({message: err.message})
+    }
 }

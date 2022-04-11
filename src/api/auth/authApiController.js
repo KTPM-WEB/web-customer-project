@@ -1,5 +1,4 @@
 const userService = require("../../components/user/userService");
-const service = require("../../components/user/userService");
 
 /**
  * check if the user exists
@@ -45,7 +44,7 @@ exports.checkEmail = async (req, res) => {
  * @param res
  * @returns {Promise<*>}
  */
-exports.signup = async (req, res) => {
+exports.register = async (req, res) => {
     try {
         const register = await userService.Register(req.body);
         await userService.confirmForm(req.body.username, req.body.email);

@@ -9,8 +9,5 @@ router.get("/", checkoutController.render);
 // place order
 router.post("/order", checkoutController.placeOrder);
 
-/*************************** PUT methods ***************************/
-
-/*************************** DELETE methods ***************************/
 
 module.exports = router;

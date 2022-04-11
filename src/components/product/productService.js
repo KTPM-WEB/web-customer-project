@@ -74,19 +74,6 @@ module.exports.getProductByField = async (field, type) => {
 }
 
 /**
- * get distinct product by category, brand, color
- * @param field {string}
- * @returns {Promise<*>}
- */
-module.exports.getDistinctByField = (field) => {
-    try {
-        return productModel.distinct(field).lean();
-    } catch (err) {
-        throw err;
-    }
-}
-
-/**
  * get related product by category
  * @param categoryValue {string}
  * @returns {Promise<*>}
@@ -116,10 +103,11 @@ module.exports.getAllReviewByProductID = (productID) => {
 }
 
 /**
- * save product
- * @param userName {string}
+ * save review
+ * @param fullname {string}
  * @param productID {string}
  * @param content {string}
+ * @param createAt
  * @returns {Promise<*>}
  */
 module.exports.createReview = async (fullname, productID, content, createAt) => {
@@ -146,9 +134,6 @@ module.exports.createReview = async (fullname, productID, content, createAt) => 
  */
 module.exports.addToCart = async (productID, userID, quantity = 1) => {
     try {
-        console.log("service add to cart");
-        console.log("quantity:", quantity);
-
         let user = await userModel.findOne({ _id: userID });
         const product = await productModel.findOne({ _id: productID });
 
@@ -156,16 +141,13 @@ module.exports.addToCart = async (productID, userID, quantity = 1) => {
 
             // product exist in cart
             let itemIdx = user.cart.findIndex(item => item.productID === productID);
-            console.log("itemIdx: " + itemIdx);
 
             if (itemIdx > -1) {
                 // product exist in cart, update quantity
-                console.log("update quantity");
                 user.cart[itemIdx].quantity += parseInt(quantity);
                 user.cart[itemIdx].total = user.cart[itemIdx].quantity * product.price;
             } else {
                 // product not exist in cart, add new item
-                console.log("push new product");
                 user.cart.push({
                     productID: productID,
                     quantity: parseInt(quantity),
@@ -191,6 +173,12 @@ module.exports.addToCart = async (productID, userID, quantity = 1) => {
     }
 }
 
+/**
+ * check if current user has buy product
+ * @param productID {string}
+ * @param userID {string}
+ * @returns {Promise<*>}
+ */
 module.exports.isBuy = (userID,productID) => {
     try {
         return orderModel.find({customer_id: userID , products: {$elemMatch: {product_id: productID}} , status: "Completed"}).lean();

@@ -49,37 +49,27 @@ module.exports.deleteProduct = async (userID, productID) => {
     }
 }
 
-
 /**
  * get promotion
- * @param cart{Object}
+ * @param promoCode{string}
  * @returns {Promise<*>}
  */
 module.exports.getPromo = async (promoCode) => {
     try {
-        const promo = await promoModel.findOne({ code: promoCode }).lean();
-
-        return promo;
+        return await promoModel.findOne({code: promoCode}).lean();
     } catch (err) {
         throw err;
     }
 }
 
-
-
 /**
  * update promotion
- * @param cart{Object}
+ * @param promoCode{string}
  * @returns {Promise<*>}
  */
 module.exports.usePromo = async (promoCode) => {
     try {
-        console.log("--- cart api use promo ---");
-        console.log("promoCode: ", promoCode);
         const promo = await promoModel.findOne({ code: promoCode }).lean();
-
-        console.log(promo);
-
         await promoModel.findOneAndUpdate(
             { code: promoCode },
             {
@@ -87,7 +77,6 @@ module.exports.usePromo = async (promoCode) => {
                     slot: promo.slot - 1
                 }
             });
-
     } catch (err) {
         throw err;
     }

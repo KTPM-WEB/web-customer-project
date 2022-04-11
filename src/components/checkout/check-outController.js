@@ -45,7 +45,6 @@ exports.render = async (req, res) => {
 exports.placeOrder = async (req, res) => {
     try {
         const user = await userService.getUserByID(req.user._id);
-        console.log("promo:", req.session.promo);
 
         if (req.session.promo !== undefined) {
             await checkoutService.order(user, req.session.promo);

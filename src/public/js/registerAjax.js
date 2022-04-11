@@ -34,7 +34,7 @@ function signUp() {
         $('#error').html('<p class="text-danger">Please fill all fields</p>');
         return;
     }
-    fetch('/api/auth/signup', {
+    fetch('/api/auth/register', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

@@ -5,9 +5,11 @@ const promoModel = require("../cart/promoModel");
 /**
  * order
  * @param user {object}
+ * @param promo
  * @returns {Promise<*>}
  */
 module.exports.order = async (user, promo = null) => {
+    let pro;
     try {
         const now = (new Date()).toString().split(" ");
         const products = [];
@@ -27,14 +29,11 @@ module.exports.order = async (user, promo = null) => {
         }
 
         if (promo !== null) {
-            console.log("promo:", promo);
             order.promo = promo.discount;
-            pro = await promoModel.findOne({ code: promo.code }).lean();
-
-            console.log(pro);
+            pro = await promoModel.findOne({code: promo.code}).lean();
 
             await promoModel.findOneAndUpdate(
-                { code: promo.code },
+                {code: promo.code},
                 {
                     $set: {
                         slot: pro.slot - 1
@@ -42,10 +41,8 @@ module.exports.order = async (user, promo = null) => {
                 });
         }
 
-        // console.log("order:", order);
-
         await orderModel.create(order);
-        await userModel.findByIdAndUpdate({ _id: user._id }, { $set: { cart: [] } });
+        await userModel.findByIdAndUpdate({_id: user._id}, {$set: {cart: []}});
     } catch (err) {
         throw err;
     }

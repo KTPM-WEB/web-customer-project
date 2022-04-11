@@ -36,7 +36,7 @@ function checkUsernameReset(e) {
 }
 
 function resetPass() {
-    fetch('/api/auth/change-password', {
+    fetch('/api/auth/forgot-password', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

@@ -1,4 +1,4 @@
-const service = require('../user/userService');
+const userService = require('../user/userService');
 
 /*************************** GET methods ***************************/
 /**
@@ -49,27 +49,45 @@ exports.logout = async (req, res) => {
     }
 };
 
-exports.forgetPassword = async (req, res) => {
+/**
+ * send email to user for reset password
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
+exports.forgotPassword = async (req, res) => {
     try {
-        await service.forgetPassword(req.body.email);
+        await userService.resetPasswordForm(req.body.email);
         res.redirect("back");
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
 };
 
-exports.changePassword = async (req, res) => {
+/**
+ * send email to user for reset password
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
+exports.resetPassword = async (req, res) => {
     try {
-        await service.changePasswordByEmail(req.body.email, req.body.newpass);
+        await userService.changePasswordByEmail(req.body.email, req.body.newpass);
         res.redirect("back");
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
 };
 
-exports.confirm = async (req, res) => {
+/**
+ * render thank you page after verify email
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
+exports.confirmEmail = async (req, res) => {
     try {
-        await service.confirm(req.body.username);
+        await userService.confirmEmail(req.body.username);
         res.render("auth/views/thank-you",{layout: false});
     } catch (err) {
         res.status(500).json({ message: err.message });

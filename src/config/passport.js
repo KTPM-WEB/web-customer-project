@@ -9,9 +9,8 @@ const userService = require('../components/user/userService');
 // authN local
 passport.use(new LocalStrategy(
     async (username, password, cb) => {
-        console.log(username, password);
         const user = await userService.verifyUser(username, password);
-        if (user) return cb(null, user);
+        if (user || user.confirm === false) return cb(null, user);
         return cb(null, false);
     }));
 

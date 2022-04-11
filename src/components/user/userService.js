@@ -7,7 +7,6 @@ const hbs = require("hbs");
 
 const userModel = require('./userModel');
 const orderModel = require("../checkout/check-outModel");
-const promoModel = require("../cart/promoModel")
 const productModel = require("../product/model/productModel");
 const cloudinary = require('../../config/cloudinary.config');
 const bcrypt = require("bcrypt")
@@ -26,33 +25,6 @@ module.exports.getUserByID = async (userID) => {
 }
 
 /**
- *  change password of user
- *
- * @param newPass {string}
- * @param id {string}
- * @param oldPass
- * @returns {Promise<string>}
- */
-module.exports.changePassword = async (id, oldPass, newPass) => {
-    try {
-        const user = await userModel.findById(id)
-
-        if (!bcrypt.compareSync(oldPass, user.password)) {
-            return 'err400';
-        }
-
-        await bcrypt.hash(newPass, 4).then(async (hash) => {
-            await userModel.findOneAndUpdate(
-                { _id: id },
-                { $set: { password: hash } });
-        });
-        return 'succ200';
-    } catch (err) {
-        throw err;
-    }
-};
-
-/**
  * get user order by ID
  * @param userID {string}
  * @returns {Promise<*>}
@@ -63,7 +35,6 @@ module.exports.getUserOrder = async (userID) => {
         for (let i = 0; i < orders.length; i++) {
             let total = 0;
             let products = orders[i].products;
-            console.log(orders[i]);
 
             for (let j = 0; j < products.length; j++) {
                 const product = await productModel.findById(products[j].product_id).lean();
@@ -80,11 +51,7 @@ module.exports.getUserOrder = async (userID) => {
 
             if (orders[i].promo !== undefined) {
                 let discount = parseInt((orders[i].promo).replace("%", ""));
-
-                console.log("discount:", discount);
                 orders[i].discount = Math.round(orders[i].total * discount) / 100;
-
-                console.log("-- discount:", orders[i].discount);
             }
         }
         return orders;
@@ -166,10 +133,8 @@ module.exports.checkEmail = async (email) => {
  */
 module.exports.changeAvatar = async (id, file) => {
     try {
-        console.log(id, file);
         if (!file) return;
         const url = await cloudinary.upload(file.path, 'user_avatar');
-        console.log(url);
         await userModel.findByIdAndUpdate(id, { avatar_url: url });
     } catch (err) {
         throw err;
@@ -239,7 +204,7 @@ module.exports.verifyUser = async (username, password) => {
     }
 }
 
-exports.resetPasswordForm = async (email) => {
+module.exports.resetPasswordForm = async (email) => {
     try {
         // Send email template
         const template = fs.readFileSync(
@@ -318,12 +283,32 @@ module.exports.confirmForm = async (username, email) => {
  * @param username {string}
  * @returns {Promise<user||false>}
  */
-module.exports.confirm = async (username) => {
+module.exports.confirmEmail = async (username) => {
     try {
         await userModel.findOneAndUpdate(
             { username: username },
             { $set: { confirm: true } });
     } catch (err) {
+        throw err;
+    }
+}
+
+/**
+ * confirm email
+ * @param userID {string}
+ * @returns {Promise<number>}
+ */
+module.exports.getNumberProduct = async (userID) => {
+    try {
+        let number_product = 0;
+        if (userID) {
+            const user = await userModel.findById(userID);
+            for (let i = 0, len = user.cart.length; i < len; i++) {
+                number_product += user.cart[i].quantity;
+            }
+        }
+        return number_product;
+    }catch (err) {
         throw err;
     }
 }

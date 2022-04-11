@@ -1,4 +1,5 @@
 const userService = require('./userService')
+const productService = require("../product/productService");
 
 /************************************* GET methods *************************************/
 /**
@@ -32,6 +33,24 @@ module.exports.renderOrder = async (req, res) => {
     }
 }
 
+/**
+ * GET home page
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
+module.exports.renderHomepage = async (req, res) => {
+    try {
+        let number_product = 0;
+        if (req.user)  number_product = await userService.getNumberProduct(req.user._id);
+        req.session.number_product = number_product;
+        if (req.query.checkout === "true") res.render('index', { number_product, message: "Place order successful" });
+        const products = (await productService.getAllProducts()).slice(0, 8);
+        res.render('index', { number_product, products });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+}
 /************************************* POST methods *************************************/
 /**
  * change profile avatar

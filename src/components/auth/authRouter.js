@@ -19,14 +19,14 @@ router.post('/login', passport.authenticate('local', {
     failureRedirect: '/auth/login?message=Login%20Fail%20' //login fail, redirect to login page
 }));
 
-// forgot pass
-router.post("/confirm", authController.confirm);
+// confirm register by email
+router.post("/confirm", authController.confirmEmail);
 
-// forgot pass
-router.post("/forgot-pass", authController.forgetPassword);
+// forgot password
+router.post("/forgot-password", authController.forgotPassword);
 
-// reset pass
-router.post("/reset-password", authController.changePassword);
+// reset password
+router.post("/reset-password", authController.resetPassword);
 /*************************** PUT methods ***************************/
 
 /*************************** DELETE methods ***************************/

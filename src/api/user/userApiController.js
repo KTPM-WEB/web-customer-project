@@ -22,7 +22,7 @@ exports.getOrder = async (req, res) => {
  * @param res
  * @returns {Promise<*>}
  */
-exports.deleteOrder = async (req, res) => {
+exports.deleteOneOrder = async (req, res) => {
     try {
         await checkoutService.deleteOrderById(req.params.orderID);
         res.status(200);
@@ -47,22 +47,12 @@ exports.getProfile = async (req, res) => {
     }
 }
 
-exports.changePass = async (req, res) => {
-    try {
-        console.log("-- change pass --");
-        console.log("req.body:", req.body);
-        console.log("req.user:", req.user);
-
-        const stt = await userService.changePassword(req.user._id, req.body.old_pass, req.body.new_pass);
-
-        console.log("stt:", stt);
-
-        res.send({ stt });
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-}
-
+/**
+ * edit profile of user
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
 exports.editProfile = async (req, res) => {
     try {
         if (req.user==null)
@@ -70,7 +60,6 @@ exports.editProfile = async (req, res) => {
             res.status(401).json({"message":"UnAuthorized"})
             return;
         }
-
         await userService.updateUser(req.user.username,req.body.field,req.body.new_val)
         res.send({})
     } catch (err) {

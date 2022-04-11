@@ -168,7 +168,7 @@ function postReview()
     $.post(url, {content: content}, function(data){
         let review_list = $('#review-list')
 
-        if (!review_list.length) 
+        if (review_list.length == 0) 
         {
             //reassign id element
             review_list = $('#review-list-empty')
@@ -180,10 +180,11 @@ function postReview()
             review_list.attr("id","review-list")
         }
 
+
         const date = new Date(data.createAt)
 
         review_list.prepend(`
-        <h4 style="font-weight: bold;">${data.fullname}</h4>
+        <h4>${data.fullname}</h4>
         <span>${date}</span>
         <p style="font-size: 16px">${content}</p>
         <hr>

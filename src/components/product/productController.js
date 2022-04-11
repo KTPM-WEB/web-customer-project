@@ -39,20 +39,20 @@ exports.render = async (req, res) => {
         reviews = reviews.slice(0,limit)
 
         let order=null
-        let disableReview = null
+        let enableReview = null
 
         //check buy product
         if (req.user)
         {
             order = await productService.isBuy(req.user._id, productID)
             if (order.length != 0)
-                disableReview = true
+            enableReview = true
         }
 
         const buffer = reviewPaging(productID,totalPage,1)
         const relatedProduct = await productService.getRelatedList(products.category);
         
-        res.render("product/views/product_detail", {product: products, review: reviews, buffer: buffer, relatedProduct: relatedProduct , disableReview: disableReview});
+        res.render("product/views/product_detail", {product: products, review: reviews, buffer: buffer, relatedProduct: relatedProduct , enableReview: enableReview});
     } catch (err) {
         res.status(500).json({message: err.message});
     }

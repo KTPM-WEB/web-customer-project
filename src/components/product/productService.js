@@ -1,6 +1,7 @@
 const productModel = require('./model/productModel');
 const userModel = require('../user/userModel');
 const ReviewModel = require('./model/productReviewModel');
+const orderModel = require('../checkout/check-outModel');
 
 /**
  * get all product

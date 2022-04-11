@@ -1,8 +1,6 @@
-#review-list
+.enable-review
 {
-    position: relative;
-    overflow: auto;
-    left: 120px;
+    padding-left: 120px;
     height: 400px;
 }
 

@@ -13,5 +13,7 @@ router.get("/field", controller.renderByField);
 
 router.get("/", controller.render);
 
+router.get("/review/:productID", controller.switchPage);
+
 module.exports = router;
 

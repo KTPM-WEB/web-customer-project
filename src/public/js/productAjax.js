@@ -197,3 +197,106 @@ function postReview()
             alert("Please dont leave it blank")
     })
 }
+
+function reviewPaging (productID,totalPage,page)
+{
+    const buffer=[];
+
+    if (page <= totalPage) {
+        buffer.push(`<a class="prev_page" onclick="abcd('${productID}', ${totalPage},${page - 1})">Prev</a>`);
+        buffer.push(`<a onclick="abcd('${productID}', ${totalPage},1)">1</a>`);
+
+        if (totalPage <= 4)
+            for (let i = 2; i <= totalPage; i++)
+                buffer.push(`<a onclick="abcd('${productID}', ${totalPage},${i})">${i}</a>`);
+
+        else {
+            if (page <= 3) {
+                for (let i = 2; i <= Math.min(3, totalPage); i++)
+                    buffer.push(`<a onclick="abcd('${productID}', ${totalPage},${i})">${i}</a>`);
+
+                if (page == 3) {
+                    if (totalPage > 3) {
+                        buffer.push(`<a onclick="abcd('${productID}', ${totalPage},4)">4</a>`);
+                    }
+                }
+
+                if (totalPage - 2 > 2) {
+                    buffer.push(`<span>...</span>`);
+                    buffer.push(`<a onclick="abcd('${productID}', ${totalPage},${totalPage})">${totalPage}</a>`);
+                }
+            }
+
+            else if (page > 3) {
+                buffer.push(`<span>...</span>`);
+
+                if (totalPage - page > 2) {
+
+                    for (let i = page - 1; i <= page; i++) {
+                        buffer.push(`<a  onclick="abcd('${productID}', ${totalPage},${i})">${i}</a>`);
+                    }
+                    buffer.push(`<a  onclick="abcd('${productID}', ${totalPage},${page + 1})">${page + 1}</a>`);
+                    buffer.push(`<span>...</span>`);
+                    buffer.push(`<a onclick="abcd('${productID}', ${totalPage},${totalPage})">${totalPage}</a>`);
+                }
+                else {
+                    if (page == totalPage - 2) {
+                        buffer.push(`<a onclick="abcd('${productID}', ${totalPage},${page - 1})">${page - 1}</a>`);
+                    }
+
+                    for (let i = totalPage - 2; i <= totalPage; i++) {
+                        buffer.push( `<a onclick="abcd('${productID}', ${totalPage},${i})">${i}</a>`);
+                    }
+                }
+
+            }
+        }
+
+        if (page < totalPage)
+            buffer.push(`<a class="next_page" onclick="abcd('${productID}', ${totalPage},${page + 1})">Next</a>`);
+
+        for(let i=1;i<buffer.length-1;i++)
+        {
+            if (buffer.at(i).search(page.toString()) != -1)
+            {
+                const index = buffer.at(i).lastIndexOf("\"")
+                const oldStr = buffer.at(i)
+                const newStr = [oldStr.slice(0, 2), ` class="active" ` , oldStr.slice(3)].join('');
+                console.log(newStr)
+                buffer[i]=newStr
+                break;
+            }
+
+        }
+    }
+    return buffer;
+}
+
+function abcd(productID, totalPage, page)
+{
+    const url = `/api/products/review/${productID}?page=${page}`
+
+    $.get(url, function(data) {
+        //get reference element
+        let review_pagination = $('#review-pagination')
+        let review_list = $('#review-list')
+
+        const page_buffer = reviewPaging(productID,totalPage,page)
+
+        //clear old html
+        review_pagination.empty()
+        review_list.empty()
+
+        for(let i=0 ; i < data.reviews.length ; i++)
+            review_list.append(`<h4 style="font-weight: bold;">${data.reviews[i].fullname}</h4>
+            <span>${data.reviews[i].createdAt}</span>
+            <p style="font-size: 16px">${data.reviews[i].content}</p>
+            <hr>
+            </div>`)
+        
+
+        for (let i=0 ; i<page_buffer.length ; i++)
+            review_pagination.append(page_buffer[i])
+
+    })
+}

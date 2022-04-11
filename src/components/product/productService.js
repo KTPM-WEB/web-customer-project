@@ -190,3 +190,10 @@ module.exports.addToCart = async (productID, userID, quantity = 1) => {
     }
 }
 
+module.exports.isBuy = (userID,productID) => {
+    try {
+        return orderModel.find({customer_id: userID , products: {$elemMatch: {product_id: productID}} , status: "Completed"}).lean();
+    } catch (err) {
+        throw err;
+    }
+}

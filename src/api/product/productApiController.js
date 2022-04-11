@@ -70,6 +70,7 @@ exports.addToCart = async (req, res) => {
     }
 }
 
+
 exports.postReview = async (req,res) =>
 {
     if(!req.user)
@@ -93,4 +94,24 @@ exports.postReview = async (req,res) =>
     await productService.createReview(req.user.fullname, productID, content, createAt)
 
     res.send({fullname: req.user.fullname, createAt: createAt})
+}
+
+exports.switchPage = async (req,res) =>
+{
+    const limit = 3
+    const productID = req.params.productID
+    const page = parseInt(req.query.page)
+
+    let reviews = await productService.getAllReviewByProductID(productID)
+    reviews = Object.values(reviews)
+
+    let start = (page - 1) * limit;
+    let end = page * limit;
+
+    if (end>=reviews.length)
+        end=reviews.length
+    
+    console.log(reviews)
+    reviews = reviews.slice(start,end)
+    res.send({reviews: reviews})
 }

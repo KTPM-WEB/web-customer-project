@@ -56,31 +56,3 @@
     transition: 1s all ease;
 }
 
-#review-list
-{
-    position: relative;
-    overflow: auto;
-    left: 120px;
-    height: 400px;
-}
-
-#review-list-empty
-{
-    text-align: center;
-    padding-top: 70px
-}
-
-#review-list span
-{
-    font-size:10px;
-    font-weight: lighter;
-    font-style: italic;
-    color: gray;
-    position: relative;
-    top:-10px
-}
-
-#review-list-empty p
-{
-    font-weight: bold; font-size: 20px
-}

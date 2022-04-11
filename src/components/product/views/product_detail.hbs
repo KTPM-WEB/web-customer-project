@@ -130,7 +130,8 @@
 							</div>
 							<div class="tab-pane" id="tabs-review" role="tabpanel">
 								<div class="row product__details__tab__content">
-									<div class="product__details__tab__content__item col-5">
+									{{#if disableReview}}
+									<div class="product__details__tab__content__item col-5" id="enable-review">
 										<h2 style="font-weight: bold">Review</h2>
 										<form id="review-form" method="post" action="/product/{{product._id}}/reviews">
 											<input type="hidden" name="productID" value="{{product._id}}">
@@ -139,16 +140,24 @@
 											<input class="primary-btn" type="submit" value="Review" onclick="postReview()">
 										</form>
 									</div>
-
+									{{/if}}
+									
 									{{#if review}}
-									<div class="product__details__tab__content__item col-7" id="review-list">
-										{{#each review}}
-										<h4 style="font-weight: bold;">{{fullname}}</h4>
-										<span>{{createdAt}}</span>
-										<p style="font-size: 16px">{{content}}</p>
-										<hr>
-										{{/each}}
-									</div>
+									<div class="col-7">
+										<div class="product__details__tab__content__item" id="review-list">
+											{{#each review}}
+											<h4>{{fullname}}</h4>
+											<span>{{createdAt}}</span>
+											<p>{{content}}</p>
+											<hr>
+											{{/each}}
+										</div>
+										<div class="product__pagination" id="review-pagination">
+											{{#each buffer}}
+												{{{this}}}
+											{{/each}}
+										</div>
+									</div>	
 									{{else}}
 									<div class="product__details__tab__content__item col-7" id="review-list-empty">
 										<p>Sorry, this product doesn't haveany reviews yet...</p>
@@ -207,7 +216,6 @@
 	</div>
 	</div>
 
-    <script src="/js/productAjax.js"></script>
 </section>
 
 <!-- Related Section End -->

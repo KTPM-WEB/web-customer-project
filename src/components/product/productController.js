@@ -1,3 +1,4 @@
+const { reviewPaging } = require('../../public/js/paging');
 const productService = require('./productService');
 
 /************************************* GET methods *************************************/
@@ -21,12 +22,37 @@ exports.render = async (req, res) => {
  * @param res
  * @returns {Promise<*>}
  */
-exports.renderDetail = async (req, res) => {
+ exports.renderDetail = async (req, res) => {
     try {
-        const product = await productService.getProductByID(req.params.id);
-        const review = await productService.getAllReviewByProductID(req.params.id);
-        const relatedProduct = await productService.getRelatedList(product.category);
-        res.render("product/views/product_detail", {product: product, review: review, relatedProduct: relatedProduct});
+        const limit = 3
+        const productID = req.params.id
+
+        //get product info
+        const products = await productService.getProductByID(productID);
+
+        //get totalPage by the number of reviews
+        let reviews = await productService.getAllReviewByProductID(productID)
+        const totalPage=Math.ceil(reviews.length/limit);
+
+        //slice within limit
+        reviews = Object.values(reviews)
+        reviews = reviews.slice(0,limit)
+
+        let order=null
+        let disableReview = null
+
+        //check buy product
+        if (req.user)
+        {
+            order = await productService.isBuy(req.user._id, productID)
+            if (order.length != 0)
+                disableReview = true
+        }
+
+        const buffer = reviewPaging(productID,totalPage,1)
+        const relatedProduct = await productService.getRelatedList(products.category);
+        
+        res.render("product/views/product_detail", {product: products, review: reviews, buffer: buffer, relatedProduct: relatedProduct , disableReview: disableReview});
     } catch (err) {
         res.status(500).json({message: err.message});
     }

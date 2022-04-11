@@ -166,9 +166,14 @@ function postReview()
     const url=`/api/products/review/${productID}`
 
     $.post(url, {content: content}, function(data){
-        let review_list = $('#review-list')
+        const limit = 3
+        const reviews = data.reviews
 
-        if (review_list.length == 0) 
+        let review_list = $('#review-list')
+        
+        let length = review_list.children('h4').length
+
+        if (length == 0) 
         {
             //reassign id element
             review_list = $('#review-list-empty')
@@ -180,16 +185,25 @@ function postReview()
             review_list.attr("id","review-list")
         }
 
+        else if (length == limit)
+        {
+            const totalPage = data.reviews.length
+            abcd(productID, totalPage, 1)
+        }
+        
+        else
+        {
+            const date = new Date(reviews[0].createdAt)
 
-        const date = new Date(data.createAt)
+            review_list.prepend(`
+            <h4>${reviews[0].fullname}</h4>
+            <span>${date}</span>
+            <p>${reviews[0].content}</p>
+            <hr>
+            </div>
+        `);
+        }
 
-        review_list.prepend(`
-        <h4>${data.fullname}</h4>
-        <span>${date}</span>
-        <p style="font-size: 16px">${content}</p>
-        <hr>
-        </div>
-    `);
 
     }).fail(function(data){
         if(data.status==401)

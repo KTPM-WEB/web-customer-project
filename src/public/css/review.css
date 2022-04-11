@@ -10,6 +10,18 @@
     padding-top: 70px
 }
 
+#review-list-empty p
+{
+    font-weight: bold;
+    font-size: 20px
+}
+
+#review-list h4
+{
+    font-weight: bold;
+    color: rgb(116, 7, 7);
+}
+
 #review-list span
 {
     font-size:10px;
@@ -17,10 +29,6 @@
     font-style: italic;
     color: gray;
     position: relative;
-    top:-10px
+    top:-5px
 }
 
-#review-list-empty p
-{
-    font-weight: bold; font-size: 20px
-}

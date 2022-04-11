@@ -80,6 +80,8 @@ exports.postReview = async (req,res) =>
     }
 
     const content = req.body.content
+    const productID = req.params.productID
+    const createAt = Date.now();
 
     if (content.length==0)
     {
@@ -87,13 +89,11 @@ exports.postReview = async (req,res) =>
         return;
     }
 
-    const productID = req.params.productID
-    
-    const createAt = Date.now();
-
     await productService.createReview(req.user.fullname, productID, content, createAt)
 
-    res.send({fullname: req.user.fullname, createAt: createAt})
+    const reviews = await productService.getAllReviewByProductID(productID)
+
+    res.send({reviews: reviews})
 }
 
 exports.switchPage = async (req,res) =>

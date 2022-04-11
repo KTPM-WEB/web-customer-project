@@ -37,6 +37,7 @@ module.exports.addUserGoogle = async (profile) => {
                 phone: "",
                 intro: "",
                 total: 0,
+                confirm: true,
                 avatar_url: profile.picture || "https://res.cloudinary.com/web-hcmus/image/upload/v1648341181/Default_avatar/default-avtar_wmf6yf.jpg", //default avatar
             }
             // insert

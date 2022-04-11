@@ -1,5 +1,4 @@
 function checkUsername(e) {
-    $('#username-error').html('');
     fetch('/api/auth/username', {
         method: 'POST',
         headers: {
@@ -8,13 +7,14 @@ function checkUsername(e) {
         body: JSON.stringify({
             username: e.value
         })
-    }).then(r => r.json()).then(r =>{
-        if(r.check) $('#username-error').html('<span class="text-danger">Username already taken</span>');
+    }).then(r => r.json()).then(r => {
+        if (r.check) $('#error').html('<span class="text-danger">Username already taken</span>');
+        else $('#error').html('');
     });
 }
 
 function checkGmail(e) {
-    $('#gmail-error').html('');
+    $('#error').html('');
     fetch('/api/auth/email', {
         method: 'POST',
         headers: {
@@ -23,12 +23,17 @@ function checkGmail(e) {
         body: JSON.stringify({
             email: e.value
         })
-    }).then(r => r.json()).then(r =>{
-        if(r.check) $('#gmail-error').html('<span class="text-danger">Gmail already taken</span>');
+    }).then(r => r.json()).then(r => {
+        if (r.check) $('#error').html('<span class="text-danger">Gmail already taken</span>');
+        else $('#error').html('');
     });
 }
 
 function signUp() {
+    if ($('#username').val() === '' || $('#passwd').val() === '' || $('#gmail').val() === '') {
+        $('#error').html('<p class="text-danger">Please fill all fields</p>');
+        return;
+    }
     fetch('/api/auth/signup', {
         method: 'POST',
         headers: {
@@ -39,11 +44,11 @@ function signUp() {
             password: $('#passwd').val(),
             email: $('#gmail').val()
         })
-    }).then(r => r.json()).then(function(data) {
-        if(data.state)
-            $('#mess-error').html(`<div class="alert alert-success" style="background:green;" role="alert"> ${data.message} </div>`)
-        else{
-            $('#mess-error').html(`<div class="alert alert-danger" role="alert"> ${data.message} </div>`)
+    }).then(r => r.json()).then(function (data) {
+        if (data.state)
+            $('#error').html(`<p style="color:green;" > ${data.message} </p>`)
+        else {
+            $('#error').html(`<p  style="color:red;"> ${data.message} </p>`)
         }
     })
 }

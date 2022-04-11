@@ -21,7 +21,7 @@ function getProfile() {
     });
 }
 function changePasswordForm() {
-    const url = '/api/auth/change-password';
+    const url = '/api/auth/reset-password';
     fetch(url, {
         method: 'POST',
         headers: {
@@ -29,8 +29,30 @@ function changePasswordForm() {
         },
         body: JSON.stringify({
             username: $("#username").val(),
+            password: $("#password").val()
         })
-    }).then(r => r.json()).then(data => {});
+    }).then(r => r.json()).then(data => {
+        console.log(data);
+        $("#change-password").type = "hidden";
+        if (data.state) {
+            $('#modal-body').html('<p> Check email for reset password </p>');
+        } else {
+            $('#modal-body').html('<p> Incorrect password </p>');
+        }
+        $('#profile-btn').html('<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="resetChangePasswordForm()">Close</button>');
+    });
+}
+
+function resetChangePasswordForm(){
+    $('#modal-body').html(`
+        <div class="form-group">  
+            <label>Password:</label> 
+            <input type="password" class="form-control" id="password">
+        </div>`);
+    $('#profile-btn').html(
+        `<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" id="change-password" class="btn btn-primary" onClick="changePasswordForm()">Change password</button>`
+    );
 }
 
 function showForm(field)
@@ -38,7 +60,7 @@ function showForm(field)
     const form = $(`.${field} .edit-form`)
     const current_info= $(`.${field} .current-info`)
     
-    if(form.css("display")=="none")
+    if(form.css("display")==="none")
     {
         form.css("display","block")
         current_info.attr("style","display: none")
@@ -62,7 +84,7 @@ function edit(field) {
             need_change_element.text(new_val)
         
       }).fail(function (data){
-            if(data.status == 401)
+            if(data.status === 401)
                 window.location.href = '/auth/login?return=' + window.location.href
       })
 }

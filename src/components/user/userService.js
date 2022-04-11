@@ -230,6 +230,7 @@ module.exports.Register = async (body) => {
 module.exports.verifyUser = async (username, password) => {
     try {
         const user = await userModel.findOne({ username: username });
+        console.log(user);
         if (!user) return false;
         else if (await bcrypt.compareSync(password, user.password)) return user;
         return false;
@@ -238,7 +239,7 @@ module.exports.verifyUser = async (username, password) => {
     }
 }
 
-exports.forgetPassword = async (email) => {
+exports.resetPasswordForm = async (email) => {
     try {
         // Send email template
         const template = fs.readFileSync(

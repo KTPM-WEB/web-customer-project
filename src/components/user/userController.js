@@ -9,9 +9,7 @@ const userService = require('./userService')
  */
 module.exports.renderProfile = async (req, res) => {
     try {
-        if (!req.user)
-            return res.redirect('/auth/login')
-
+        if (!req.user) return res.redirect('/auth/login')
         res.render('user/views/profile')
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -27,11 +25,7 @@ module.exports.renderProfile = async (req, res) => {
  */
 module.exports.renderOrder = async (req, res) => {
     try {
-        if (!req.user)
-            return res.redirect('/auth/login')
-
-        console.log("--- user controller get order ---");
-
+        if (!req.user) return res.redirect('/auth/login')
         res.render('user/views/order')
     } catch (err) {
         res.status(500).json({ message: err.message });

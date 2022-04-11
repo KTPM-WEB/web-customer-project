@@ -82,9 +82,30 @@ exports.signup = async (req, res) => {
 exports.forgotPassword = async (req, res) => {
     try {
         const user = await userService.checkUserName(req.body.username);
-        await userService.forgetPassword(user.email);
+        await userService.resetPasswordForm(user.email);
         res.send({message: "Send email success", state: true});
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 }
+
+/**
+ * reset password
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
+exports.resetPassword = async (req, res) => {
+    try {
+        const user = await userService.verifyUser(req.body.username, req.body.password);
+        if (user) {
+            await userService.resetPasswordForm(user.email);
+            res.send({state: true});
+        } else {
+            res.send({state: false});
+        }
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+}
+

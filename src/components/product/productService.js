@@ -35,7 +35,7 @@ module.exports.getProductByID = (id) => {
  */
 module.exports.getProductByName = async (name) => {
     try {
-        return await productModel.find({ name: { $regex: new RegExp('^' + name + '.*', 'i') } }).exec();
+        return await productModel.find({name: {$regex: new RegExp('^' + name + '.*', 'i')}}).exec();
     } catch (err) {
         throw err;
     }
@@ -43,30 +43,36 @@ module.exports.getProductByName = async (name) => {
 
 /**
  * get product by field
- * @param field {string}
+ * @param field {string||number}
  * @param type {string}
  * @returns {Promise<*>}
  */
 module.exports.getProductByField = async (field, type) => {
     try {
         if (type === 'name') {
-            return await productModel.find({ name: { $regex: new RegExp('^' + field + '.*', 'i') } }).exec();
+            return await productModel.find({name: {$regex: new RegExp('^' + field + '.*', 'i')}}).exec();
         } else if (type === 'category') {
-            return await productModel.find({ category: { $regex: new RegExp('^' + field + '.*', 'i') } }).exec();
+            return await productModel.find({category: {$regex: new RegExp('^' + field + '.*', 'i')}}).exec();
         } else if (type === 'brand') {
-            return await productModel.find({ brand: { $regex: new RegExp('^' + field + '.*', 'i') } }).exec();
+            return await productModel.find({brand: {$regex: new RegExp('^' + field + '.*', 'i')}}).exec();
         } else if (type === 'price') {
-            return await productModel.find({ price: { $lte: field + 49 || 1000000000, $gte: field || 150 } }).exec();
+            if (field === '0') {
+                return await productModel.find({price: {$lte: 49, $gte: 0}}).exec();
+            } else if (field === '150+') {
+                return await productModel.find({price: {$gte: 150}}).exec();
+            }
+            return await productModel.find({price: {$lte: parseInt(field) + 49, $gte: parseInt(field)}}).exec();
+
         } else if (type === 'size') {
-            return await productModel.find({ size: { $regex: new RegExp('^' + field + '.*', 'i') } }).exec();
+            return await productModel.find({size: {$regex: new RegExp('^' + field + '.*', 'i')}}).exec();
         } else if (type === 'color') {
-            return await productModel.find({ color: [{ $regex: new RegExp('^' + field + '.*', 'i') }] }).exec();
-        }else if (type === ''){
+            return await productModel.find({color: [{$regex: new RegExp('^' + field + '.*', 'i')}]}).exec();
+        } else if (type === '') {
             return await productModel.find({}).exec();
-        }else if (type === 'sort' && field === 'Low to High'){
-            return await productModel.find({}).sort({price:1}).exec();
-        }else if (type === 'sort' && field === 'High to Low'){
-            return await productModel.find({}).sort({price:-1}).exec();
+        } else if (type === 'sort' && field === 'Low to High') {
+            return await productModel.find({}).sort({price: 1}).exec();
+        } else if (type === 'sort' && field === 'High to Low') {
+            return await productModel.find({}).sort({price: -1}).exec();
         }
     } catch (err) {
         throw err;
@@ -81,8 +87,8 @@ module.exports.getProductByField = async (field, type) => {
 module.exports.getRelatedList = async (categoryValue) => {
     try {
         return productModel.aggregate([
-            { "$match": { "category": { "$eq": categoryValue } } },
-            { "$sample": { "size": 4 } }
+            {"$match": {"category": {"$eq": categoryValue}}},
+            {"$sample": {"size": 4}}
         ])
     } catch (err) {
         throw err;
@@ -96,7 +102,7 @@ module.exports.getRelatedList = async (categoryValue) => {
  */
 module.exports.getAllReviewByProductID = (productID) => {
     try {
-        return ReviewModel.find({ productID: productID }).sort({createdAt :-1}).lean();
+        return ReviewModel.find({productID: productID}).sort({createdAt: -1}).lean();
     } catch (err) {
         throw err;
     }
@@ -134,8 +140,8 @@ module.exports.createReview = async (fullname, productID, content, createAt) => 
  */
 module.exports.addToCart = async (productID, userID, quantity = 1) => {
     try {
-        let user = await userModel.findOne({ _id: userID });
-        const product = await productModel.findOne({ _id: productID });
+        let user = await userModel.findOne({_id: userID});
+        const product = await productModel.findOne({_id: productID});
 
         if (user && product) {
 
@@ -158,7 +164,7 @@ module.exports.addToCart = async (productID, userID, quantity = 1) => {
             user.total = 0;
 
             for (let i = 0; i < user.cart.length; i++) {
-                const product_total = await productModel.findOne({ _id: user.cart[i].productID });
+                const product_total = await productModel.findOne({_id: user.cart[i].productID});
                 user.total += user.cart[i].quantity * product_total.price;
             }
 
@@ -179,9 +185,13 @@ module.exports.addToCart = async (productID, userID, quantity = 1) => {
  * @param userID {string}
  * @returns {Promise<*>}
  */
-module.exports.isBuy = (userID,productID) => {
+module.exports.isBuy = (userID, productID) => {
     try {
-        return orderModel.find({customer_id: userID , products: {$elemMatch: {product_id: productID}} , status: "Completed"}).lean();
+        return orderModel.find({
+            customer_id: userID,
+            products: {$elemMatch: {product_id: productID}},
+            status: "Completed"
+        }).lean();
     } catch (err) {
         throw err;
     }

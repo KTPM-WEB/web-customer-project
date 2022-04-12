@@ -8,12 +8,9 @@ function loadUserOrder() {
             'Content-Type': 'application/json'
         }
     }).then(r => r.json()).then(data => {
-        console.log('-- Ajax get order --');
-        console.log("data: ", data);
-
         $("#show-orders").html("");
 
-        data.forEach((item, index) => {
+        data.forEach((item) => {
             let order_cart = `
                 <div class="card user-card-full">
                     <div class="row w-100">
@@ -35,11 +32,11 @@ function loadUserOrder() {
             }
 
 
-            if (item.status == "Processing") {
+            if (item.status === "Processing") {
                 order_cart += `<div class="status btn-warning">${item.status}</div>`
-            } else if (item.status == "Cancel") {
+            } else if (item.status === "Cancel") {
                 order_cart += `<div class="status btn-danger">${item.status}</div>`
-            } else if (item.status == "Completed") {
+            } else if (item.status === "Completed") {
                 order_cart += `<div class="status btn-success">${item.status}</div>`
             }
 
@@ -127,7 +124,7 @@ function loadUserOrder() {
                                         </div>
                                     </div>
                                     <hr>`
-            item.products.forEach((product, index) => {
+            item.products.forEach((product) => {
                 order_cart += `
                                     <div class="row">
                                         <div class="col-7">
@@ -157,7 +154,6 @@ function loadUserOrder() {
 
             if (item.discount !== undefined) {
                 let final_price = Math.round((item.total - item.discount) * 100) / 100;
-                console.log("final_price", final_price);
 
                 order_cart += `
                                     <div class="row">
@@ -211,10 +207,7 @@ function deleteOrder(orderID) {
         headers: {
             'Content-Type': 'application/json'
         }
-    })
-
-    console.log('-- Ajax delete order --');
-
+    }).then();
     // reload order
     loadUserOrder();
 }

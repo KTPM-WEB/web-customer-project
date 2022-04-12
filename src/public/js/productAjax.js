@@ -74,34 +74,7 @@ function getProductByField(field, type, page) {
                 return;
             }
 
-            $start.append(`
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                    <div class="shop__product__option__left">
-                        <p>Showing ${products.start}–${products.end} of ${products.total} results</p>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                    <div class="shop__product__option__right">
-                         <p>Sort by:</p>
-                            <select style="display: none;">
-                                <option>Random</option>
-                                <option>Low to High</option>
-                                <option>High to Low</option>
-                            </select><div class="nice-select" tabindex="0">
-                            <span class="current">${products.field}</span>
-                            <ul class="list">
-                                <li data-value="" class="option" onclick="getProductByField('Random','',1)">Random</li>
-                                <li data-value="" class="option" onclick="getProductByField('Low to High','sort',1)">Low to High</li>
-                                <li data-value="" class="option" onclick="getProductByField('High to Low','sort',1)">High to Low</li>
-                            </ul></div>
-                    </div>
-                </div>
-            </div>
-
-           `);
-
-            products.data.forEach((item, index) => {
+            products.data.forEach((item) => {
                 const str = `
                 <div class="col-lg-4 col-md-6 col-sm-6">
                     <div class="card" style="width: 18rem;">
@@ -125,7 +98,71 @@ function getProductByField(field, type, page) {
                 $product.append(html);
             });
 
-            $pagination.append(`
+            if (products.data.length < 1) {
+                $pagination.html('');
+                $start.html(
+                    `<div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="shop__product__option__left">
+                                <p>Showing 0 results</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="shop__product__option__right">
+                                <p>Sort by:</p>
+                                <select style="display: none;">
+                                    <option>Random</option>
+                                    <option>Low to High</option>
+                                    <option>High to Low</option>
+                                </select>
+                                <div class="nice-select" tabIndex="0">
+                                    <span class="current">${products.field}</span>
+                                    <ul class="list">
+                                        <li data-value="" class="option"
+                                            onClick="getProductByField('Random','',1)">Random
+                                        </li>
+                                        <li data-value="" class="option"
+                                            onClick="getProductByField('Low to High','sort',1)">Low to High
+                                        </li>
+                                        <li data-value="" class="option"
+                                            onClick="getProductByField('High to Low','sort',1)">High to Low
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`
+                );
+                return;
+            }
+
+
+            $start.html(`
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="shop__product__option__left">
+                        <p>Showing ${products.start}–${products.end} of ${products.total} results</p>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="shop__product__option__right">
+                         <p>Sort by:</p>
+                            <select style="display: none;">
+                                <option>Random</option>
+                                <option>Low to High</option>
+                                <option>High to Low</option>
+                            </select><div class="nice-select" tabindex="0">
+                            <span class="current">${products.field}</span>
+                            <ul class="list">
+                                <li data-value="" class="option" onclick="getProductByField('Random','',1)">Random</li>
+                                <li data-value="" class="option" onclick="getProductByField('Low to High','sort',1)">Low to High</li>
+                                <li data-value="" class="option" onclick="getProductByField('High to Low','sort',1)">High to Low</li>
+                            </ul></div>
+                    </div>
+                </div>
+            </div>`);
+
+            $pagination.html(`
                     <button class="page-link" style="color: #0b0b0b" href="#"
                        aria-label="Previous" onclick="getProductByField('${products.field}','${products.type}','${products.prev}')">
                         <span aria-hidden="true">&laquo;</span>
@@ -274,7 +311,7 @@ function reviewPaging (productID,totalPage,page)
         {
             if (buffer.at(i).search(page.toString()) !== -1)
             {
-                const index = buffer.at(i).lastIndexOf("\"")
+                buffer.at(i).lastIndexOf("\"")
                 const oldStr = buffer.at(i)
                 buffer[i]=[oldStr.slice(0, 2), ` class="active" `, oldStr.slice(3)].join('')
                 break;

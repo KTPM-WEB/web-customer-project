@@ -8,7 +8,19 @@ function loadUserOrder() {
             'Content-Type': 'application/json'
         }
     }).then(r => r.json()).then(data => {
+        console.log("-- load order --");
+        console.log("data:", data);
+
         $("#show-orders").html("");
+
+        if (data.length === 0) {
+            var html = `
+            <div class="text-center">
+                <h2><b>No order</b></h2>
+            </div>`
+
+            $("#show-orders").html(html)
+        }
 
         data.forEach((item) => {
             let order_cart = `
@@ -207,7 +219,12 @@ function deleteOrder(orderID) {
         headers: {
             'Content-Type': 'application/json'
         }
-    }).then();
+    }).then()
+
+    console.log("-- delete order --");
+
+    $(".modal-backdrop").remove();
+
     // reload order
     loadUserOrder();
 }

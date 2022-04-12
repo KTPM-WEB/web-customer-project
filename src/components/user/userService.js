@@ -31,7 +31,7 @@ module.exports.getUserByID = async (userID) => {
  */
 module.exports.getUserOrder = async (userID) => {
     try {
-        const orders = await orderModel.find({ customer_id: userID }).lean();
+        const orders = await orderModel.find({ 'customer._id': userID }).lean();
         for (let i = 0; i < orders.length; i++) {
             let total = 0;
             let products = orders[i].products;
@@ -308,7 +308,7 @@ module.exports.getNumberProduct = async (userID) => {
             }
         }
         return number_product;
-    }catch (err) {
+    } catch (err) {
         throw err;
     }
 }

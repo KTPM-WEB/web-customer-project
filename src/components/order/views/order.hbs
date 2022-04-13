@@ -1,3 +1,14 @@
+<style>
+	#place-order-announce {
+		text-align: center;
+		font-size: 20px;
+		font-weight: 600;
+		color: red;
+		margin-top: 10px;
+
+	}
+</style>
+
 <!-- Breadcrumb Section Begin -->
 <section class="breadcrumb-option">
 	<div class="container">
@@ -21,117 +32,37 @@
 <section class="checkout spad">
 	<div class="container">
 		<div class="checkout__form">
-			{{!-- <form action="#"> --}}
-				<div class="row">
-					{{#unless user}}
-					<div class="col-lg-8 col-md-6">
-						<h6 class="coupon__code"><span class="icon_tag_alt"></span> Have a coupon? <a href="#">Click
-								here</a> to enter your code</h6>
-						<h6 class="checkout__title">Billing Details</h6>
-						<div class="row">
-							<div class="col-lg-6">
-								<div class="checkout__input">
-									<p>Fist Name<span>*</span></p>
-									<input type="text">
-								</div>
-							</div>
-							<div class="col-lg-6">
-								<div class="checkout__input">
-									<p>Last Name<span>*</span></p>
-									<input type="text">
-								</div>
-							</div>
-						</div>
-						<div class="checkout__input">
-							<p>Country<span>*</span></p>
-							<input type="text">
-						</div>
-						<div class="checkout__input">
-							<p>Address<span>*</span></p>
-							<input type="text" placeholder="Street Address" class="checkout__input__add">
-							<input type="text" placeholder="Apartment, suite, unite ect (optinal)">
-						</div>
-						<div class="checkout__input">
-							<p>Town/City<span>*</span></p>
-							<input type="text">
-						</div>
-						<div class="checkout__input">
-							<p>Country/State<span>*</span></p>
-							<input type="text">
-						</div>
-						<div class="checkout__input">
-							<p>Postcode / ZIP<span>*</span></p>
-							<input type="text">
-						</div>
-						<div class="row">
-							<div class="col-lg-6">
-								<div class="checkout__input">
-									<p>Phone<span>*</span></p>
-									<input type="text">
-								</div>
-							</div>
-							<div class="col-lg-6">
-								<div class="checkout__input">
-									<p>Email<span>*</span></p>
-									<input type="text">
-								</div>
-							</div>
-						</div>
-						<div class="checkout__input__checkbox">
-							<label for="acc">
-								Create an account?
-								<input type="checkbox" id="acc">
-								<span class="checkmark"></span>
-							</label>
-							<p>Create an account by entering the information below. If you are a returning customer
-								please login at the top of the page</p>
-						</div>
-						<div class="checkout__input">
-							<p>Account Password<span>*</span></p>
-							<input type="text">
-						</div>
-						<div class="checkout__input__checkbox">
-							<label for="diff-acc">
-								Note about your order, e.g, special noe for delivery
-								<input type="checkbox" id="diff-acc">
-								<span class="checkmark"></span>
-							</label>
-						</div>
-						<div class="checkout__input">
-							<p>Order notes<span>*</span></p>
-							<input type="text" placeholder="Notes about your order, e.g. special notes for delivery.">
-						</div>
+			<div class="row">
+				<div class="col-lg-7 col-md-6">
+					<h6 class="coupon__code"><span class="icon_tag_alt"></span> Have a coupon? <a href="/cart">Click
+							here</a> to enter your code</h6>
+					<h6 class="checkout__title">Billing Details</h6>
+					<div class="checkout__input">
+						<p>Full name<span>*</span></p>
+						<input type="text" id="fullname">
 					</div>
-					<div class="col-lg-4 col-md-6">
-						<div class="checkout__order">
-							<h4 class="order__title">Your order</h4>
-							<div class="checkout__order__products">Product <span>Total</span></div>
-							<ul class="checkout__total__products">
-								<li>01. Vanilla salted caramel <span>$ 300.0</span></li>
-								<li>02. German chocolate <span>$ 170.0</span></li>
-								<li>03. Sweet autumn <span>$ 170.0</span></li>
-								<li>04. Cluten free mini dozen <span>$ 110.0</span></li>
-							</ul>
-							<ul class="checkout__total__all">
-								<li>Subtotal <span>$750.99</span></li>
-								<li>Total <span>$750.99</span></li>
-							</ul>
-							<div class="checkout__input__checkbox">
-								<label for="acc-or">
-									Create an account?
-									<input type="checkbox" id="acc-or">
-									<span class="checkmark"></span>
-								</label>
+					<div class="checkout__input">
+						<p>Address<span>*</span></p>
+						<input type="text" id="address" placeholder="Street Address" class="checkout__input__add">
+					</div>
+
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="checkout__input">
+								<p>Phone<span>*</span></p>
+								<input type="text" id="phone">
 							</div>
-							<p>Lorem ipsum dolor sit amet, consectetur adip elit, sed do eiusmod tempor incididunt
-								ut labore et dolore magna aliqua.</p>
-							<button type="submit" class="site-btn">PLACE ORDER</button>
+						</div>
+						<div class="col-lg-6">
+							<div class="checkout__input">
+								<p>Email<span>*</span></p>
+								<input type="text" id="email">
+							</div>
 						</div>
 					</div>
 				</div>
-				{{else}}
-				<div class="row w-100 d-flex justify-content-center">
-					<div class="w-75 checkout__order">
+				<div class="col-lg-5 col-md-6">
+					<div class="checkout__order">
 						<h4 class="order__title">Your order</h4>
 						<div class="checkout_order_products_title row">
 							<div class="col-10">
@@ -141,35 +72,8 @@
 								Total
 							</div>
 						</div>
-						<ul class="checkout__total__products">
-							{{#each products}}
-							<li>
-								<div class="row">
-									<div class="col-10 ">
-										<div class="row">
-											<img class="checkout-img" src="{{thumb}}" alt="checkout thumnail">
-											<div class="col ml-3">
-												<div class="row mb-2" style="font-weight: 700;">
-													{{name}}
-												</div>
-												<div class="row">
-													<div class="col-8">
-														${{price}}
-													</div>
-													<div class="col-4">
-														x{{quantity}}
-													</div>
-												</div>
-											</div>
+						<ul class="checkout__total__products" id="checkout-product">
 
-										</div>
-									</div>
-									<div class="product-total col-2 d-flex align-items-center pb-4">
-										${{total}}
-									</div>
-								</div>
-							</li>
-							{{/each}}
 						</ul>
 						<hr>
 						<ul class="checkout_order_products_title">
@@ -177,36 +81,24 @@
 								<div class="col-10">
 									Total
 								</div>
-								<div class="product-total col-2 d-flex flex-column align-items-center">
-									{{#if discount}}
-									<div style="font-size:18px;">
-										${{total}}
-									</div>
-									<div style="color: gray;">
-										{{discount}}
-									</div>
-									<div style="border: 0.2px solid lightgray; width:100%"></div>
-									<div class="mt-3" style="font-weight: bold; font-size:20px; color: red;">
-										${{result}}
-									</div>
-									{{else}}
-									<div style="font-size:120x; font-weight: bold; color: red;">
-										${{total}}
-									</div>
-									{{/if}}
+								<div class="product-total col-2 d-flex flex-column align-items-center"
+									id="result-total">
 								</div>
 							</div>
 						</ul>
 						<hr>
-						<form action="/order" method="post">
-							<button type="submit" class="site-btn">PLACE ORDER</button>
-						</form>
+						<p>Lorem ipsum dolor sit amet, consectetur adip elit, sed do eiusmod tempor incididunt
+							ut labore et dolore magna aliqua.</p>
+						<button type="submit" class="site-btn" onclick="placeOrder()">PLACE ORDER</button>
+						<div id="place-order-announce">
+
+						</div>
 					</div>
 				</div>
-				{{/unless}}
-				{{!--
-			</form> --}}
+			</div>
 		</div>
 	</div>
 </section>
 <!-- Checkout Section End -->
+
+<script src="/js/orderAjax.js"></script>

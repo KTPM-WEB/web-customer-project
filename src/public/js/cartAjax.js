@@ -108,7 +108,6 @@ function checkInputCoupon() {
         $("#discount").html(``);
         $("#coupon-announce").html(``);
     }
-
 }
 
 function applyCoupon() {
@@ -136,7 +135,6 @@ function applyCoupon() {
         }
 
         console.log("f:", coupon);
-
 
         $("#coupon-announce").text(data.msg);
     });

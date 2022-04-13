@@ -1,213 +1,108 @@
-window.onload = loadUserOrder();
+window.onload = loadCheckout();
 
-function loadUserOrder() {
-    const url = '/api/user/order';
+function loadCheckout() {
+    const url = '/api/order';
     fetch(url, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         }
     }).then(r => r.json()).then(data => {
-        $("#show-orders").html("");
+        console.log("data:", data);
 
-        data.forEach((item) => {
-            let order_cart = `
-                <div class="card user-card-full">
-                    <div class="row w-100">
-                        <div class="col-10">
-                            <div class="d-flex">
-                                <img src="${item.thumb}"
-                                    style="width: 150px; object-fit:cover" alt="logo">
-                                <div class="ml-3 p-3">
-                                    <h4 style="font-weight: bold;">${item.products[0].name},...</h4>`
+        $("#checkout-product").html("");
 
-            if (item.discount !== undefined) {
-                let final_pricee = Math.round((item.total - item.discount) * 100) / 100;
+        if (data.user !== undefined) {
+            $("#fullname").val(data.user.fullname);
+            $("#address").val(data.user.address);
+            $("#email").val(data.user.email);
+            $("#phone").val(data.user.phone);
+        }
 
-                order_cart += `<div class="mb-2" id="item-total">$${final_pricee}</div>
-                                    <div class="row">`
-            } else {
-                order_cart += `<div class="mb-2" id="item-total">$${item.total}</div>
-                                    <div class="row">`
-            }
-
-
-            if (item.status === "Processing") {
-                order_cart += `<div class="status btn-warning">${item.status}</div>`
-            } else if (item.status === "Cancel") {
-                order_cart += `<div class="status btn-danger">${item.status}</div>`
-            } else if (item.status === "Completed") {
-                order_cart += `<div class="status btn-success">${item.status}</div>`
-            }
-
-            if (item.status === "Processing") {
-                order_cart += `
-                        <button style="border-radius: 7px;" class="ml-3 btn btn-danger btn-sm"
-                            data-toggle="modal" data-target="#cancle-order-${item._id}">
-                            &times; Cancle order
-                        </button>
-                        <!-- Modal -->
-                        <div class="modal fade" id="cancle-order-${item._id}" tabindex="-1" role="dialog"
-                            aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" style="font-weight: bold;">
-                                            Confirm
-                                        </h5>
-                                        <button type="button" class="close" data-dismiss="modal"
-                                            aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
+        data.products.forEach(product => {
+            var html = `
+            	<li>
+                    <div class="row">
+                        <div class="col-10 ">
+                            <div class="row">
+                                <img class="checkout-img" src="${product.thumb}" alt="checkout thumnail">
+                                <div class="col ml-3">
+                                    <div class="row mb-2" style="font-weight: 700;">
+                                        ${product.name}
                                     </div>
-                                    <div class="modal-body">
-                                        Are you sure to <b style="color: red;">CANCLE</b> this
-                                        order?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-dismiss="modal">Cancle</button>
-                                        <button type="button" class="btn btn-danger"
-                                            data-dismiss="modal"
-                                            onmousedown="deleteOrder('${item._id}')">Confirm
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>`
-            }
-
-            order_cart +=
-                `
+                                    <div class="row">
+                                        <div class="col-8">
+                                            ${product.price}
+                                        </div>
+                                        <div class="col-4">
+                                            x${product.quantity}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-2 d-flex align-items-center justify-content-center">
-                            <button class="p-2 btn  btn-detail" data-toggle="modal"
-                                data-target="#order-${item._id}">
-                                Detail
-                            </button>
+                        <div class="product-total col-2 d-flex align-items-center pb-4">
+                            ${product.total}
                         </div>
                     </div>
-                </div>
+                </li>`
 
-                <div class="modal fade" id="order-${item._id}" tabindex="-1" role="dialog"
-                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h3 class="modal-title" style="font-weight: bold;">Order detail</h3>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <h5 class="mb-2"><b>ID: </b>
-                                    ${item._id}
-                                </h5>
-                                <div class="mb-1"><b>Create at:</b> ${item.create_date}</div>
-                                <div class="mb-3">
-                                    <b>Status:</b>  ${item.status}
-                                </div>
-
-                                <div class="custom-table p-3 mb-3">
-                                    <div class="row">
-                                        <div class="col-7 ">
-                                            <b>Product</b>
-                                        </div>
-                                        <div class="col-3 ">
-                                            <b>Quantity</b>
-                                        </div>
-                                        <div class="col-2">
-                                            <b>Price</b>
-                                        </div>
-                                    </div>
-                                    <hr>`
-            item.products.forEach((product) => {
-                order_cart += `
-                                    <div class="row">
-                                        <div class="col-7">
-                                            <div class="row">
-                                                <div class="col product-image">
-                                                    <img src="${product.img}"
-                                                        class="avatar avatar-sm" alt="thumnail">
-                                                </div>
-                                                <div class="col-9 d-flex flex-column justify-content-center">
-                                                    <h6 class="mb-0 text-sm">${product.name}</h6>
-                                                    <span
-                                                        class="text-secondary text-xs font-weight-bold">${product._id}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-3 align-middle text-center">
-                                            <span class="text-secondary text-xs font-weight-bold">x${product.quantity}</span>
-                                        </div>
-
-                                        <div class="col-2 align-middle">
-                                            <span class="text-secondary text-xs font-weight-bold">$${product.total}</span>
-                                        </div>
-                                        <hr class="my-2">
-                                    </div>
-                                    <hr>`
-            });
-
-            if (item.discount !== undefined) {
-                let final_price = Math.round((item.total - item.discount) * 100) / 100;
-
-                order_cart += `
-                                    <div class="row">
-                                        <h6 class="col">Total:</h6>
-                                        <div class="col-3">
-                                            <h6 class="text-secondary font-weight-bold">
-                                                $${item.total}
-                                            </h6>
-                                            <h6 class="text-secondary font-weight-bold">
-                                                - $${item.discount}
-                                            </h6>
-                                            <hr>
-                                            <h5 class="font-weight-bold">
-                                                $${final_price}
-                                            </h5>
-                                        </div>
-                                    </div>`
-
-            } else {
-                order_cart += `
-                                    <div class="row">
-                                        <h6 class="col">Total:</h6>
-                                        <div class="col-3">
-                                            <h6 class="text-secondary font-weight-bold">
-                                                $${item.total}</h6>
-                                        </div>
-                                    </div>`
-            }
-
-            order_cart += `
-                        </div>
-                            </div>
-                            <div class="m-3 d-flex justify-content-end">
-                                <button type="button" class="btn btn-secondary" style="width: 120px;"
-                                    data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                `;
-
-            $("#show-orders").append(order_cart);
+            $("#checkout-product").append(html);
         });
+
+        if (data.discount !== undefined) {
+            var html = `
+            <div style="font-size:18px;">
+                ${data.total}
+            </div>
+            <div style="color: gray;" id="discount">
+                ${data.discount}
+            </div>
+            <div style="border: 0.2px solid lightgray; width:100%"></div>
+            <div class="mt-3" style="font-weight: bold; font-size:20px; color: red;">
+                ${data.result}
+            </div>
+            `
+
+            $("#result-total").html(html);
+        } else {
+            var html = `
+            <div style="font-size:120x; font-weight: bold; color: red;">
+                ${data.total}
+            </div>`
+
+            $("#result-total").html(html);
+        }
     });
 }
 
-function deleteOrder(orderID) {
-    const url = '/api/user/order/delete/' + orderID;
+
+function placeOrder() {
+    const url = '/api/order/place-order';
     fetch(url, {
-        method: 'DELETE',
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            fullname: $("#fullname").val(),
+            address: $("#address").val(),
+            email: $("#email").val(),
+            phone: $("#phone").val()
+
+        })
+    }).then(r => r.json()).then(data => {
+        console.log("data:", data);
+
+        // check condition to order
+        if (data.canCheckout === true) {
+            location.replace("/?checkout=true")
+        } else if (data.canCheckout === false) {
+            $("#place-order-announce").text("Cart is empty - Can't checkout");
+        } else {
+            $("#place-order-announce").text("Please fill all fields");
         }
-    }).then();
-    // reload order
-    loadUserOrder();
+
+
+    });
 }

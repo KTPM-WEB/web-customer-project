@@ -1,4 +1,4 @@
-const { reviewPaging } = require('../../public/js/paging');
+const { reviewPaging } = require('../../public/js/paging.js');
 const productService = require('./productService');
 
 /************************************* GET methods *************************************/

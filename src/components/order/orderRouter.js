@@ -5,9 +5,4 @@ const orderController = require("./orderController");
 //render check out page
 router.get("/", orderController.render);
 
-/*************************** POST methods ***************************/
-// place order
-router.post("/", orderController.placeOrder);
-
-
 module.exports = router;

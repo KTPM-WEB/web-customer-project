@@ -1,4 +1,4 @@
-const orderModel = require("./check-outModel");
+const orderModel = require("./orderModel");
 const userModel = require("../user/userModel");
 const promoModel = require("../cart/promoModel");
 

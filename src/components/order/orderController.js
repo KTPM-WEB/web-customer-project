@@ -1,5 +1,5 @@
 const cartService = require("../cart/cartService");
-const checkoutService = require("./check-outService");
+const orderService = require("./orderService");
 const userService = require("../user/userService");
 
 /*************************** GET methods ***************************/
@@ -15,17 +15,17 @@ exports.render = async (req, res) => {
         const products = await cartService.getProducts(user.cart);
 
         if (req.session.promo === undefined)
-            res.render("checkout/views/checkout", {
+            res.render("order/views/order", {
                 active: { Checkout: true },
-                page: "checkout",
+                page: "order",
                 products,
                 total: Math.round(user.total * 100) / 100,
                 result: Math.round(user.total * 100) / 100
             });
         else
-            res.render("checkout/views/checkout", {
+            res.render("order/views/order", {
                 active: { Checkout: true },
-                page: "checkout",
+                page: "order",
                 products,
                 discount: req.session.promo.discount_total,
                 total: Math.round(user.total * 100) / 100,
@@ -47,13 +47,13 @@ exports.placeOrder = async (req, res) => {
         const user = await userService.getUserByID(req.user._id);
 
         if (req.session.promo !== undefined) {
-            await checkoutService.order(user, req.session.promo);
+            await orderService.order(user, req.session.promo);
             req.session.promo = undefined;
         } else
-            await checkoutService.order(user);
+            await orderService.order(user);
 
         req.session.number_product = 0;
-        res.redirect("/?checkout=true");
+        res.redirect("/?order=true");
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

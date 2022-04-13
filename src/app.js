@@ -14,7 +14,7 @@ const userRouter = require('./components/user/userRouter');
 const shopRouter = require('./components/product/productRouter');
 const contactRouter = require('./components/contact/contactRouter');
 const cartRouter = require('./components/cart/cartRouter');
-const checkoutRouter = require('./components/checkout/check-outRouter')
+const orderRouter = require('./components/order/orderRouter')
 const apiRouter = require('./api/apiRouter');
 
 const db = require('./config/database.config');
@@ -62,7 +62,7 @@ app.use('/user', userRouter);
 app.use('/product', shopRouter);
 app.use('/contact', contactRouter);
 app.use('/cart', cartRouter);
-app.use('/checkout', checkoutRouter);
+app.use('/order', orderRouter);
 app.use('/api', apiRouter);
 
 

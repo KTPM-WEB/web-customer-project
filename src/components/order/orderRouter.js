@@ -1,13 +1,13 @@
 const router = require("express").Router();
-const checkoutController = require("./check-outController");
+const orderController = require("./orderController");
 
 /*************************** GET methods ***************************/
 //render check out page
-router.get("/", checkoutController.render);
+router.get("/", orderController.render);
 
 /*************************** POST methods ***************************/
 // place order
-router.post("/order", checkoutController.placeOrder);
+router.post("/", orderController.placeOrder);
 
 
 module.exports = router;

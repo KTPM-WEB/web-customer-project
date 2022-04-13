@@ -1,4 +1,4 @@
-const checkoutService = require("../../components/checkout/check-outService");
+const checkoutService = require("../../components/order/orderService");
 const userService = require("../../components/user/userService");
 
 /**
@@ -29,7 +29,6 @@ exports.deleteOneOrder = async (req, res) => {
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
-
 }
 
 /**

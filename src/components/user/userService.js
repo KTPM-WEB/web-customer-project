@@ -6,7 +6,7 @@ const path = require("path");
 const hbs = require("hbs");
 
 const userModel = require('./userModel');
-const orderModel = require("../checkout/check-outModel");
+const orderModel = require("../order/orderModel");
 const productModel = require("../product/model/productModel");
 const cloudinary = require('../../config/cloudinary.config');
 const bcrypt = require("bcrypt")
@@ -195,8 +195,9 @@ module.exports.Register = async (body) => {
 module.exports.verifyUser = async (username, password) => {
     try {
         const user = await userModel.findOne({ username: username });
-        console.log(user);
+
         if (!user) return false;
+        else if(user.confirm === false) return false;
         else if (await bcrypt.compareSync(password, user.password)) return user;
         return false;
     } catch (err) {
@@ -216,7 +217,7 @@ module.exports.resetPasswordForm = async (email) => {
         const msg = {
             to: email,
             from: process.env.EMAIL_SENDER,
-            subject: "male shop reset password",
+            subject: "Male Fashion shop reset password",
             html: compiledTemplate({
                 domain: process.env.DOMAIN_NAME,
                 email,
@@ -266,7 +267,7 @@ module.exports.confirmForm = async (username, email) => {
         const msg = {
             to: email,
             from: process.env.EMAIL_SENDER,
-            subject: "male shop confirm account",
+            subject: "Male Fashion confirm account",
             html: compiledTemplate({
                 domain: process.env.DOMAIN_NAME,
                 username

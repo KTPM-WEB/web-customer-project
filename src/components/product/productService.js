@@ -1,7 +1,7 @@
 const productModel = require('./model/productModel');
 const userModel = require('../user/userModel');
 const ReviewModel = require('./model/productReviewModel');
-const orderModel = require('../checkout/check-outModel');
+const orderModel = require('../order/orderModel');
 
 /**
  * get all product

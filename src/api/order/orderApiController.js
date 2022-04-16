@@ -31,7 +31,7 @@ exports.getCheckout = async (req, res) => {
             result = Math.round(total * 100) / 100
         else {
             discount = req.session.promo.discount_total
-            result = Math.round(((Math.round(total * 100) / 100) - req.session.promo.discount_total) * 100) / 100;
+            result = Math.round(((Math.round(total * 100) / 100) + req.session.promo.discount_total) * 100) / 100;
         }
 
         total = Math.round(total * 100) / 100;
@@ -60,32 +60,34 @@ exports.placeOrder = async (req, res) => {
 
         console.log("pass check");
 
-        let canCheckout = false;
+        let canCheckout = true;
         let cart = JSON.parse(ls.get("cart"));
         let user = {};
 
-        if (req.user)
-            user._id = req.user._id;
-        else
+        if (req.user) {
+            user = await userService.getUserByID(req.user._id);
+        }
+        else {
             user._id = 'undefined';
+            user.cart = cart;
+        }
 
-        console.log("user._id: ", user._id);
         user.fullname = req.body.fullname;
-        console.log("user.fullname: ", user.fullname);
         user.address = req.body.address;
         user.phone = req.body.phone;
         user.email = req.body.email;
-        user.cart = cart;
+
 
         console.log("user:", user);
 
         if (req.session.promo !== undefined) {
             await orderService.order(user, req.session.promo);
             req.session.promo = undefined;
-        } else if (req.user) {
-            canCheckout = await orderService.order(user);
         } else
             canCheckout = await orderService.order(user);
+
+
+        console.log("canCheckout:", canCheckout);
 
         req.session.number_product = 0;
 

@@ -26,7 +26,6 @@ module.exports.order = async (user, promo = null) => {
             products.push(product);
         }
 
-        console.log(products);
         if (products.length > 0) {
             let order = {
 
@@ -60,15 +59,16 @@ module.exports.order = async (user, promo = null) => {
 
             await orderModel.create(order);
 
-            if (user._id !== "undefined") {
+            if (user._id == 'undefined') {
+                ls.set("cart", JSON.stringify([]));
+                ls.set("total", JSON.stringify(0));
+            } else {
                 await userModel.findByIdAndUpdate({ _id: user._id }, {
                     $set: {
                         cart: [],
                         total: 0
                     }
                 });
-            } else {
-                ls.set("cart", JSON.stringify([]));
             }
 
             return true;

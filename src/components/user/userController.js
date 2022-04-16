@@ -44,9 +44,9 @@ module.exports.renderHomepage = async (req, res) => {
         let number_product = 0;
         if (req.user)  number_product = await userService.getNumberProduct(req.user._id);
         req.session.number_product = number_product;
-        if (req.query.checkout === "true") res.render('index', { number_product, message: "Place order successful" });
         const products = (await productService.getAllProducts()).slice(0, 8);
-        res.render('index', { number_product, products });
+        if (req.query.checkout === "true") res.render('index', { number_product,products, message: "Place order successful" });
+        else res.render('index', { number_product, products });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

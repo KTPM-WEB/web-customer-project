@@ -42,18 +42,23 @@ module.exports.renderOrder = async (req, res) => {
  */
 module.exports.renderHomepage = async (req, res) => {
     try {
+        console.log("ls.cart", ls.get("cart"));
         // check local cart
-
         let number_product = 0;
         if (req.user) {
+            if (ls.get("cart")) {
+                await userService.updateLocalCartToUser(req.user._id);
+            }
+
             number_product = await userService.getNumberProduct(req.user._id);
+
             req.session.number_product = number_product;
             if (req.query.checkout === "true")
                 res.render('index', { number_product, message: "Place order successful" });
         } else {
             // not login
-            number_product = 1;
-            if (!ls("cart"))
+            number_product = 0;
+            if (!ls.get("cart"))
                 ls.set("cart", JSON.stringify([]));
         }
 

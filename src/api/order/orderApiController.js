@@ -39,6 +39,12 @@ exports.getCheckout = async (req, res) => {
  */
 exports.placeOrder = async (req, res) => {
     try {
+        if(!req.user)
+        {
+            res.send({ signin:"please sign in" });
+            return;
+        }
+
         if (req.body === undefined || req.body.fullname === '' || req.body.address === '' || req.body.phone === '' || req.body.email === '') {
             res.send({ msg: "lack-info" });
             return;

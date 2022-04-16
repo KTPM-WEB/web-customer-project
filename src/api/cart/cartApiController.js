@@ -1,11 +1,22 @@
 const cartService = require("../../components/cart/cartService")
 const userService = require("../../components/user/userService");
 const productService = require("../../components/product/productService");
+const ls = require("local-storage");
 
 exports.getProducts = async (req, res) => {
     try {
-        const user = await userService.getUserByID(req.user._id);
-        const products = await cartService.getProducts(user.cart);
+        console.log("--- get product to show in cart ---");
+        let products = undefined;
+
+        if (req.user) {
+            const user = await userService.getUserByID(req.user._id);
+            products = await cartService.getProducts(user.cart);
+        }
+        else {
+            console.log("user not login");
+            let cart = JSON.parse(ls.get('cart'));
+            products = await cartService.getProducts(cart);
+        }
 
         let total = 0;
         let number_products = 0;
@@ -17,6 +28,7 @@ exports.getProducts = async (req, res) => {
 
         req.session.number_product = number_products;
         res.send({ number_products, total, products });
+
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
@@ -25,11 +37,21 @@ exports.getProducts = async (req, res) => {
 
 exports.changeQuantity = async (req, res) => {
     try {
-        const user = await userService.getUserByID(req.user._id);
-        const products = user.cart;
+        let products = undefined;
+        let user = undefined;
+
+        if (req.user) {
+            user = await userService.getUserByID(req.user._id);
+            products = user.cart;
+        } else {
+            console.log("--- update quantity in cart ---");
+            products = JSON.parse(ls.get("cart"));
+        }
+
+        console.log("product: ", products);
 
         // product index in cart
-        let itemIdx = products.findIndex(item => item.productID === req.params.productID);
+        let itemIdx = products.findIndex(item => item.productID == req.params.productID);
 
         // product exist in cart, update quantity
         if (itemIdx > -1) {
@@ -59,7 +81,6 @@ exports.changeQuantity = async (req, res) => {
             products[itemIdx].total = parseInt(products[itemIdx].quantity) * parseFloat(product.price);
         }
 
-
         let total = 0;
 
         for (let i = 0; i < products.length; i++) {
@@ -69,11 +90,16 @@ exports.changeQuantity = async (req, res) => {
         // round total
         total = Math.round(total * 100) / 100;
 
-        await userService.updateCart(user._id, products, total);
+        // update
+        if (req.user)
+            await userService.updateCart(user._id, products, total);
+        else
+            ls.set("cart", JSON.stringify(products));
 
         let number_product = req.session.number_product;
         let product_quantity = products[itemIdx].quantity;
         let product_total = Math.round(products[itemIdx].total * 100) / 100;
+        console.log("update product:", products);
 
         res.send({ number_product, total, product_quantity, product_total });
 
@@ -85,8 +111,16 @@ exports.changeQuantity = async (req, res) => {
 
 exports.deleteProduct = async (req, res) => {
     try {
-        const user = await cartService.deleteProduct(req.user._id, req.params.productID);
-        res.send(user.cart);
+        console.log("delete product");
+        if (req.user) {
+            const user = await cartService.deleteProduct(req.user._id, req.params.productID);
+            res.send(user.cart);
+        } else {
+            await cartService.deleteProduct(undefined, req.params.productID);
+            let cart = JSON.parse(ls.get("cart"));
+
+            res.send(cart);
+        }
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
@@ -139,7 +173,4 @@ exports.applyCoupon = async (req, res) => {
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
-
-
-
 }

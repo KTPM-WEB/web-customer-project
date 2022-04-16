@@ -1,5 +1,7 @@
 const productService = require("../../components/product/productService");
 const pagination = require("../../public/js/paging");
+const ls = require("local-storage");
+
 
 /**
  * search name of product
@@ -11,9 +13,9 @@ exports.search = async (req, res) => {
     try {
         const payload = req.body.payload.trim();
         const search = await productService.getProductByName(payload);
-        res.send({payload: search});
+        res.send({ payload: search });
     } catch (err) {
-        res.status(500).json({message: err.message});
+        res.status(500).json({ message: err.message });
     }
 };
 
@@ -32,7 +34,7 @@ exports.renderByField = async (req, res) => {
         products.type = req.query.type;
         res.json(products);
     } catch (err) {
-        res.status(500).json({message: err.message});
+        res.status(500).json({ message: err.message });
     }
 };
 
@@ -44,12 +46,27 @@ exports.renderByField = async (req, res) => {
  */
 exports.addToCart = async (req, res) => {
     try {
-        req.session.user = await productService.addToCart(req.body.id, req.user._id, req.body.quantity);
-        req.session.number_product += parseInt(req.body.quantity);
-        const number = req.session.number_product;
-        res.send({number});
+        console.log("--- add to cart ---");
+        console.log("req.body: ", req.body);
+        let number = 0;
+
+        if (req.user) {
+            req.session.user = await productService.addToCart(req.body.id, req.user._id, req.body.quantity);
+            req.session.number_product += parseInt(req.body.quantity);
+            number = req.session.number_product;
+        } else {
+            // req.session.user = await productService.addToCart(req.body.id);
+
+            await productService.addToCart(req.body.id, undefined, req.body.quantity);
+            console.log("add success");
+
+            req.session.number_product += parseInt(req.body.quantity);
+            number = req.session.number_product;
+        }
+
+        res.send({ number });
     } catch (err) {
-        res.status(500).json({message: err.message});
+        res.status(500).json({ message: err.message });
     }
 }
 
@@ -62,7 +79,7 @@ exports.addToCart = async (req, res) => {
 exports.postReview = async (req, res) => {
     try {
         if (!req.user) {
-            res.status(401).json({message: "UnAuthorized"})
+            res.status(401).json({ message: "UnAuthorized" })
             return;
         }
 
@@ -77,9 +94,9 @@ exports.postReview = async (req, res) => {
 
         await productService.createReview(req.user.fullname, productID, content, createAt)
         const reviews = await productService.getAllReviewByProductID(productID)
-        res.send({reviews: reviews})
+        res.send({ reviews: reviews })
     } catch (err) {
-        res.status(500).json({message: err.message})
+        res.status(500).json({ message: err.message })
     }
 
 }
@@ -106,8 +123,8 @@ exports.switchPage = async (req, res) => {
             end = reviews.length
 
         reviews = reviews.slice(start, end)
-        res.send({reviews: reviews})
+        res.send({ reviews: reviews })
     } catch (err) {
-        res.status(500).json({message: err.message})
+        res.status(500).json({ message: err.message })
     }
 }

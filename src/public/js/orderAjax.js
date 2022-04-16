@@ -92,7 +92,11 @@ function placeOrder() {
 
         })
     }).then(r => r.json()).then(data => {
-        console.log("data:", data);
+        if(data.signin)
+        {
+            $("#place-order-announce").text("Please sign in to place order");
+            return
+        }
 
         // check condition to order
         if (data.canCheckout === true) {

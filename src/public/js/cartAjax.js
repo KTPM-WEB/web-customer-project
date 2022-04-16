@@ -9,6 +9,7 @@ function loadProduct() {
             'Content-Type': 'application/json'
         }
     }).then(r => r.json()).then(data => {
+        console.log("load data:", data);
         const $product_table = $("#cart-table");
         $product_table.html("");
 
@@ -47,11 +48,10 @@ function loadProduct() {
             </tr>`
 
             $product_table.append($.parseHTML(html));
-
-
-            $("#number-product-incart").html(data.number_products);
-            $("#cart-total").html(data.total);
         });
+
+        $("#number-product-incart").html(data.number_products);
+        $("#cart-total").html(data.total);
     });
 }
 
@@ -68,8 +68,6 @@ function changeQuantity(productID, type) {
             quantity: $("#" + productID).val()
         })
     }).then(r => r.json()).then(data => {
-        console.log("data:", data);
-
         $("#number-product-incart").html(data.number_product);
         $("#cart-total").html(data.total);
         $("#" + productID).val(data.product_quantity);
@@ -88,6 +86,7 @@ function deleteProductInCart(productID) {
             id: productID
         })
     }).then(r => r.json()).then(data => {
+        console.log("del data:", data);
         const $product_table = $("#cart-table");
 
         // clear product table
@@ -123,7 +122,7 @@ function applyCoupon() {
     }).then(r => r.json()).then(data => {
         console.log("data:", data);
 
-        if (data.stt == false) {
+        if (data.stt === false) {
             $("#coupon-announce").css("color", "red");
             $("#discount").html(" ");
 

@@ -1,4 +1,5 @@
 const userService = require("../user/userService");
+const ls = require("local-storage");
 
 /*************************** GET methods ***************************/
 /**
@@ -9,8 +10,16 @@ const userService = require("../user/userService");
  */
 module.exports.render = async (req, res) => {
     try {
-        const user = await userService.getUserByID(req.user._id);
-        const total = user.total;
+        let total = 0;
+
+        if (req.user) {
+            const user = await userService.getUserByID(req.user._id);
+            total = user.total;
+        }
+        else {
+            total = ls.get("total");
+        }
+
         res.render("cart/views/cart", { active: { Cart: true }, page: "cart", total });
     } catch (err) {
         res.status(500).json({ message: err.message });

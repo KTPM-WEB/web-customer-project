@@ -1,5 +1,6 @@
 const userService = require('./userService')
 const productService = require("../product/productService");
+const ls = require("local-storage");
 
 /************************************* GET methods *************************************/
 /**
@@ -13,7 +14,7 @@ module.exports.renderProfile = async (req, res) => {
         if (!req.user) return res.redirect('/auth/login')
         res.render('user/views/profile')
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({message: err.message});
     }
 }
 
@@ -29,7 +30,7 @@ module.exports.renderOrder = async (req, res) => {
         if (!req.user) return res.redirect('/auth/login')
         res.render('user/views/order')
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({message: err.message});
     }
 }
 
@@ -41,14 +42,28 @@ module.exports.renderOrder = async (req, res) => {
  */
 module.exports.renderHomepage = async (req, res) => {
     try {
-        let number_product = 0;
-        if (req.user)  number_product = await userService.getNumberProduct(req.user._id);
-        req.session.number_product = number_product;
+        // check local cart
+        let number_product;
+        if (req.user) {
+            number_product = await userService.getNumberProduct(req.user._id);
+            req.session.number_product = number_product;
+            if (req.query.checkout === "true")
+                res.render('index', {number_product, message: "Place order successful"});
+        } else {
+            // not login
+            number_product = 1;
+            if (!ls("cart"))
+                ls.set("cart", JSON.stringify([]));
+        }
         const products = (await productService.getAllProducts()).slice(0, 8);
-        if (req.query.checkout === "true") res.render('index', { number_product,products, message: "Place order successful" });
-        else res.render('index', { number_product, products });
+        if (req.query.checkout === "true") res.render('index', {
+            number_product,
+            products,
+            message: "Place order successful"
+        });
+        else res.render('index', {number_product, products});
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({message: err.message});
     }
 }
 /************************************* POST methods *************************************/
@@ -63,7 +78,7 @@ module.exports.changeAvatar = async (req, res) => {
         await userService.changeAvatar(req.user._id, req.file);
         res.redirect('back');
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({message: err.message});
     }
 }
 
@@ -79,9 +94,8 @@ module.exports.editProfile = async (req, res) => {
         await userService.updateUser(req.user.username, req.body.field, req.body.value)
         res.redirect("/user/profile")
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({message: err.message});
     }
-
 }
 
 

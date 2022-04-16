@@ -8,7 +8,7 @@ function loadCheckout() {
             'Content-Type': 'application/json'
         }
     }).then(r => r.json()).then(data => {
-        console.log("data:", data);
+        console.log("order data:", data);
 
         $("#checkout-product").html("");
 

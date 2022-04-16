@@ -1,6 +1,7 @@
 const orderModel = require("./orderModel");
 const userModel = require("../user/userModel");
 const promoModel = require("../cart/promoModel");
+const ls = require("local-storage");
 
 /**
  * order
@@ -13,65 +14,66 @@ module.exports.order = async (user, promo = null) => {
     try {
         console.log("--- order ---");
         console.log("user:", user);
-        // case no login
-        if (user === undefined) {
-            // customer _id = null
 
+        const now = (new Date()).toString().split(" ");
+        const products = [];
 
-        } else { // case login
-            const now = (new Date()).toString().split(" ");
-            const products = [];
-            for (let i = 0; i < user.cart.length; i++) {
-                const product = {
-                    product_id: user.cart[i].productID,
-                    quantity: user.cart[i].quantity
+        for (let i = 0; i < user.cart.length; i++) {
+            const product = {
+                product_id: user.cart[i].productID,
+                quantity: user.cart[i].quantity
+            }
+            products.push(product);
+        }
+
+        console.log(products);
+        if (products.length > 0) {
+            let order = {
+
+                create_date: now[2] + ' ' + now[1] + ',' + now[3],
+                products: products,
+                status: "Processing",
+                customer: {
+                    _id: user._id,
+                    fullname: user.fullname,
+                    address: user.address,
+                    phone: user.phone,
+                    email: user.email
                 }
-                products.push(product);
             }
 
-            console.log(products);
-            if (products.length > 0) {
-                let order = {
+            // case: has promo
+            if (promo !== null) {
+                order.promo = promo.discount;
+                pro = await promoModel.findOne({ code: promo.code }).lean();
 
-                    create_date: now[2] + ' ' + now[1] + ',' + now[3],
-                    products: products,
-                    status: "Processing",
-                    customer: {
-                        _id: user._id,
-                        fullname: user.fullname,
-                        address: user.address,
-                        phone: user.phone,
-                        email: user.email
-                    }
-                }
+                await promoModel.findOneAndUpdate(
+                    { code: promo.code },
+                    {
+                        $set: {
+                            slot: pro.slot - 1
+                        }
+                    });
+            }
 
-                // case: has promo
-                if (promo !== null) {
-                    order.promo = promo.discount;
-                    pro = await promoModel.findOne({ code: promo.code }).lean();
+            console.log("order:", order);
 
-                    await promoModel.findOneAndUpdate(
-                        { code: promo.code },
-                        {
-                            $set: {
-                                slot: pro.slot - 1
-                            }
-                        });
-                }
+            await orderModel.create(order);
 
-                console.log("order:", order);
-
-                await orderModel.create(order);
+            if (user._id !== "undefined") {
                 await userModel.findByIdAndUpdate({ _id: user._id }, {
                     $set: {
                         cart: [],
                         total: 0
                     }
                 });
-                return true;
-            } else
-                return false;
-        }
+            } else {
+                ls.set("cart", JSON.stringify([]));
+            }
+
+            return true;
+        } else
+            return false;
     } catch (err) {
         throw err;
     }

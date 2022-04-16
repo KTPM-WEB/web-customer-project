@@ -42,31 +42,29 @@ module.exports.renderOrder = async (req, res) => {
  */
 module.exports.renderHomepage = async (req, res) => {
     try {
-        console.log("ls.cart", ls.get("cart"));
-        // check local cart
+        const products = (await productService.getAllProducts()).slice(0, 8);
+        if (!ls.get("cart"))
+            ls.set("cart", JSON.stringify([]));
+
         let number_product;
         if (req.user) {
-            if (ls.get("cart")) {
+            if (JSON.parse(ls.get("cart")).length > 0) {
+                number_product = JSON.parse(ls.get("cart")).length;
+
                 await userService.updateLocalCartToUser(req.user._id);
+
+                number_product = await userService.getNumberProduct(req.user._id);
+            } else {
+                number_product = 0;
             }
-
-            number_product = await userService.getNumberProduct(req.user._id);
-
-            req.session.number_product = number_product;
-            if (req.query.checkout === "true")
-                res.render('index', {number_product, message: "Place order successful"});
         } else {
-            // not login
             number_product = 0;
-            if (!ls.get("cart"))
-                ls.set("cart", JSON.stringify([]));
         }
-        const products = (await productService.getAllProducts()).slice(0, 8);
-        if (req.query.checkout === "true") res.render('index', {
-            number_product,
-            products,
-            message: "Place order successful"
-        });
+        req.session.number_product = number_product;
+        if (req.query.checkout === "true")
+            res.render('index', {number_product, products, message: "Place order successful"});
+
+
         else res.render('index', {number_product, products});
     } catch (err) {
         res.status(500).json({message: err.message});

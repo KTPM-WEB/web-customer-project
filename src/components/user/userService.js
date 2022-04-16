@@ -40,12 +40,14 @@ module.exports.updateLocalCartToUser = async (userID) => {
     try {
         let local_cart = JSON.parse(ls.get('cart'));
 
+        console.log(userID);
         let user = await userModel.findById(userID).lean();
+        console.log(user);
         let user_cart = user.cart;
 
         for (let i = 0; i < local_cart.length; i++) {
             // product index in cart
-            let itemIdx = user_cart.findIndex(item => item.productID == local_cart[i].productID);
+            let itemIdx = user_cart.findIndex(item => item.productID === local_cart[i].productID);
             let product = await productService.getProductByID(local_cart[i].productID);
 
             // product exist in cart, update quantity
@@ -197,6 +199,7 @@ module.exports.changeAvatar = async (id, file) => {
     try {
         if (!file) return;
         const url = await cloudinary.upload(file.path, 'user_avatar');
+        console.log(id,url);
         await userModel.findByIdAndUpdate(id, { avatar_url: url });
     } catch (err) {
         throw err;

@@ -248,10 +248,15 @@ function postReview()
 
 
         }
-
+        else if (length === limit) //prevent exceed page limit
+            loadReviewSpecificPage(1)
 
     }).fail(function(data){
         console.log(data.responseJSON.message)
+        if(data.message===401)
+            window.location.href='/auth/login/'
+        else if(data.status === 400)
+            alert(data.responseJSON.message)
     })
 }
 

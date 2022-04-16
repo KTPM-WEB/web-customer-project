@@ -6,6 +6,7 @@ const Schema = mongoose.Schema;
 const review = new Schema({
     fullname: String,
     stranger_name: String,
+    avatar: String,
     productID: String,
     content: String,
     createdAt: Date

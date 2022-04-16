@@ -130,63 +130,56 @@
 							</div>
 							<div class="tab-pane" id="tabs-review" role="tabpanel">
 								<div class="row product__details__tab__content">
-									{{#if enableReview}}
-									<div class="product__details__tab__content__item col-5">
-										<h2 style="font-weight: bold">Review</h2>
+                                    <!--review form-->
+									<div class="product__details__tab__content__item col-5" id="review-left-tab">
+										<h3>Your Review</h3>
 										<form id="review-form" method="post" action="/product/{{product._id}}/reviews">
 											<input type="hidden" name="productID" value="{{product._id}}">
-											<input id="content" type="text" name="content"
+                      {{#if stranger}}
+                        <h5>Name</h5>
+                        <input id="review-stranger-name" type="text" name="content"
+                               placeholder="Write a name here...">
+                      {{/if}}
+                      <h5>Content</h5>
+											<input id="review-content" type="text" name="content"
 												placeholder="Write a review here...">
 											<input class="primary-btn" type="submit" value="Review" onclick="postReview()">
 										</form>
 									</div>
-									{{/if}}
-									
-									{{#if enableReview}}
-										{{#if review}}
-											<div class="col-7">
-												<div class="product__details__tab__content__item enable-review" id="review-list">
-													{{#each review}}
-													<h4>{{fullname}}</h4>
-													<span>{{createdAt}}</span>
-													<p>{{content}}</p>
-													<hr>
-													{{/each}}
-												</div>
-												<div class="product__pagination" id="review-pagination">
-													{{#each buffer}}
-														{{{this}}}
-													{{/each}}
-												</div>
-											</div>	
-											{{else}}
-											<div class="product__details__tab__content__item col-7" id="review-list-empty">
-												<p>Sorry, this product doesn't haveany reviews yet...</p>
-											</div>
-										{{/if}}
-									{{else}}
-										{{#if review}}
-											<div class="col-12">
-												<div class="product__details__tab__content__item" id="review-list">
-													{{#each review}}
-													<h4>{{fullname}}</h4>
-													<span>{{createdAt}}</span>
-													<p>{{content}}</p>
-													<hr>
-													{{/each}}
-												</div>
-												<div class="product__pagination" id="review-pagination">
-													{{#each buffer}}
-														{{{this}}}
-													{{/each}}
-												</div>
-											</div>	
-											{{else}}
-											<div class="product__details__tab__content__item col-7" id="review-list-empty">
-												<p>Sorry, this product doesn't haveany reviews yet...</p>
-											</div>
-										{{/if}}
-									{{/if}}
+                                    <!--review list-->
+                                    <div class="product__details__tab__content__item col-7" id="review-right-tab">
+                                      <h3>Product Reviews</h3>
+                                        <div id="review-list">
+                                            {{#if review}}
+                                                {{#each review}}
+                                                    <div class="review-box">
+                                                        <div class="review-user-detail">
+                                                            {{#if stranger_name}}
+                                                                <h5>{{stranger_name}}</h5>
+                                                            {{else}}
+                                                                <h5>{{fullname}}</h5>
+                                                            {{/if}}
+                                                            <span>{{createdAt}}</span>
+                                                            <p>{{content}}</p>
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                            {{/each}}
+                                            {{else}}
+                                                <div class="product__details__tab__content__item col-12" id="empty-review-list">
+                                                    <p>Sorry, this product doesn't haveany reviews yet...</p>
+                                                </div>
+                                            {{/if}}
+                                        </div>
+                                        <!--pagination-->
+                                        <div class="product__pagination" id="review-pagination">
+                                            {{#if buffer}}
+                                                {{#each buffer}}
+                                                    {{{this}}}
+                                                {{/each}}
+                                            {{/if}}
+                                        </div>
+                                    </div>
 
 								</div>
 							</div>
@@ -238,7 +231,6 @@
 			{{/each}}
 		</div>
 
-	</div>
 	</div>
 
 </section>

@@ -24,7 +24,6 @@ exports.render = async (req, res) => {
  */
  exports.renderDetail = async (req, res) => {
     try {
-        const limit = 3
         const productID = req.params.id
 
         //get product info
@@ -32,27 +31,16 @@ exports.render = async (req, res) => {
 
         //get totalPage by the number of reviews
         let reviews = await productService.getAllReviewByProductID(productID)
-        const totalPage=Math.ceil(reviews.length/limit);
 
-        //slice within limit
-        reviews = Object.values(reviews)
-        reviews = reviews.slice(0,limit)
-
-        let order=null
-        let enableReview = null
-
-        //check buy product
+        //check stranger visit
+        let stranger = true
         if (req.user)
-        {
-            order = await productService.isBuy(req.user._id, productID)
-            if (order.length !== 0)
-            enableReview = true
-        }
+            stranger = false
 
-        const buffer = reviewPaging(productID,totalPage,1)
+        const result = reviewPaging(reviews,1)
         const relatedProduct = await productService.getRelatedList(products.category);
         
-        res.render("product/views/product_detail", {product: products, review: reviews, buffer: buffer, relatedProduct: relatedProduct , enableReview: enableReview});
+        res.render("product/views/product_detail", {product: products, review: result.data, buffer: result.buffer, relatedProduct: relatedProduct , stranger: stranger});
     } catch (err) {
         res.status(500).json({message: err.message});
     }

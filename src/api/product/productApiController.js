@@ -1,6 +1,7 @@
 const productService = require("../../components/product/productService");
 const pagination = require("../../public/js/paging");
 const ls = require("local-storage");
+const {memoryStorage} = require("multer");
 
 
 /**
@@ -78,23 +79,39 @@ exports.addToCart = async (req, res) => {
  */
 exports.postReview = async (req, res) => {
     try {
-        if (!req.user) {
-            res.status(401).json({ message: "UnAuthorized" })
-            return;
-        }
+        let fullName = null
+        if (req.user)
+            fullName = req.user.fullname
+
+        let id = null
+        if (req.user)
+            id = req.user._id
 
         const content = req.body.content
         const productID = req.params.productID
         const createAt = Date.now();
 
+        // review with empty content
         if (content.length === 0) {
-            res.status(400)
+            res.status(400).json({message: "Content is required"})
             return;
         }
 
-        await productService.createReview(req.user.fullname, productID, content, createAt)
-        const reviews = await productService.getAllReviewByProductID(productID)
-        res.send({ reviews: reviews })
+        //review with empty name
+        if (!fullName && req.body.stranger_name.length === 0) {
+            res.status(400).json({message: "Name is required"})
+            return;
+        }
+
+        //create review in mongo
+        await productService.createReview(id, fullName,req.body.stranger_name, productID, content, createAt)
+
+        //paging and slice data
+        const all_reviews = await productService.getAllReviewByProductID(productID)
+        const result = pagination.reviewPaging(all_reviews,1)
+
+        res.send({ reviews: result.data, buffer: result.buffer })
+
     } catch (err) {
         res.status(500).json({ message: err.message })
     }
@@ -109,21 +126,14 @@ exports.postReview = async (req, res) => {
  */
 exports.switchPage = async (req, res) => {
     try {
-        const limit = 3
         const productID = req.params.productID
-        const page = parseInt(req.query.page)
+        const page = parseInt(req.query.page||1)
 
         let reviews = await productService.getAllReviewByProductID(productID)
-        reviews = Object.values(reviews)
+        const result = pagination.reviewPaging(reviews, page)
 
-        let start = (page - 1) * limit;
-        let end = page * limit;
+        res.send({ reviews: result.data, buffer: result.buffer })
 
-        if (end >= reviews.length)
-            end = reviews.length
-
-        reviews = reviews.slice(start, end)
-        res.send({ reviews: reviews })
     } catch (err) {
         res.status(500).json({ message: err.message })
     }

@@ -38,31 +38,50 @@ module.exports.paging = (data, page, limit) => {
     return result;
 }
 
-module.exports.reviewPaging = (productID, totalPage, page) => {
-    const buffer = [];
+module.exports.reviewPaging = (data, page) => {
+    const limit = 3
+    let buffer = [];
+
+    const totalPage=Math.ceil(data.length/limit);
+    const productID = 0
+    //slice within limit
+    let start = (page - 1) * limit;
+    let end = page * limit;
+
+    if (end >= data.length)
+        end = data.length
+    data = Object.values(data)
+    data = data.slice(start, end)
+
+    //if not exceed a first page
+    if (parseInt(page) == 1 && data.length < limit)
+    {
+        buffer =null
+        return {buffer,data};
+    }
 
     if (page <= totalPage) {
-        buffer.push(`<a class="prev_page" onclick="abcd('${productID}', ${totalPage},${page - 1})">Prev</a>`);
-        buffer.push(`<a onclick="abcd('${productID}', ${totalPage},1)">1</a>`);
+        buffer.push(`<a class="prev_page" onclick="loadReviewSpecificPage(${page-1})">Prev</a>`);
+        buffer.push(`<a onclick="loadReviewSpecificPage(1)">1</a>`);
 
         if (totalPage <= 4)
             for (let i = 2; i <= totalPage; i++)
-                buffer.push(`<a onclick="abcd('${productID}', ${totalPage},${i})">${i}</a>`);
+                buffer.push(`<a onclick="loadReviewSpecificPage(${i})">${i}</a>`);
 
         else {
             if (page <= 3) {
                 for (let i = 2; i <= Math.min(3, totalPage); i++)
-                    buffer.push(`<a onclick="abcd('${productID}', ${totalPage},${i})">${i}</a>`);
+                    buffer.push(`<a onclick="loadReviewSpecificPage(${i})">${i}</a>`);
 
                 if (page === 3) {
                     if (totalPage > 3) {
-                        buffer.push(`<a onclick="abcd('${productID}', ${totalPage},4)">4</a>`);
+                        buffer.push(`<a onclick="loadReviewSpecificPage(4)">4</a>`);
                     }
                 }
 
                 if (totalPage - 2 > 2) {
                     buffer.push(`<span>...</span>`);
-                    buffer.push(`<a onclick="abcd('${productID}', ${totalPage},${totalPage})">${totalPage}</a>`);
+                    buffer.push(`<a onclick="loadReviewSpecificPage(${totalPage})">${totalPage}</a>`);
                 }
             } else if (page > 3) {
                 buffer.push(`<span>...</span>`);
@@ -70,36 +89,36 @@ module.exports.reviewPaging = (productID, totalPage, page) => {
                 if (totalPage - page > 2) {
 
                     for (let i = page - 1; i <= page; i++) {
-                        buffer.push(`<a  onclick="abcd('${productID}', ${totalPage},${i})">${i}</a>`);
+                        buffer.push(`<a  onclick="loadReviewSpecificPage(${i})">${i}</a>`);
                     }
-                    buffer.push(`<a  onclick="abcd('${productID}', ${totalPage},${page + 1})">${page + 1}</a>`);
+                    buffer.push(`<a  onclick="loadReviewSpecificPage(${page + 1})">${page + 1}</a>`);
                     buffer.push(`<span>...</span>`);
-                    buffer.push(`<a onclick="abcd('${productID}', ${totalPage},${totalPage})">${totalPage}</a>`);
+                    buffer.push(`<a onclick="loadReviewSpecificPage(${totalPage})">${totalPage}</a>`);
                 } else {
                     if (page === totalPage - 2) {
-                        buffer.push(`<a onclick="abcd('${productID}', ${totalPage},${page - 1})">${page - 1}</a>`);
+                        buffer.push(`<a onclick="loadReviewSpecificPage(${page - 1} )">${page - 1}</a>`);
                     }
 
                     for (let i = totalPage - 2; i <= totalPage; i++) {
-                        buffer.push(`<a onclick="abcd('${productID}', ${totalPage},${i})">${i}</a>`);
+                        buffer.push(`<a onclick="loadReviewSpecificPage(${i})">${i}</a>`);
                     }
                 }
 
             }
         }
-
         if (page < totalPage)
-            buffer.push(`<a class="next_page" onclick="abcd('${productID}', ${totalPage},${page + 1})">Next</a>`);
+            buffer.push(`<a class="next_page" onclick="loadReviewSpecificPage(${page + 1})">Next</a>`);
 
-        for (let i = 1; i < buffer.length - 1; i++) {
-            if (buffer.at(i).search(page.toString()) !== -1) {
-                const index = buffer.at(i).lastIndexOf("\"")
-                const oldStr = buffer.at(i)
-                buffer[i] = [oldStr.slice(0, 2), ` class="active" `, oldStr.slice(3)].join('')
-                break;
+        for (let i=0; i < buffer.length; i++)
+        {
+            const pos = buffer[i].indexOf(page)
+            if (pos !=-1)
+            {
+                buffer[i] = buffer[i].slice(0,3) + 'class = "active"' + buffer[i].slice(2)
+                return {buffer,data};
             }
 
         }
+
     }
-    return buffer;
 }

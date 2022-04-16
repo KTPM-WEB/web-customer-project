@@ -117,14 +117,31 @@ module.exports.getAllReviewByProductID = (productID) => {
  * @param createAt
  * @returns {Promise<*>}
  */
-module.exports.createReview = async (fullname, productID, content, createAt) => {
+module.exports.createReview = async (id, fullname, stranger_name,productID, content, createAt) => {
     try {
-        await new ReviewModel({
-            fullname: fullname,
-            productID: productID,
-            content: content,
-            createdAt: createAt
-        }).save();
+        if (fullname)
+        {
+            const user = await userModel.findById(id).lean()
+
+            await new ReviewModel({
+                fullname: fullname,
+                avatar: user.avatar_url,
+                productID: productID,
+                content: content,
+                createdAt: createAt
+            }).save();
+        }
+
+        else
+        {
+            await new ReviewModel({
+                stranger_name: stranger_name,
+                avatar: "https://ssl.gstatic.com/docs/common/profile/nyancat_lg.png",
+                productID: productID,
+                content: content,
+                createdAt: createAt
+            }).save();
+        }
 
     } catch (err) {
         throw err;
@@ -218,24 +235,6 @@ module.exports.addToCart = async (productID, userID = undefined, quantity = 1) =
                 console.log("total:", ls.get("total"));
             }
         }
-    } catch (err) {
-        throw err;
-    }
-}
-
-/**
- * check if current user has buy product
- * @param productID {string}
- * @param userID {string}
- * @returns {Promise<*>}
- */
-module.exports.isBuy = (userID, productID) => {
-    try {
-        return orderModel.find({
-            customer_id: userID,
-            products: { $elemMatch: { product_id: productID } },
-            status: "Completed"
-        }).lean();
     } catch (err) {
         throw err;
     }

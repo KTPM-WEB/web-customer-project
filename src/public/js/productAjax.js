@@ -197,156 +197,108 @@ window.onload = function () {
 function postReview()
 {
     event.preventDefault()
-    const content = $('#review-form input[type=text]').val()
+    let stranger_name = null
+    if ($('#review-stranger-name'))
+        stranger_name = $('#review-stranger-name').val()
+    const content = $('#review-content').val()
 
     const productID = $('#review-form input[type=hidden]').val()
     const url=`/api/products/review/${productID}`
 
-    $.post(url, {content: content}, function(data){
+    $.post(url, {stranger_name: stranger_name,content: content}, function(data){
         const limit = 3
-        const reviews = data.reviews
 
-        let review_list = $('#review-list')
-        
-        let length = review_list.children('h4').length
+        //set empty for inputs
+        $('#review-content').val('')
+        $('#review-stranger-name').val('')
 
-        if (length === 0)
-        {
-            //reassign id element
-            review_list = $('#review-list-empty')
+        const review_list = $('#review-list')
+        const length = $('.review-box').length
 
-            //clear child
-            review_list.empty()
+        if (length === 0) {
+            //clear sorry paragraph
+            $('#empty-review-list').remove()
 
-            //reassign id element
-            review_list.attr("id","review-list")
+            //generate new pagination
+            const pagination = $('#review-pagination')
+            if (data.buffer)
+                for (let i=0; i<data.buffer.length; i++)
+                    pagination.append(data.buffer[i])
         }
 
-        else if (length === limit)
+        if (length < limit)
         {
-            const totalPage = data.reviews.length
-            abcd(productID, totalPage, 1)
-        }
-        
-        else
-        {
-            const date = new Date(reviews[0].createdAt)
+            //add review to list
+            const date = new Date(data.reviews[0].createdAt)
+            let name = data.reviews[0].fullname || stranger_name
+            let avatar = data.reviews[0].avatar || "https://ssl.gstatic.com/docs/common/profile/nyancat_lg.png"
 
             review_list.prepend(`
-            <h4>${reviews[0].fullname}</h4>
-            <span>${date}</span>
-            <p>${reviews[0].content}</p>
-            <hr>
+            <div class="review-box">
+                <div class="review-user-avatar">
+                    <img src="${avatar}" alt="user's avatar"></img>
+                </div>
+                <div class="review-user-detail">
+                    <h5>${name}</h5>
+                    <span>${date}</span>
+                    <p>${data.reviews[0].content}</p>
+                </div>
             </div>
-        `);
-        }
+            <hr>`);
 
+
+        }
+        else if (length === limit) //prevent exceed page limit
+            loadReviewSpecificPage(1)
 
     }).fail(function(data){
-        if(data.status===401)
+        console.log(data.responseJSON.message)
+        if(data.message===401)
             window.location.href='/auth/login/'
-        else if(data.status===400)
-            alert("Please dont leave it blank")
+        else if(data.status === 400)
+            alert(data.responseJSON.message)
     })
 }
 
-function reviewPaging (productID,totalPage,page)
+
+function loadReviewSpecificPage(page)
 {
-    const buffer=[];
+    const productID = $('#review-form input[type=hidden]').val()
 
-    if (page <= totalPage) {
-        buffer.push(`<a class="prev_page" onclick="abcd('${productID}', ${totalPage},${page - 1})">Prev</a>`);
-        buffer.push(`<a onclick="abcd('${productID}', ${totalPage},1)">1</a>`);
-
-        if (totalPage <= 4)
-            for (let i = 2; i <= totalPage; i++)
-                buffer.push(`<a onclick="abcd('${productID}', ${totalPage},${i})">${i}</a>`);
-
-        else {
-            if (page <= 3) {
-                for (let i = 2; i <= Math.min(3, totalPage); i++)
-                    buffer.push(`<a onclick="abcd('${productID}', ${totalPage},${i})">${i}</a>`);
-
-                if (page === 3) {
-                    if (totalPage > 3) {
-                        buffer.push(`<a onclick="abcd('${productID}', ${totalPage},4)">4</a>`);
-                    }
-                }
-
-                if (totalPage - 2 > 2) {
-                    buffer.push(`<span>...</span>`);
-                    buffer.push(`<a onclick="abcd('${productID}', ${totalPage},${totalPage})">${totalPage}</a>`);
-                }
-            }
-
-            else if (page > 3) {
-                buffer.push(`<span>...</span>`);
-
-                if (totalPage - page > 2) {
-
-                    for (let i = page - 1; i <= page; i++) {
-                        buffer.push(`<a  onclick="abcd('${productID}', ${totalPage},${i})">${i}</a>`);
-                    }
-                    buffer.push(`<a  onclick="abcd('${productID}', ${totalPage},${page + 1})">${page + 1}</a>`);
-                    buffer.push(`<span>...</span>`);
-                    buffer.push(`<a onclick="abcd('${productID}', ${totalPage},${totalPage})">${totalPage}</a>`);
-                }
-                else {
-                    if (page === totalPage - 2) {
-                        buffer.push(`<a onclick="abcd('${productID}', ${totalPage},${page - 1})">${page - 1}</a>`);
-                    }
-
-                    for (let i = totalPage - 2; i <= totalPage; i++) {
-                        buffer.push( `<a onclick="abcd('${productID}', ${totalPage},${i})">${i}</a>`);
-                    }
-                }
-
-            }
-        }
-
-        if (page < totalPage)
-            buffer.push(`<a class="next_page" onclick="abcd('${productID}', ${totalPage},${page + 1})">Next</a>`);
-
-        for(let i=1;i<buffer.length-1;i++)
-        {
-            if (buffer.at(i).search(page.toString()) !== -1)
-            {
-                buffer.at(i).lastIndexOf("\"")
-                const oldStr = buffer.at(i)
-                buffer[i]=[oldStr.slice(0, 2), ` class="active" `, oldStr.slice(3)].join('')
-                break;
-            }
-
-        }
-    }
-    return buffer;
-}
-
-function abcd(productID, totalPage, page)
-{
     const url = `/api/products/review/${productID}?page=${page}`
-
     $.get(url, function(data) {
         //get reference element
-        let review_pagination = $('#review-pagination')
-        let review_list = $('#review-list')
 
-        const page_buffer = reviewPaging(productID,totalPage,page)
+        const review_list = $('#review-list')
+        const pagination = $('#review-pagination')
 
-        //clear old html
-        review_pagination.empty()
         review_list.empty()
+        pagination.empty()
 
-        for(let i=0 ; i < data.reviews.length ; i++)
-            review_list.append(`<h4 style="font-weight: bold;">${data.reviews[i].fullname}</h4>
-            <span>${data.reviews[i].createdAt}</span>
-            <p style="font-size: 16px">${data.reviews[i].content}</p>
-            <hr>
-            </div>`)
-        
+        //generate new review list
+       for(let i=0 ; i < data.reviews.length ; i++)
+       {
+           const name = data.reviews[i].fullname || data.reviews[i].stranger_name
+           const avatar = data.reviews[i].avatar || "https://ssl.gstatic.com/docs/common/profile/nyancat_lg.png"
+           const date = new Date(data.reviews[i].createdAt)
 
-        for (let i=0 ; i<page_buffer.length ; i++)
-            review_pagination.append(page_buffer[i])
+           review_list.append(`                
+            <div class="review-box">
+                <div class="review-user-avatar">
+                    <img src="${avatar}" alt="user's avatar"></img>
+                </div>
+                <div class="review-user-detail">
+                    <h5>${name}</h5>
+                    <span>${date}</span>
+                    <p>${data.reviews[i].content}</p>
+                </div>
+            </div>
+            <hr>`)
+       }
+
+       //generate new pagination
+       for (let i=0 ; i<data.buffer.length ; i++)
+           pagination.append(data.buffer[i])
 
     })
 }

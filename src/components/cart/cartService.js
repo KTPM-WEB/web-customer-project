@@ -1,6 +1,7 @@
 const productModel = require("../product/model/productModel");
 const promoModel = require("./promoModel");
 const userModel = require("../user/userModel");
+const ls = require("local-storage");
 
 /**
  * delete a product from the cart
@@ -35,15 +36,31 @@ module.exports.getProducts = async (cart) => {
  */
 module.exports.deleteProduct = async (userID, productID) => {
     try {
-        const user = await userModel.findById(userID).lean();
-        let itemIdx = user.cart.findIndex(item => item.productID === productID);
-        if (itemIdx > -1) {
-            const product = await productModel.findById(productID);
-            user.total = Math.round((user.total - user.cart[itemIdx].quantity * product.price) * 100) / 100;
-            user.cart.splice(itemIdx, 1);
-            await userModel.findByIdAndUpdate({ _id: userID }, { $set: { cart: user.cart, total: user.total } });
+        if (userID) {
+            const user = await userModel.findById(userID).lean();
+            let itemIdx = user.cart.findIndex(item => item.productID == productID);
+            if (itemIdx > -1) {
+                const product = await productModel.findById(productID);
+                user.total = Math.round((user.total - user.cart[itemIdx].quantity * product.price) * 100) / 100;
+                user.cart.splice(itemIdx, 1);
+                await userModel.findByIdAndUpdate({ _id: userID }, { $set: { cart: user.cart, total: user.total } });
+            }
+            return user;
+        } else {
+            let cart = JSON.parse(ls.get("cart"));
+            let total = JSON.parse(ls.get("total"));
+            let itemIdx = cart.findIndex(item => item.productID == productID);
+
+            if (itemIdx > -1) {
+                const product = await productModel.findById(productID);
+                total = Math.round((total - cart[itemIdx].quantity * product.price) * 100) / 100;
+                cart.splice(itemIdx, 1);
+
+                //update 
+                ls.set("cart", JSON.stringify(cart));
+                ls.set("total", total);
+            }
         }
-        return user;
     } catch (err) {
         throw err;
     }
@@ -56,7 +73,7 @@ module.exports.deleteProduct = async (userID, productID) => {
  */
 module.exports.getPromo = async (promoCode) => {
     try {
-        return await promoModel.findOne({code: promoCode}).lean();
+        return await promoModel.findOne({ code: promoCode }).lean();
     } catch (err) {
         throw err;
     }

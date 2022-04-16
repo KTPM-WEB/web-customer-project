@@ -129,6 +129,9 @@ exports.deleteProduct = async (req, res) => {
 exports.applyCoupon = async (req, res) => {
     try {
         const promo = await cartService.getPromo(req.params.couponCODE);
+
+        console.log("promo: ", promo);
+
         const now = new Date();
 
         if (promo === null) {
@@ -149,9 +152,14 @@ exports.applyCoupon = async (req, res) => {
             } else {
                 msg = "Apply promotion successfully";
                 status = true;
+                let products = undefined;
 
-                const user = await userService.getUserByID(req.user._id);
-                const products = user.cart;
+                if (req.user) {
+                    const user = await userService.getUserByID(req.user._id);
+                    products = user.cart;
+                } else {
+                    products = JSON.parse(ls.get("cart"));
+                }
 
                 for (let i = 0; i < products.length; i++) {
                     total += parseFloat(products[i].total);

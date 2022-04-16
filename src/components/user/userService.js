@@ -1,5 +1,7 @@
 require("dotenv").config();
 
+const productService = require("../product/productService")
+
 const fs = require("fs");
 const sgMail = require("../../config/sendgrid.config");
 const path = require("path");
@@ -10,6 +12,8 @@ const orderModel = require("../order/orderModel");
 const productModel = require("../product/model/productModel");
 const cloudinary = require('../../config/cloudinary.config');
 const bcrypt = require("bcrypt")
+const ls = require("local-storage");
+const { log } = require("console");
 
 /**
  * get user by ID
@@ -23,6 +27,64 @@ module.exports.getUserByID = async (userID) => {
         throw err;
     }
 }
+
+
+
+
+/**
+ * update product in local cart to database
+ * @param userID {string}
+ * @returns {Promise<*>}
+ */
+module.exports.updateLocalCartToUser = async (userID) => {
+    try {
+        let local_cart = JSON.parse(ls.get('cart'));
+
+        let user = await userModel.findById(userID).lean();
+        let user_cart = user.cart;
+
+        for (let i = 0; i < local_cart.length; i++) {
+            // product index in cart
+            let itemIdx = user_cart.findIndex(item => item.productID == local_cart[i].productID);
+            let product = await productService.getProductByID(local_cart[i].productID);
+
+            // product exist in cart, update quantity
+            if (itemIdx > -1) {
+                user_cart[itemIdx].quantity += local_cart[i].quantity;
+                user_cart[itemIdx].total = parseInt(user_cart[itemIdx].quantity) * parseFloat(product.price);
+            } else {
+                user_cart.push({
+                    productID: local_cart[i].productID,
+                    quantity: local_cart[i].quantity,
+                    total: Math.round((product.price * local_cart[i].quantity) * 100) / 100
+                })
+            }
+        }
+
+        let total = 0;
+
+        for (let i = 0; i < user_cart.length; i++) {
+            total += parseFloat(user_cart[i].total);
+        }
+
+        // round total
+        total = Math.round(total * 100) / 100;
+
+        await userModel.findByIdAndUpdate(
+            { _id: userID },
+            {
+                $set: {
+                    cart: user_cart,
+                    total: total
+                }
+            });
+
+        ls.set("cart", JSON.stringify([]));
+    } catch (err) {
+        throw err;
+    }
+}
+
 
 /**
  * get user order by ID
@@ -197,7 +259,7 @@ module.exports.verifyUser = async (username, password) => {
         const user = await userModel.findOne({ username: username });
 
         if (!user) return false;
-        else if(user.confirm === false) return false;
+        else if (user.confirm === false) return false;
         else if (await bcrypt.compareSync(password, user.password)) return user;
         return false;
     } catch (err) {

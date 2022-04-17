@@ -1,4 +1,5 @@
 const productService = require("../../components/product/productService");
+const userService = require("../../components/user/userService");
 const pagination = require("../../public/js/paging");
 const ls = require("local-storage");
 const {memoryStorage} = require("multer");
@@ -72,7 +73,7 @@ exports.addToCart = async (req, res) => {
 }
 
 /**
- * post comment
+ * post review
  * @param req
  * @param res
  * @returns {Promise<*>}
@@ -80,15 +81,9 @@ exports.addToCart = async (req, res) => {
 exports.postReview = async (req, res) => {
     try {
         //current user is unauthorized
-        let id = null
-        let fullName = null
-
-        //current user is authorized
+        let current_user = null
         if (req.user)
-        {
-            fullName = req.user.fullname
-            id = req.user._id
-        }
+            current_user = await userService.getUserByID(req.user._id)
 
         const content = req.body.content
         const productID = req.params.productID
@@ -101,7 +96,7 @@ exports.postReview = async (req, res) => {
         }
 
         //stranger review
-        if (fullName == null)
+        if (current_user == null)
         {
             //with empty content
             if (req.body.stranger_name.length === 0)
@@ -109,6 +104,7 @@ exports.postReview = async (req, res) => {
                 res.status(400).json({message: "Name is required"})
                 return;
             }
+
             //already review
             const isReview = await productService.getAllReviewByProductID(productID, req.body.stranger_name)
             if (isReview.length !== 0)
@@ -117,31 +113,43 @@ exports.postReview = async (req, res) => {
                 return;
             }
         }
-
-        //authorized user has no full name
-        else if (fullName.length === 0)
-        {
-            res.status(400).json({message: "Please add your full name in profile before review"})
-            return;
-        }
-
+        //authorized user review
         else
         {
-            const isReview = await productService.getAllReviewByProductID(productID, null, fullName)
-            if (isReview.length !== 0)
+            //authorized user has no full name
+            if (current_user.fullname.length === 0)
             {
-                res.status(400).json({message: "Each person can only rate the product once"})
+                res.status(400).json({message: "Please update your full name in profile"})
                 return;
+            }
+
+            //already review
+            else
+            {
+                const isReview = await productService.getAllReviewByProductID(productID, null, current_user._id)
+                if (isReview.length !== 0)
+                {
+                    res.status(400).json({message: "Each person can only rate the product once"})
+                    return;
+                }
             }
         }
 
-
         //create review in mongo
-        await productService.createReview(id, fullName,req.body.stranger_name, productID, content, createAt)
+        await productService.createReview(current_user ,req.body.stranger_name, productID, content, createAt)
 
         //paging and slice data
         const all_reviews = await productService.getAllReviewByProductID(productID)
         const result = pagination.reviewPaging(all_reviews,1)
+
+        //author users in review list
+        for (let i=0; i<result.data.length; i++)
+            if (result.data[i].userID != null) //authorized user
+            {
+                const author_user = await userService.getUserByID(result.data[i].userID)
+                result.data[i].avatar = author_user.avatar_url
+                result.data[i].fullname = author_user.fullname
+            }
 
         res.send({ reviews: result.data, buffer: result.buffer })
 
@@ -152,17 +160,28 @@ exports.postReview = async (req, res) => {
 }
 
 /**
- *
+ * load specific review page
  * @param req
  * @param res
  * @returns {Promise<*>}
  */
-exports.switchPage = async (req, res) => {
+exports.loadReviewPage = async (req, res) => {
     try {
         const productID = req.params.productID
         const page = parseInt(req.query.page||1)
 
+        //review list
         let reviews = await productService.getAllReviewByProductID(productID)
+
+        //author users in review list
+        for (let i=0; i<reviews.length; i++)
+            if (reviews[i].userID != null) //authorized user
+            {
+                const author_user = await userService.getUserByID(reviews[i].userID)
+                reviews[i].avatar = author_user.avatar_url
+                reviews[i].fullname = author_user.fullname
+            }
+
         const result = pagination.reviewPaging(reviews, page)
 
         res.send({ reviews: result.data, buffer: result.buffer })

@@ -1,5 +1,6 @@
 const { reviewPaging } = require('../../public/js/paging.js');
 const productService = require('./productService');
+const userService = require('../user/userService');
 
 /************************************* GET methods *************************************/
 /**
@@ -32,10 +33,19 @@ exports.render = async (req, res) => {
         //get totalPage by the number of reviews
         let reviews = await productService.getAllReviewByProductID(productID)
 
-        //check stranger visit
+        //stranger visit check
         let stranger = true
         if (req.user)
             stranger = false
+
+        //author users in review list
+        for (let i=0; i<reviews.length; i++)
+            if (reviews[i].userID != null) //authorized user
+            {
+                const author_user = await userService.getUserByID(reviews[i].userID)
+                reviews[i].avatar = author_user.avatar_url
+                reviews[i].fullname = author_user.fullname
+            }
 
         const result = reviewPaging(reviews,1)
         const relatedProduct = await productService.getRelatedList(products.category);

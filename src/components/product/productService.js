@@ -101,12 +101,12 @@ module.exports.getRelatedList = async (categoryValue) => {
  * @param productID {string}
  * @returns {Promise<*>}
  */
-module.exports.getAllReviewByProductID = (productID,stranger_name=null, fullname=null) => {
+module.exports.getAllReviewByProductID = (productID,stranger_name=null, userID=null) => {
     try {
         if (stranger_name)
             return ReviewModel.find({ productID: productID, stranger_name: stranger_name }).sort({ createdAt: -1 }).lean();
-        else if (fullname)
-            return ReviewModel.find({ productID: productID, fullname: fullname }).sort({ createdAt: -1 }).lean();
+        else if (userID)
+            return ReviewModel.find({ productID: productID, userID: userID }).sort({ createdAt: -1 }).lean();
         else
             return ReviewModel.find({ productID: productID }).sort({ createdAt: -1 }).lean();
     } catch (err) {
@@ -122,15 +122,12 @@ module.exports.getAllReviewByProductID = (productID,stranger_name=null, fullname
  * @param createAt
  * @returns {Promise<*>}
  */
-module.exports.createReview = async (id, fullname, stranger_name,productID, content, createAt) => {
+module.exports.createReview = async (authorized_user, stranger_name,productID, content, createAt) => {
     try {
-        if (fullname)
+        if (authorized_user != null)
         {
-            const user = await userModel.findById(id).lean()
-
             await new ReviewModel({
-                fullname: fullname,
-                avatar: user.avatar_url,
+                userID: authorized_user._id,
                 productID: productID,
                 content: content,
                 createdAt: createAt
@@ -141,7 +138,6 @@ module.exports.createReview = async (id, fullname, stranger_name,productID, cont
         {
             await new ReviewModel({
                 stranger_name: stranger_name,
-                avatar: "https://ssl.gstatic.com/docs/common/profile/nyancat_lg.png",
                 productID: productID,
                 content: content,
                 createdAt: createAt

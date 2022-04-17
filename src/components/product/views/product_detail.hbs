@@ -154,17 +154,17 @@
                                                 {{#each review}}
                                                     <div class="review-box">
                                                         <div class="review-user-avatar">
-                                                            {{#if avatar}}
+                                                            {{#if userID}}
                                                               <img src="{{avatar}}" alt="user's avatar"></img>
                                                             {{else}}
                                                               <img src="https://ssl.gstatic.com/docs/common/profile/nyancat_lg.png" alt="user's avatar">
                                                             {{/if}}
                                                         </div>
                                                         <div class="review-user-detail">
-                                                            {{#if stranger_name}}
-                                                                <h5>{{stranger_name}}</h5>
+                                                            {{#if userID}}
+                                                              <h5>{{fullname}}</h5>
                                                             {{else}}
-                                                                <h5>{{fullname}}</h5>
+                                                              <h5>{{stranger_name}}</h5>
                                                             {{/if}}
                                                             <span>{{createdAt}}</span>
                                                             <p>{{content}}</p>

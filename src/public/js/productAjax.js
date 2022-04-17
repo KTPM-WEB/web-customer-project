@@ -249,7 +249,7 @@ function postReview()
 
         }
         else if (length === limit) //prevent exceed page limit
-            loadReviewSpecificPage(1)
+            displayReviewPage(1)
 
     }).fail(function(data){
         console.log(data.responseJSON.message)
@@ -261,7 +261,7 @@ function postReview()
 }
 
 
-function loadReviewSpecificPage(page)
+function displayReviewPage(page)
 {
     const productID = $('#review-form input[type=hidden]').val()
 

@@ -101,9 +101,12 @@ module.exports.getRelatedList = async (categoryValue) => {
  * @param productID {string}
  * @returns {Promise<*>}
  */
-module.exports.getAllReviewByProductID = (productID) => {
+module.exports.getAllReviewByProductID = (productID,stranger_name=null) => {
     try {
-        return ReviewModel.find({ productID: productID }).sort({ createdAt: -1 }).lean();
+        if (stranger_name)
+            return ReviewModel.find({ productID: productID, stranger_name: stranger_name }).sort({ createdAt: -1 }).lean();
+        else
+            return ReviewModel.find({ productID: productID }).sort({ createdAt: -1 }).lean();
     } catch (err) {
         throw err;
     }

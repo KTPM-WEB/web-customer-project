@@ -97,11 +97,22 @@ exports.postReview = async (req, res) => {
             return;
         }
 
-        //review with empty name
-        if (!fullName && req.body.stranger_name.length === 0) {
-            res.status(400).json({message: "Name is required"})
-            return;
+        //stranger review with empty name
+        if (!fullName) {
+            if (req.body.stranger_name.length === 0)
+            {
+                res.status(400).json({message: "Name is required"})
+                return;
+            }
+            const isReview = await productService.getAllReviewByProductID(productID, req.body.stranger_name)
+            if (isReview.length !== 0)
+            {
+                res.status(400).json({message: "Each person can only rate the product once"})
+                return;
+            }
         }
+
+
 
         //create review in mongo
         await productService.createReview(id, fullName,req.body.stranger_name, productID, content, createAt)

@@ -27,6 +27,7 @@ exports.renderRegister = (req, res) => {
     try {
         req.query.state = req.query.state === 'true';
         res.render("auth/views/register", { message: req.query.message, state: req.query.state });
+
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
@@ -88,7 +89,7 @@ exports.resetPassword = async (req, res) => {
 exports.confirmEmail = async (req, res) => {
     try {
         await userService.confirmEmail(req.body.username);
-        res.render("auth/views/thank-you",{layout: false});
+        res.render("auth/views/thank-you", { layout: false });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

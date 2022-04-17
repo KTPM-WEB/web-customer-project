@@ -6,13 +6,13 @@ const userModel = require("../user/userModel");
  * @returns {Promise<user||false>}
  */
 module.exports.verifyGoogle = async (profile) => {
-    try{
+    try {
         if (profile.id) {
-            const user = await userModel.findOne({googleId: profile.id})
+            const user = await userModel.findOne({ googleId: profile.id })
             if (user) return user;
         }
         return false;
-    }catch (err){
+    } catch (err) {
         throw err;
     }
 }
@@ -24,7 +24,9 @@ module.exports.verifyGoogle = async (profile) => {
  */
 module.exports.addUserGoogle = async (profile) => {
     try {
-        if (!this.verifyGoogle(profile)) {
+        let check = await this.verifyGoogle(profile);
+
+        if (!check) {
             const now = (new Date()).toString().split(" ");
             const user = {
                 googleId: profile.id,

@@ -66,7 +66,8 @@ exports.register = async (req, res) => {
             message = "Please input all field";
             state = false;
         }
-        res.send({message, state});
+
+        res.send({ message, state });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
@@ -82,7 +83,7 @@ exports.forgotPassword = async (req, res) => {
     try {
         const user = await userService.checkUserName(req.body.username);
         await userService.resetPasswordForm(user.email);
-        res.send({message: "Send email success", state: true});
+        res.send({ message: "Send email success", state: true });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
@@ -99,9 +100,9 @@ exports.resetPassword = async (req, res) => {
         const user = await userService.verifyUser(req.body.username, req.body.password);
         if (user) {
             await userService.resetPasswordForm(user.email);
-            res.send({state: true});
+            res.send({ state: true });
         } else {
-            res.send({state: false});
+            res.send({ state: false });
         }
     } catch (err) {
         res.status(500).json({ message: err.message });

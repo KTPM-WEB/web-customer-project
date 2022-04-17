@@ -38,3 +38,7 @@
 .signup-image-link:hover {
     color: gray;
 }
+
+.alert-success{
+    background-color: green !important;
+}

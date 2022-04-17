@@ -5,7 +5,6 @@ const ls = require("local-storage");
 
 exports.getProducts = async (req, res) => {
     try {
-        console.log("--- get product to show in cart ---");
         let products = undefined;
 
         if (req.user) {
@@ -13,7 +12,6 @@ exports.getProducts = async (req, res) => {
             products = await cartService.getProducts(user.cart);
         }
         else {
-            console.log("user not login");
             let cart = JSON.parse(ls.get('cart'));
             products = await cartService.getProducts(cart);
         }
@@ -44,11 +42,9 @@ exports.changeQuantity = async (req, res) => {
             user = await userService.getUserByID(req.user._id);
             products = user.cart;
         } else {
-            console.log("--- update quantity in cart ---");
             products = JSON.parse(ls.get("cart"));
         }
 
-        console.log("product: ", products);
 
         // product index in cart
         let itemIdx = products.findIndex(item => item.productID == req.params.productID);
@@ -99,7 +95,6 @@ exports.changeQuantity = async (req, res) => {
         let number_product = req.session.number_product;
         let product_quantity = products[itemIdx].quantity;
         let product_total = Math.round(products[itemIdx].total * 100) / 100;
-        console.log("update product:", products);
 
         res.send({ number_product, total, product_quantity, product_total });
 
@@ -111,7 +106,6 @@ exports.changeQuantity = async (req, res) => {
 
 exports.deleteProduct = async (req, res) => {
     try {
-        console.log("delete product");
         if (req.user) {
             const user = await cartService.deleteProduct(req.user._id, req.params.productID);
             res.send(user.cart);
@@ -129,8 +123,6 @@ exports.deleteProduct = async (req, res) => {
 exports.applyCoupon = async (req, res) => {
     try {
         const promo = await cartService.getPromo(req.params.couponCODE);
-
-        console.log("promo: ", promo);
 
         const now = new Date();
 

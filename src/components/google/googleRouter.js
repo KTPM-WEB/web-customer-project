@@ -15,6 +15,7 @@ router.get('/login', passport.authenticate('google', {
 // get google callback
 router.get("/callback", (req, res, next) => {
     passport.authenticate('google', {}, (err, user, info) => {
+
         info = info.message;
         if (info === 'login: account dont exist') {
             res.redirect('/auth/login?state=false&message=Account%20dont%20exist');
@@ -24,13 +25,13 @@ router.get("/callback", (req, res, next) => {
             res.redirect("/");
         }
         else try {
-                if (info.includes('register')) {
-                    res.redirect("/auth/register?message=" + info.replace("register: ", "").replace(" ", "%20"));
-                }
+            if (info.includes('register')) {
+                res.redirect("/auth/register?message=" + info.replace("register: ", "").replace(" ", "%20"));
             }
-            catch (error) {
-                res.redirect("/auth/register?state=true&message=Create%20new%20user%20success");
-            }
+        }
+        catch (error) {
+            res.redirect("/auth/register?state=true&message=Create%20new%20user%20success");
+        }
     })(req, res, next);
 });
 

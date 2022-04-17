@@ -16,27 +16,32 @@ passport.use(new LocalStrategy(
 
 // authN google
 passport.use(new GoogleStrategy({
-        clientID: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: 'http://localhost:3000/google/callback',
-        passReqToCallback: true
-    },
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: 'http://localhost:3000/google/callback',
+    passReqToCallback: true
+},
     async (req, accessToken, refreshToken, profile, cb) => {
         const user = await googleService.verifyGoogle(profile);
+        console.log("--- passport google ---");
+        console.log("req.query", req.query);
+        console.log("user:", user);
+
         if (!user) {
             if (req.query.state === 'register') {
                 const result = await googleService.addUserGoogle(profile);
+                console.log("result:", result);
 
                 return cb(null, true, result);
             } else {
-                return cb(null, true, {message: 'login: account dont exist'});
+                return cb(null, true, { message: 'login: account dont exist' });
             }
         } else {
 
             if (req.query.state === 'register') {
-                return cb(null, user, {message: 'register: account exist'});
+                return cb(null, user, { message: 'register: account exist' });
             } else {
-                return cb(null, user, {message: 'login: login success'});
+                return cb(null, user, { message: 'login: login success' });
             }
         }
     }

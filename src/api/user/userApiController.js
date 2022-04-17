@@ -60,7 +60,7 @@ exports.editProfile = async (req, res) => {
             return;
         }
         await userService.updateUser(req.user.username,req.body.field,req.body.new_val)
-        res.send({})
+        res.status(200).json({message: "success"})
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

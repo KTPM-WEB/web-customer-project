@@ -79,13 +79,16 @@ exports.addToCart = async (req, res) => {
  */
 exports.postReview = async (req, res) => {
     try {
-        let fullName = null
-        if (req.user)
-            fullName = req.user.fullname
-
+        //current user is unauthorized
         let id = null
+        let fullName = null
+
+        //current user is authorized
         if (req.user)
+        {
+            fullName = req.user.fullname
             id = req.user._id
+        }
 
         const content = req.body.content
         const productID = req.params.productID
@@ -97,19 +100,29 @@ exports.postReview = async (req, res) => {
             return;
         }
 
-        //stranger review with empty name
-        if (!fullName) {
+        //stranger review
+        if (fullName == null)
+        {
+            //with empty content
             if (req.body.stranger_name.length === 0)
             {
                 res.status(400).json({message: "Name is required"})
                 return;
             }
+            //already review
             const isReview = await productService.getAllReviewByProductID(productID, req.body.stranger_name)
             if (isReview.length !== 0)
             {
                 res.status(400).json({message: "Each person can only rate the product once"})
                 return;
             }
+        }
+
+        //authorized user has no full name
+        else if (fullName.length === 0)
+        {
+            res.status(400).json({message: "Please add your full name in profile before review"})
+            return;
         }
 
         else
@@ -121,7 +134,6 @@ exports.postReview = async (req, res) => {
                 return;
             }
         }
-
 
 
         //create review in mongo

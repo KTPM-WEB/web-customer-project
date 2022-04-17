@@ -112,6 +112,16 @@ exports.postReview = async (req, res) => {
             }
         }
 
+        else
+        {
+            const isReview = await productService.getAllReviewByProductID(productID, null, fullName)
+            if (isReview.length !== 0)
+            {
+                res.status(400).json({message: "Each person can only rate the product once"})
+                return;
+            }
+        }
+
 
 
         //create review in mongo

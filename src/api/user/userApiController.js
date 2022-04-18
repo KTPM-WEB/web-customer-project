@@ -60,7 +60,23 @@ exports.editProfile = async (req, res) => {
             return;
         }
         await userService.updateUser(req.user.username,req.body.field,req.body.new_val)
-        res.send({})
+        switch (req.body.field)
+        {
+            case 'fullname':
+                req.user.fullname = req.body.new_val
+                break;
+            case 'intro':
+                req.user.intro = req.body.new_val
+                break;
+            case 'phone':
+                req.user.phone = req.body.new_val
+                break;
+            case 'email':
+                req.user.email = req.body.new_val
+                break;
+
+        }
+        res.status(200).json({message: "success"})
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

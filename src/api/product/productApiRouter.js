@@ -11,7 +11,7 @@ router.post("/search", controller.search);
 
 router.get("/field", controller.renderByField);
 
-router.get("/review/:productID", controller.switchPage);
+router.get("/review/:productID", controller.loadReviewPage);
 
 module.exports = router;
 

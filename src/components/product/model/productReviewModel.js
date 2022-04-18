@@ -4,9 +4,8 @@ const Schema = mongoose.Schema;
  * Schema
  */
 const review = new Schema({
-    fullname: String,
+    userID: String,
     stranger_name: String,
-    avatar: String,
     productID: String,
     content: String,
     createdAt: Date

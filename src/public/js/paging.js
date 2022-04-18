@@ -61,27 +61,27 @@ module.exports.reviewPaging = (data, page) => {
     }
 
     if (page <= totalPage) {
-        buffer.push(`<a class="prev_page" onclick="loadReviewSpecificPage(${page-1})">Prev</a>`);
-        buffer.push(`<a onclick="loadReviewSpecificPage(1)">1</a>`);
+        buffer.push(`<a class="prev_page" onclick="displayReviewPage(${page - 1})">Prev</a>`);
+        buffer.push(`<a onclick="displayReviewPage(1)">1</a>`);
 
         if (totalPage <= 4)
             for (let i = 2; i <= totalPage; i++)
-                buffer.push(`<a onclick="loadReviewSpecificPage(${i})">${i}</a>`);
+                buffer.push(`<a onclick="displayReviewPage(${i})">${i}</a>`);
 
         else {
             if (page <= 3) {
                 for (let i = 2; i <= Math.min(3, totalPage); i++)
-                    buffer.push(`<a onclick="loadReviewSpecificPage(${i})">${i}</a>`);
+                    buffer.push(`<a onclick="displayReviewPage(${i})">${i}</a>`);
 
                 if (page === 3) {
                     if (totalPage > 3) {
-                        buffer.push(`<a onclick="loadReviewSpecificPage(4)">4</a>`);
+                        buffer.push(`<a onclick="displayReviewPage(4)">4</a>`);
                     }
                 }
 
                 if (totalPage - 2 > 2) {
                     buffer.push(`<span>...</span>`);
-                    buffer.push(`<a onclick="loadReviewSpecificPage(${totalPage})">${totalPage}</a>`);
+                    buffer.push(`<a onclick="displayReviewPage(${totalPage})">${totalPage}</a>`);
                 }
             } else if (page > 3) {
                 buffer.push(`<span>...</span>`);
@@ -89,25 +89,25 @@ module.exports.reviewPaging = (data, page) => {
                 if (totalPage - page > 2) {
 
                     for (let i = page - 1; i <= page; i++) {
-                        buffer.push(`<a  onclick="loadReviewSpecificPage(${i})">${i}</a>`);
+                        buffer.push(`<a  onclick="displayReviewPage(${i})">${i}</a>`);
                     }
-                    buffer.push(`<a  onclick="loadReviewSpecificPage(${page + 1})">${page + 1}</a>`);
+                    buffer.push(`<a  onclick="displayReviewPage(${page + 1})">${page + 1}</a>`);
                     buffer.push(`<span>...</span>`);
-                    buffer.push(`<a onclick="loadReviewSpecificPage(${totalPage})">${totalPage}</a>`);
+                    buffer.push(`<a onclick="displayReviewPage(${totalPage})">${totalPage}</a>`);
                 } else {
                     if (page === totalPage - 2) {
-                        buffer.push(`<a onclick="loadReviewSpecificPage(${page - 1} )">${page - 1}</a>`);
+                        buffer.push(`<a onclick="displayReviewPage(${page - 1} )">${page - 1}</a>`);
                     }
 
                     for (let i = totalPage - 2; i <= totalPage; i++) {
-                        buffer.push(`<a onclick="loadReviewSpecificPage(${i})">${i}</a>`);
+                        buffer.push(`<a onclick="displayReviewPage(${i})">${i}</a>`);
                     }
                 }
 
             }
         }
         if (page < totalPage)
-            buffer.push(`<a class="next_page" onclick="loadReviewSpecificPage(${page + 1})">Next</a>`);
+            buffer.push(`<a class="next_page" onclick="displayReviewPage(${page + 1})">Next</a>`);
 
         for (let i=0; i < buffer.length; i++)
         {

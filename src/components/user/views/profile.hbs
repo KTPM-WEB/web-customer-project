@@ -95,7 +95,7 @@
 												</div>
 												<form method="post" class="edit-form" style="display: none">
 													<div class="container edit-form">
-														<input class="edit-input" type="text" ; name="fullname">
+														<input class="edit-input" type="text" name="fullname">
 														<input type="submit" value="Apply" class="sub-btn"
 															onclick="edit('fullname')">
 													</div>
@@ -135,7 +135,7 @@
 												</div>
 												<form method="post" class="edit-form" style="display: none">
 													<div class="container edit-form">
-														<input class="edit-input" type="text" ; name="intro">
+														<input class="edit-input" type="text" name="intro">
 														<input type="submit" value="Apply" class="sub-btn"
 															onclick="edit('intro')">
 													</div>
@@ -156,10 +156,13 @@
 												</div>
 												<form method="post" class="edit-form" style="display: none">
 													<div class="container edit-form">
-														<input class="edit-input" type="text" ; name="phone">
-														<input type="submit" value="Apply" class="sub-btn"
+														<input class="edit-input" type="text" name="phone" onkeyup="checkPhone(this)">
+                            <span id="phone-btn">
+														<input type="submit" value="Apply" class="sub-btn" id="phone-btn"
 															onclick="edit('phone')">
-													</div>
+													  </span>
+                          </div>
+                          <div id="phone-error"></div>
 												</form>
 											</div>
 											<div class="col-sm-6">
@@ -179,7 +182,7 @@
 												</div>
 												<form method="post" class="edit-form" style="display: none">
 													<div class="container edit-form">
-														<input class="edit-input" type="text" ; name="address">
+														<input class="edit-input" type="text" name="address">
 														<input type="submit" value="Apply" class="sub-btn"
 															onclick="edit('address')">
 													</div>

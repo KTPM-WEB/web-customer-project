@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 
 const order = new Schema({
     username: String,
-    create_date: Date,
+    timestamp: Date,
+    create_date: String,
     products: [{
         product_id: String,
         quantity: Number
@@ -18,7 +19,6 @@ const order = new Schema({
         phone: String,
         email: String
     }
-
 }, {
     versionKey: false // You should be aware of the outcome after set to false
 });

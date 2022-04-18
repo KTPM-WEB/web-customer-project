@@ -16,6 +16,7 @@ module.exports.order = async (user, promo = null) => {
         console.log("user:", user);
 
         const products = [];
+        const now = (new Date()).toString().split(" ");
 
         for (let i = 0; i < user.cart.length; i++) {
             const product = {
@@ -28,7 +29,8 @@ module.exports.order = async (user, promo = null) => {
         if (products.length > 0) {
             let order = {
                 username: user.username,
-                create_date: Date.now(),
+                timestamp: Date.now(),
+                create_date: now[2] + ' ' + now[1] + ',' + now[3],
                 products: products,
                 status: "Processing",
                 customer: {

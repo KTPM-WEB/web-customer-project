@@ -5,7 +5,7 @@ const ls = require("local-storage");
 
 exports.getProducts = async (req, res) => {
     try {
-        let products = undefined;
+        let products;
 
         if (req.user) {
             const user = await userService.getUserByID(req.user._id);
@@ -35,7 +35,7 @@ exports.getProducts = async (req, res) => {
 
 exports.changeQuantity = async (req, res) => {
     try {
-        let products = undefined;
+        let products;
         let user = undefined;
 
         if (req.user) {
@@ -47,7 +47,7 @@ exports.changeQuantity = async (req, res) => {
 
 
         // product index in cart
-        let itemIdx = products.findIndex(item => item.productID == req.params.productID);
+        let itemIdx = products.findIndex(item => item.productID === req.params.productID);
 
         // product exist in cart, update quantity
         if (itemIdx > -1) {
@@ -144,7 +144,7 @@ exports.applyCoupon = async (req, res) => {
             } else {
                 msg = "Apply promotion successfully";
                 status = true;
-                let products = undefined;
+                let products;
 
                 if (req.user) {
                     const user = await userService.getUserByID(req.user._id);

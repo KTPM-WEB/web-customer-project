@@ -12,6 +12,8 @@ const order = new Schema({
     }],
     promo: String,
     status: String,
+    start_delivery: Date,
+    end_delivery: Date,
     customer: {
         _id: String,
         fullname: String,

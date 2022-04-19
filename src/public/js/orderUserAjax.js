@@ -44,9 +44,10 @@ function loadUserOrder() {
             }
 
 
-            if (item.status === "Processing") {
-                order_cart += `<div class="status btn-warning">${item.status}</div>`
-            } else if (item.status === "Cancel") {
+            if (item.status === "Delivering") {
+                order_cart += `<div class="status btn-secondary">${item.status}</div> 
+                                <div class="delivery-time" style="margin-left: 20px">${item.start_delivery.split("T")[0]} - ${item.end_delivery.split("T")[0]}</div>`
+            } else if (item.status === "Canceled") {
                 order_cart += `<div class="status btn-danger">${item.status}</div>`
             } else if (item.status === "Completed") {
                 order_cart += `<div class="status btn-success">${item.status}</div>`
@@ -56,7 +57,7 @@ function loadUserOrder() {
                 order_cart += `
                         <button style="border-radius: 7px;" class="ml-3 btn btn-danger btn-sm"
                             data-toggle="modal" data-target="#cancle-order-${item._id}">
-                            &times; Cancle order
+                            &times; Cancel order
                         </button>
                         <!-- Modal -->
                         <div class="modal fade" id="cancle-order-${item._id}" tabindex="-1" role="dialog"

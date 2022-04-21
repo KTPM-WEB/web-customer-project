@@ -1640,13 +1640,13 @@ ol {
 	margin-bottom: 16px;
 }
 
-.product__details__text h3 span {
+/*.product__details__text h3 span {
 	color: #b7b7b7;
 	font-size: 20px;
 	font-weight: 400;
 	margin-left: 10px;
 	text-decoration: line-through;
-}
+}*/
 
 .product__details__text p {
 	margin-bottom: 35px;
@@ -1842,17 +1842,20 @@ ol {
 	padding-top: 40px;
 }
 
+.product__details__last__option b {
+	font-weight: 900;
+}
+
 .product__details__last__option ul li {
 	list-style: none;
 	font-size: 15px;
 	color: #111111;
-	font-weight: 700;
 	line-height: 30px;
 }
 
 .product__details__last__option ul li span {
-	font-weight: 400;
-	color: #b7b7b7;
+	color: black;
+	font-style: italic;
 }
 
 .product__details__tab {

@@ -190,3 +190,15 @@ exports.loadReviewPage = async (req, res) => {
         res.status(500).json({ message: err.message })
     }
 }
+
+exports.loadVariation = async (req , res) => {
+    try {
+        const product = await productService.getProductByID(req.params.productID)
+        const variations = product.variation
+
+        res.send({variations: variations})
+    }catch (e)
+    {
+        res.status(500).json({ message: e.message })
+    }
+}

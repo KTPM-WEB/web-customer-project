@@ -13,5 +13,7 @@ router.get("/field", controller.renderByField);
 
 router.get("/review/:productID", controller.loadReviewPage);
 
+router.get("/load/:productID", controller.loadVariation);
+
 module.exports = router;
 

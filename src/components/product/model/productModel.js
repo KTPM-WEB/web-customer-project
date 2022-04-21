@@ -1,9 +1,7 @@
-const mongoose = require("mongoose");
+const { default: mongoose } = require("mongoose");
+
 const Schema = mongoose.Schema;
 
-/**
- * Schema
- */
 const product = new Schema({
     name: String,
     price: Number,
@@ -11,13 +9,13 @@ const product = new Schema({
     size: [String],
     color: [String],
     category: String,
-    thumb: String,
     img: [String],
     SKU: String,
     introduction: String,
     infomation: String,
+    variation:[{size: String, color: String, price: Number, stock: Number}]
 }, {
     versionKey: false // You should be aware of the outcome after set to false
 });
 
-module.exports = mongoose.model("product", product, "product");
+module.exports = mongoose.model('product', product, 'product');

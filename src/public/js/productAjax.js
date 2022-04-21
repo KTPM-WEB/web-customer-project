@@ -74,7 +74,15 @@ function getProductByField(field, type, page) {
                 return;
             }
 
+
             products.data.forEach((item) => {
+                let add_to_cart = `<a href="javascript:{}" id="add-product-${item._id}" class="add-cart"
+                                    onClick="addProduct('${item._id}')">
+                                    + Add to cart
+                                    </a>
+                                    <h5>$${item.price}</h5>`
+                if (item.variation.length == 0 || !item.variation)
+                    add_to_cart = `<span style="color: red">Out of stock</span>`
                 const str = `
                 <div class="col-lg-4 col-md-6 col-sm-6">
                     <div class="card" style="width: 18rem;">
@@ -86,11 +94,8 @@ function getProductByField(field, type, page) {
                                 <h5 id="product-name"><b>${item.name}</b></h5>
                             </a>
                             <input type="hidden" name="id" value="${item._id}" />
-                            <a href="javascript:{}" id="add-product-${item._id}" class="add-cart"
-                                onClick="addProduct('${item._id}')">
-                                + Add to cart
-                            </a>
-                            <h5>$${item.price}</h5>
+                            ${add_to_cart}
+                            
                         </div>
                     </div>
                 </div>`;
@@ -188,10 +193,122 @@ function getProductByField(field, type, page) {
             `);
         }
     });
+
 }
 
-window.onload = function () {
-    getProductByField('Random', '', 1);
+function loadProductVariation(size_idx, color_idx)
+{
+    const productID = $(`input[name=product-id]`).val()
+    const url = `/api/products/load/${productID}`
+    $.get(url, function (data){
+        const variations = data.variations
+
+        if (variations == null || variations.length == 0)
+        {
+            $(`.product__details__text`).html(`<h3>Coming soon...</h3>`)
+            $(`#product-detail-review-section`).empty()
+        }
+        else
+        {
+            //unique filter
+            const unique_sizes = []
+            const unique_colors = []
+            for (let i=0;i<variations.length;i++)
+            {
+                if (!unique_sizes.includes(variations[i].size))
+                    unique_sizes.push(variations[i].size)
+
+            }
+
+            for (let i=0;i<variations.length;i++)
+            {
+                if (variations[i].size == unique_sizes[size_idx] && !unique_colors.includes(variations[i].color))
+                    unique_colors.push(variations[i].color)
+            }
+
+
+            const product_detail_size = $(`#product-detail-size`)
+            product_detail_size.empty()
+
+            for (let i=0;i<unique_sizes.length;i++)
+                product_detail_size.append(`
+                      <label for="${unique_sizes[i]}">${unique_sizes[i]}
+                        <input type="radio" id="${unique_sizes[i]}" value="${unique_sizes[i]}" name="size">
+                      </label>`)
+
+            const product_detail_color = $(`#product-detail-color`)
+            product_detail_color.empty()
+
+            for (let i=0;i<variations.length;i++)
+            {
+                if (variations[i].size == unique_sizes[size_idx])
+                {
+                    product_detail_color.append(`
+                      <label for="${variations[i].color}" style="background-color: ${variations[i].color}">
+                        <input type="radio" id="${variations[i].color}" value="${variations[i].color}" name="color">
+                      </label>`)
+                }
+
+            }
+
+            if (variations)
+            {
+                product_detail_size.prepend(`<span>Size:</span>`)
+                product_detail_color.prepend(`<span>Color:</span>`)
+
+                //set active size
+                const size_label = product_detail_size.children(`label[for=${unique_sizes[size_idx]}]`)
+                size_label.attr("class","active")
+                size_label.children(`input`).prop('checked', true)
+
+                //set active color
+                const color_label = product_detail_color.children(`label[for='${unique_colors[color_idx]}']`)
+                color_label.attr("class","active")
+                color_label.children(`input`).prop('checked', true)
+            }
+
+            for (let i=0; i<variations.length; i++)
+            {
+                if (variations[i].size == unique_sizes[size_idx] && variations[i].color == unique_colors[color_idx])
+                {
+                    $(`#product-detail-price`).text('$' + variations[i].price)
+                    $(`#product-detail-stock`).text(variations[i].stock)
+                }
+            }
+        }
+    })
+
+}
+
+function changeVariation(field)
+{
+    const productID = $(`input[name=product-id]`).val()
+
+    const size = $(`#product-detail-size input[name=size]:checked`).val()
+    const color = $(`#product-detail-color input[name=color]:checked`).val()
+
+    const unique_sizes = []
+    const unique_colors = []
+
+    const url = `/api/products/load/${productID}`
+    $.get(url, function (data) {
+        const variations = data.variations
+        const index = 0
+        for (let i=0; i<variations.length; i++)
+            if(!unique_sizes.includes(variations[i].size))
+                unique_sizes.push(variations[i].size)
+
+        for (let i=0; i<variations.length; i++)
+            if(variations[i].size == size && !unique_colors.includes(variations[i].color))
+                unique_colors.push(variations[i].color)
+
+        let index_color = unique_colors.indexOf(color)
+        if (field =='size')
+            index_color = 0
+        loadProductVariation(unique_sizes.indexOf(size), index_color)
+
+    })
+
 }
 
 function postReview()
@@ -252,14 +369,12 @@ function postReview()
             displayReviewPage(1)
 
     }).fail(function(data){
-        console.log(data.responseJSON.message)
         if(data.message===401)
             window.location.href='/auth/login/'
         else if(data.status === 400)
             alert(data.responseJSON.message)
     })
 }
-
 
 function displayReviewPage(page)
 {
@@ -301,4 +416,10 @@ function displayReviewPage(page)
            pagination.append(data.buffer[i])
 
     })
+}
+
+
+window.onload = function () {
+    getProductByField('Random', '', 1);
+    loadProductVariation(0,0)
 }

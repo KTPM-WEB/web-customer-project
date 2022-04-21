@@ -79,9 +79,10 @@ function getProductByField(field, type, page) {
                 let add_to_cart = `<a href="javascript:{}" id="add-product-${item._id}" class="add-cart"
                                     onClick="addProduct('${item._id}')">
                                     + Add to cart
-                                </a>`
+                                    </a>
+                                    <h5>$${item.price}</h5>`
                 if (item.variation.length == 0 || !item.variation)
-                    add_to_cart = ``
+                    add_to_cart = `<span style="color: red">Out of stock</span>`
                 const str = `
                 <div class="col-lg-4 col-md-6 col-sm-6">
                     <div class="card" style="width: 18rem;">
@@ -94,7 +95,7 @@ function getProductByField(field, type, page) {
                             </a>
                             <input type="hidden" name="id" value="${item._id}" />
                             ${add_to_cart}
-                            <h5>$${item.price}</h5>
+                            
                         </div>
                     </div>
                 </div>`;

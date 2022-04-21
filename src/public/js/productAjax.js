@@ -74,7 +74,14 @@ function getProductByField(field, type, page) {
                 return;
             }
 
+
             products.data.forEach((item) => {
+                let add_to_cart = `<a href="javascript:{}" id="add-product-${item._id}" class="add-cart"
+                                    onClick="addProduct('${item._id}')">
+                                    + Add to cart
+                                </a>`
+                if (item.variation.length == 0 || !item.variation)
+                    add_to_cart = ``
                 const str = `
                 <div class="col-lg-4 col-md-6 col-sm-6">
                     <div class="card" style="width: 18rem;">
@@ -86,10 +93,7 @@ function getProductByField(field, type, page) {
                                 <h5 id="product-name"><b>${item.name}</b></h5>
                             </a>
                             <input type="hidden" name="id" value="${item._id}" />
-                            <a href="javascript:{}" id="add-product-${item._id}" class="add-cart"
-                                onClick="addProduct('${item._id}')">
-                                + Add to cart
-                            </a>
+                            ${add_to_cart}
                             <h5>$${item.price}</h5>
                         </div>
                     </div>
@@ -198,7 +202,7 @@ function loadProductVariation(size_idx, color_idx)
     $.get(url, function (data){
         const variations = data.variations
 
-        if (variations == null)
+        if (variations == null || variations.length == 0)
         {
             $(`.product__details__text`).html(`<h3>Coming soon...</h3>`)
             $(`#product-detail-review-section`).empty()
@@ -306,7 +310,6 @@ function changeVariation(field)
 
 }
 
-
 function postReview()
 {
     event.preventDefault()
@@ -371,7 +374,6 @@ function postReview()
             alert(data.responseJSON.message)
     })
 }
-
 
 function displayReviewPage(page)
 {

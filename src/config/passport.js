@@ -10,7 +10,7 @@ const userService = require('../components/user/userService');
 passport.use(new LocalStrategy(
     async (username, password, cb) => {
         const user = await userService.verifyUser(username, password);
-        if (user || user.confirm === false) return cb(null, user);
+        if (user || user.confirm === false||user.status !=='Banned') return cb(null, user);
         return cb(null, false);
     }));
 
@@ -23,9 +23,6 @@ passport.use(new GoogleStrategy({
 },
     async (req, accessToken, refreshToken, profile, cb) => {
         const user = await googleService.verifyGoogle(profile);
-        console.log("--- passport google ---");
-        console.log("req.query", req.query);
-        console.log("user:", user);
 
         if (!user) {
             if (req.query.state === 'register') {

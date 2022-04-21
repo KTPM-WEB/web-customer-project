@@ -223,40 +223,34 @@ function isInstockSize(variations,size)
     return false
 }
 
-function isInStockColor(variations, color)
+function isInStockColor(variations, size, color)
 {
     for (let i=0 ;i<variations.length; i++)
-        if (variations[i].color == color && variations[i].stock != 0)
+        if (variations[i].size == size && variations[i].color == color && variations[i].stock != 0)
             return true
     return false
 }
 
-function findValidVariation(variations, size_series) {
-    for (let i = 0; i < size_series.length; i++) {
-
-        if (!isInstockSize(variations, size_series[i]))
-            continue
-
-        const color_series = []
-        for (let k = 0; k < variations.length; k++) {
-            if (variations[k].size == size_series[i] && !color_series.includes(variations[k].color) && variations[k].stock != 0)
-                color_series.push(variations[k].color)
-        }
-
-        for (let j = 0; j < color_series.length; j++) {
-            if (!isInStockColor(variations, color_series[j]))
-                continue
-
-            const result = {size: size_series[i], color: color_series[j]}
-            return result
-        }
+function findValidSize(variations, size) {
+    const color_series = []
+    for (let k = 0; k < variations.length; k++) {
+        if (variations[k].size == size && !color_series.includes(variations[k].color) && variations[k].stock != 0)
+            color_series.push(variations[k].color)
     }
+
+    for (let j = 0; j < color_series.length; j++) {
+        if (!isInStockColor(variations,size, color_series[j]))
+            continue
+        return color_series[j]
+    }
+    return false
 }
 
-function load(variations,size, color, size_series, color_series, stock)
+
+function displayVariance(variations, size, color, size_series, color_series, stock)
 {
     const product_detail_size = $(`#product-detail-size`)
-    product_detail_size.empty()
+    product_detail_size.children('label').remove()
 
     for (let i=0;i<size_series.length;i++)
     {
@@ -274,14 +268,20 @@ function load(variations,size, color, size_series, color_series, stock)
 
 
     const product_detail_color = $(`#product-detail-color`)
-    product_detail_color.empty()
+    product_detail_color.children('label').remove()
 
     for (let i=0;i<color_series.length;i++)
     {
-        product_detail_color.append(`
-              <label for="${color_series[i]}" style="background-color: ${color_series[i]}">
-                <input type="radio" id="${color_series[i]}" value="${color_series[i]}" name="color">
-              </label>`)
+        if (isInStockColor(variations,size,color_series[i]))
+            product_detail_color.append(`
+                  <label for="${color_series[i]}" style="background-color: ${color_series[i]}">
+                    <input type="radio" id="${color_series[i]}" value="${color_series[i]}" name="color">
+                  </label>`)
+        else
+            product_detail_color.append(`
+                  <label for="${color_series[i]}" style="pointer-events: none; background-color: ${color_series[i]}; ">
+                    <input type="radio" id="${color_series[i]}" value="${color_series[i]}" name="color">
+                  </label>`)
     }
 
 
@@ -298,12 +298,10 @@ function load(variations,size, color, size_series, color_series, stock)
     color_label.children(`input`).prop('checked', true)
 }
 
-function run(size = null,color = null)
+function run(field)
 {
     const productID = $(`input[name=product-id]`).val()
-
-    if(size == null)
-        size = $(`#product-detail-size input[name=size]:checked`).val()
+    let size , color;
 
     const url = `/api/products/load/${productID}`
     $.get(url, function (data) {
@@ -322,24 +320,33 @@ function run(size = null,color = null)
             if (!size_series.includes(variations[i].size))
                 size_series.push(variations[i].size)
 
-        for (let i=0;i<variations.length;i++)
-        {
-            if (variations[i].size == size && !color_series.includes(variations[i].color) && variations[i].stock != 0)
-                color_series.push(variations[i].color)
-        }
+        size = $(`#product-detail-size input[name=size]:checked`).val()
 
-        if(color == null)
-            color = color_series[0]
+        if (field == 'size')
+        {
+            for (let i=size_series.indexOf(size); i < size_series.length; i++)
+            {
+                size = size_series[i]
+                color = findValidSize(variations, size)
+                if (color != false)
+                    break
+            }
+        }
+        else
+            color = $(`#product-detail-color input[name=color]:checked`).val()
+
+        for (let i=0;i<variations.length;i++)
+            if (variations[i].size == size && !color_series.includes(variations[i].color))
+                color_series.push(variations[i].color)
 
         let stock = 0
         for (let i=0;i<variations.length;i++)
             if (variations[i].size == size && variations[i].color == color)
                 stock = variations[i].stock
 
-        load(variations,size,color, size_series, color_series, stock)
+        displayVariance(variations,size,color, size_series, color_series, stock)
     })
 }
-
 
 function postReview()
 {
@@ -451,30 +458,7 @@ function displayReviewPage(page)
 
 window.onload = async function () {
     getProductByField('Random', '', 1);
-
-
-
-    const productID = $(`input[name=product-id]`).val()
-    const url = `/api/products/load/${productID}`
-    $.get(url, function (data) {
-        const variations = data.variations
-        const size_series = []
-        let color_series = []
-
-        if (variations == null || variations.length == 0) {
-            $(`.product__details__text`).html(`<h3>Coming soon...</h3>`)
-            $(`#product-detail-review-section`).empty()
-            return false;
-        }
-
-        for (let i = 0; i < variations.length; i++)
-            if (!size_series.includes(variations[i].size))
-                size_series.push(variations[i].size)
-
-        const init = findValidVariation(variations, size_series)
-
-        run(init.size, init.color)
-        })
+    run('size')
 
 
 }

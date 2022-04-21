@@ -18,7 +18,7 @@ const orderRouter = require('./components/order/orderRouter')
 const apiRouter = require('./api/apiRouter');
 
 const db = require('./config/database.config');
-db.connect();
+db.connect().then();
 
 const app = express();
 

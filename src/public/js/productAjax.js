@@ -74,33 +74,42 @@ function getProductByField(field, type, page) {
                 return;
             }
 
-
             products.data.forEach((item) => {
                 let add_to_cart = `<a href="javascript:{}" id="add-product-${item._id}" class="add-cart"
                                     onClick="addProduct('${item._id}')">
                                     + Add to cart
                                     </a>
                                     <h5>$${item.price}</h5>`
-                if (item.variation.length == 0 || !item.variation)
-                    add_to_cart = `<span style="color: red">Out of stock</span>`
-                const str = `
-                <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="card" style="width: 18rem;">
-                        <a href="/product/${item._id}">
-                            <img class="card-img-top" src="${item.thumb}" alt="Card image cap">
-                        </a>
-                        <div class="card-body" id="card-body">
-                            <a href="/product/${item._id}">
-                                <h5 id="product-name"><b>${item.name}</b></h5>
-                            </a>
-                            <input type="hidden" name="id" value="${item._id}" />
-                            ${add_to_cart}
-                            
-                        </div>
-                    </div>
-                </div>`;
-                const html = $.parseHTML(str);
-                $product.append(html);
+
+                const url = `/api/products/load/${item._id}`
+                $.get(url, function (data) {
+                    const variations = data.variations
+                    const status = isInStockProduct(variations)
+
+                    if (status == 1) // coming soon
+                        add_to_cart = `<span style="color: blue; font-style: italic">Coming soon</span>`
+                    else if (status == 2) // out of stock
+                        add_to_cart = `<span style="color: red; font-style: italic">Out of stock</span>`
+
+                    const str = `
+                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                <div class="card" style="width: 18rem;">
+                                    <a href="/product/${item._id}">
+                                        <img class="card-img-top" src="${item.thumb}" alt="Card image cap">
+                                    </a>
+                                    <div class="card-body" id="card-body">
+                                        <a href="/product/${item._id}">
+                                            <h5 id="product-name"><b>${item.name}</b></h5>
+                                        </a>
+                                        <input type="hidden" name="id" value="${item._id}" />
+                                        ${add_to_cart}
+                                        
+                                    </div>
+                                </div>
+                            </div>`;
+                    const html = $.parseHTML(str);
+                    $product.append(html);
+                })
             });
 
             if (products.data.length < 1) {
@@ -140,7 +149,6 @@ function getProductByField(field, type, page) {
                 );
                 return;
             }
-
 
             $start.html(`
             <div class="row">
@@ -195,121 +203,143 @@ function getProductByField(field, type, page) {
     });
 
 }
+function isInStockProduct(variations)
+{
+    if (variations == undefined) //coming soon
+        return 1
 
-function loadProductVariation(size_idx, color_idx)
+    for (let i=0 ;i<variations.length; i++)
+        if (variations[i].stock != 0)
+            return 0 //in stock
+
+    return 2 //out of stock
+}
+
+function isInstockSize(variations,size)
+{
+    for (let i=0 ;i<variations.length; i++)
+        if (variations[i].size == size && variations[i].stock != 0)
+            return true
+    return false
+}
+
+function isInStockColor(variations, color)
+{
+    for (let i=0 ;i<variations.length; i++)
+        if (variations[i].color == color && variations[i].stock != 0)
+            return true
+    return false
+}
+
+function findValidVariation(variations, size_series) {
+    for (let i = 0; i < size_series.length; i++) {
+
+        if (!isInstockSize(variations, size_series[i]))
+            continue
+
+        const color_series = []
+        for (let k = 0; k < variations.length; k++) {
+            if (variations[k].size == size_series[i] && !color_series.includes(variations[k].color) && variations[k].stock != 0)
+                color_series.push(variations[k].color)
+        }
+
+        for (let j = 0; j < color_series.length; j++) {
+            if (!isInStockColor(variations, color_series[j]))
+                continue
+
+            const result = {size: size_series[i], color: color_series[j]}
+            return result
+        }
+    }
+}
+
+function load(variations,size, color, size_series, color_series, stock)
+{
+    const product_detail_size = $(`#product-detail-size`)
+    product_detail_size.empty()
+
+    for (let i=0;i<size_series.length;i++)
+    {
+        if (isInstockSize(variations,size_series[i]))
+            product_detail_size.append(`
+                      <label for="${size_series[i]}">${size_series[i]}
+                        <input type="radio" id="${size_series[i]}" value="${size_series[i]}" name="size">
+                      </label>`)
+        else
+            product_detail_size.append(`
+                      <label for="${size_series[i]}" style="pointer-events: none; opacity: 0.2">${size_series[i]}
+                        <input type="radio" id="${size_series[i]}" value="${size_series[i]}" name="size">
+                      </label>`)
+    }
+
+
+    const product_detail_color = $(`#product-detail-color`)
+    product_detail_color.empty()
+
+    for (let i=0;i<color_series.length;i++)
+    {
+        product_detail_color.append(`
+              <label for="${color_series[i]}" style="background-color: ${color_series[i]}">
+                <input type="radio" id="${color_series[i]}" value="${color_series[i]}" name="color">
+              </label>`)
+    }
+
+
+    $(`#product-detail-stock`).text(stock)
+
+    //set active size
+    const size_label = product_detail_size.children(`label[for=${size}]`)
+    size_label.attr("class","active")
+    size_label.children(`input`).prop('checked', true)
+
+    //set active color
+    const color_label = product_detail_color.children(`label[for='${color}']`)
+    color_label.attr("class","active")
+    color_label.children(`input`).prop('checked', true)
+}
+
+function run(size = null,color = null)
 {
     const productID = $(`input[name=product-id]`).val()
+
+    if(size == null)
+        size = $(`#product-detail-size input[name=size]:checked`).val()
+
     const url = `/api/products/load/${productID}`
-    $.get(url, function (data){
+    $.get(url, function (data) {
         const variations = data.variations
+        const size_series = []
+        let color_series = []
 
         if (variations == null || variations.length == 0)
         {
             $(`.product__details__text`).html(`<h3>Coming soon...</h3>`)
             $(`#product-detail-review-section`).empty()
+            return false;
         }
-        else
+
+        for (let i=0;i<variations.length;i++)
+            if (!size_series.includes(variations[i].size))
+                size_series.push(variations[i].size)
+
+        for (let i=0;i<variations.length;i++)
         {
-            //unique filter
-            const unique_sizes = []
-            const unique_colors = []
-            for (let i=0;i<variations.length;i++)
-            {
-                if (!unique_sizes.includes(variations[i].size))
-                    unique_sizes.push(variations[i].size)
-
-            }
-
-            for (let i=0;i<variations.length;i++)
-            {
-                if (variations[i].size == unique_sizes[size_idx] && !unique_colors.includes(variations[i].color))
-                    unique_colors.push(variations[i].color)
-            }
-
-
-            const product_detail_size = $(`#product-detail-size`)
-            product_detail_size.empty()
-
-            for (let i=0;i<unique_sizes.length;i++)
-                product_detail_size.append(`
-                      <label for="${unique_sizes[i]}">${unique_sizes[i]}
-                        <input type="radio" id="${unique_sizes[i]}" value="${unique_sizes[i]}" name="size">
-                      </label>`)
-
-            const product_detail_color = $(`#product-detail-color`)
-            product_detail_color.empty()
-
-            for (let i=0;i<variations.length;i++)
-            {
-                if (variations[i].size == unique_sizes[size_idx])
-                {
-                    product_detail_color.append(`
-                      <label for="${variations[i].color}" style="background-color: ${variations[i].color}">
-                        <input type="radio" id="${variations[i].color}" value="${variations[i].color}" name="color">
-                      </label>`)
-                }
-
-            }
-
-            if (variations)
-            {
-                product_detail_size.prepend(`<span>Size:</span>`)
-                product_detail_color.prepend(`<span>Color:</span>`)
-
-                //set active size
-                const size_label = product_detail_size.children(`label[for=${unique_sizes[size_idx]}]`)
-                size_label.attr("class","active")
-                size_label.children(`input`).prop('checked', true)
-
-                //set active color
-                const color_label = product_detail_color.children(`label[for='${unique_colors[color_idx]}']`)
-                color_label.attr("class","active")
-                color_label.children(`input`).prop('checked', true)
-            }
-
-            for (let i=0; i<variations.length; i++)
-            {
-                if (variations[i].size == unique_sizes[size_idx] && variations[i].color == unique_colors[color_idx])
-                {
-                    $(`#product-detail-price`).text('$' + variations[i].price)
-                    $(`#product-detail-stock`).text(variations[i].stock)
-                }
-            }
+            if (variations[i].size == size && !color_series.includes(variations[i].color) && variations[i].stock != 0)
+                color_series.push(variations[i].color)
         }
-    })
 
+        if(color == null)
+            color = color_series[0]
+
+        let stock = 0
+        for (let i=0;i<variations.length;i++)
+            if (variations[i].size == size && variations[i].color == color)
+                stock = variations[i].stock
+
+        load(variations,size,color, size_series, color_series, stock)
+    })
 }
 
-function changeVariation(field)
-{
-    const productID = $(`input[name=product-id]`).val()
-
-    const size = $(`#product-detail-size input[name=size]:checked`).val()
-    const color = $(`#product-detail-color input[name=color]:checked`).val()
-
-    const unique_sizes = []
-    const unique_colors = []
-
-    const url = `/api/products/load/${productID}`
-    $.get(url, function (data) {
-        const variations = data.variations
-        const index = 0
-        for (let i=0; i<variations.length; i++)
-            if(!unique_sizes.includes(variations[i].size))
-                unique_sizes.push(variations[i].size)
-
-        for (let i=0; i<variations.length; i++)
-            if(variations[i].size == size && !unique_colors.includes(variations[i].color))
-                unique_colors.push(variations[i].color)
-
-        let index_color = unique_colors.indexOf(color)
-        if (field =='size')
-            index_color = 0
-        loadProductVariation(unique_sizes.indexOf(size), index_color)
-
-    })
-
-}
 
 function postReview()
 {
@@ -419,7 +449,32 @@ function displayReviewPage(page)
 }
 
 
-window.onload = function () {
+window.onload = async function () {
     getProductByField('Random', '', 1);
-    loadProductVariation(0,0)
+
+
+
+    const productID = $(`input[name=product-id]`).val()
+    const url = `/api/products/load/${productID}`
+    $.get(url, function (data) {
+        const variations = data.variations
+        const size_series = []
+        let color_series = []
+
+        if (variations == null || variations.length == 0) {
+            $(`.product__details__text`).html(`<h3>Coming soon...</h3>`)
+            $(`#product-detail-review-section`).empty()
+            return false;
+        }
+
+        for (let i = 0; i < variations.length; i++)
+            if (!size_series.includes(variations[i].size))
+                size_series.push(variations[i].size)
+
+        const init = findValidVariation(variations, size_series)
+
+        run(init.size, init.color)
+        })
+
+
 }

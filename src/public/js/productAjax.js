@@ -203,29 +203,26 @@ function getProductByField(field, type, page) {
     });
 
 }
-function isInStockProduct(variations)
-{
+function isInStockProduct(variations) {
     if (variations == undefined) //coming soon
         return 1
 
-    for (let i=0 ;i<variations.length; i++)
+    for (let i = 0; i < variations.length; i++)
         if (variations[i].stock != 0)
             return 0 //in stock
 
     return 2 //out of stock
 }
 
-function isInstockSize(variations,size)
-{
-    for (let i=0 ;i<variations.length; i++)
+function isInstockSize(variations, size) {
+    for (let i = 0; i < variations.length; i++)
         if (variations[i].size == size && variations[i].stock != 0)
             return true
     return false
 }
 
-function isInStockColor(variations, size, color)
-{
-    for (let i=0 ;i<variations.length; i++)
+function isInStockColor(variations, size, color) {
+    for (let i = 0; i < variations.length; i++)
         if (variations[i].size == size && variations[i].color == color && variations[i].stock != 0)
             return true
     return false
@@ -239,7 +236,7 @@ function findValidSize(variations, size) {
     }
 
     for (let j = 0; j < color_series.length; j++) {
-        if (!isInStockColor(variations,size, color_series[j]))
+        if (!isInStockColor(variations, size, color_series[j]))
             continue
         return color_series[j]
     }
@@ -247,41 +244,47 @@ function findValidSize(variations, size) {
 }
 
 
-function displayVariance(variations, size, color, size_series, color_series, stock)
-{
+function displayVariance(variations, size, color, size_series, color_series, stock) {
     const product_detail_size = $(`#product-detail-size`)
     product_detail_size.children('label').remove()
+    product_detail_size.html(`<span>Sizes:</span>`)
 
-    for (let i=0;i<size_series.length;i++)
-    {
-        if (isInstockSize(variations,size_series[i]))
-            product_detail_size.append(`
+    for (let i = 0; i < size_series.length; i++) {
+        if (size_series[i] !== undefined) {
+            if (isInstockSize(variations, size_series[i])) {
+                console.log("i:", i, ' - size_series[i]:', size_series[i]);
+                product_detail_size.append(`
                       <label for="${size_series[i]}">${size_series[i]}
                         <input type="radio" id="${size_series[i]}" value="${size_series[i]}" name="size">
                       </label>`)
-        else
-            product_detail_size.append(`
+            }
+            else
+                product_detail_size.append(`
                       <label for="${size_series[i]}" style="pointer-events: none; opacity: 0.2">${size_series[i]}
                         <input type="radio" id="${size_series[i]}" value="${size_series[i]}" name="size">
                       </label>`)
+        }
     }
 
 
     const product_detail_color = $(`#product-detail-color`)
     product_detail_color.children('label').remove()
+    product_detail_color.html(`<span>Color:</span>`)
 
-    for (let i=0;i<color_series.length;i++)
-    {
-        if (isInStockColor(variations,size,color_series[i]))
+    for (let i = 0; i < color_series.length; i++) {
+        if (isInStockColor(variations, size, color_series[i]))
             product_detail_color.append(`
-                  <label for="${color_series[i]}" style="background-color: ${color_series[i]}">
+                  
                     <input type="radio" id="${color_series[i]}" value="${color_series[i]}" name="color">
-                  </label>`)
+                    <label for="${color_series[i]}" style="background-color: ${color_series[i]}"></label>
+                  `)
         else
             product_detail_color.append(`
-                  <label for="${color_series[i]}" style="pointer-events: none; background-color: ${color_series[i]}; ">
+           
+                    <label for="${color_series[i]}" style="pointer-events: none; background-color: ${color_series[i]}"></label>
+
                     <input type="radio" id="${color_series[i]}" value="${color_series[i]}" name="color">
-                  </label>`)
+                  `)
     }
 
 
@@ -289,19 +292,18 @@ function displayVariance(variations, size, color, size_series, color_series, sto
 
     //set active size
     const size_label = product_detail_size.children(`label[for=${size}]`)
-    size_label.attr("class","active")
+    size_label.attr("class", "active")
     size_label.children(`input`).prop('checked', true)
 
     //set active color
     const color_label = product_detail_color.children(`label[for='${color}']`)
-    color_label.attr("class","active")
+    color_label.attr("class", "active")
     color_label.children(`input`).prop('checked', true)
 }
 
-function run(field)
-{
+function run(field) {
     const productID = $(`input[name=product-id]`).val()
-    let size , color;
+    let size, color;
 
     const url = `/api/products/load/${productID}`
     $.get(url, function (data) {
@@ -309,23 +311,20 @@ function run(field)
         const size_series = []
         let color_series = []
 
-        if (variations == null || variations.length == 0)
-        {
+        if (variations == null || variations.length == 0) {
             $(`.product__details__text`).html(`<h3>Coming soon...</h3>`)
             $(`#product-detail-review-section`).empty()
             return false;
         }
 
-        for (let i=0;i<variations.length;i++)
+        for (let i = 0; i < variations.length; i++)
             if (!size_series.includes(variations[i].size))
                 size_series.push(variations[i].size)
 
         size = $(`#product-detail-size input[name=size]:checked`).val()
 
-        if (field == 'size')
-        {
-            for (let i=size_series.indexOf(size); i < size_series.length; i++)
-            {
+        if (field == 'size') {
+            for (let i = size_series.indexOf(size); i < size_series.length; i++) {
                 size = size_series[i]
                 color = findValidSize(variations, size)
                 if (color != false)
@@ -335,21 +334,20 @@ function run(field)
         else
             color = $(`#product-detail-color input[name=color]:checked`).val()
 
-        for (let i=0;i<variations.length;i++)
+        for (let i = 0; i < variations.length; i++)
             if (variations[i].size == size && !color_series.includes(variations[i].color))
                 color_series.push(variations[i].color)
 
         let stock = 0
-        for (let i=0;i<variations.length;i++)
+        for (let i = 0; i < variations.length; i++)
             if (variations[i].size == size && variations[i].color == color)
                 stock = variations[i].stock
 
-        displayVariance(variations,size,color, size_series, color_series, stock)
+        displayVariance(variations, size, color, size_series, color_series, stock)
     })
 }
 
-function postReview()
-{
+function postReview() {
     event.preventDefault()
     let stranger_name = null
     if ($('#review-stranger-name'))
@@ -357,9 +355,9 @@ function postReview()
     const content = $('#review-content').val()
 
     const productID = $('#review-form input[type=hidden]').val()
-    const url=`/api/products/review/${productID}`
+    const url = `/api/products/review/${productID}`
 
-    $.post(url, {stranger_name: stranger_name,content: content}, function(data){
+    $.post(url, { stranger_name: stranger_name, content: content }, function (data) {
         const limit = 3
 
         //set empty for inputs
@@ -376,12 +374,11 @@ function postReview()
             //generate new pagination
             const pagination = $('#review-pagination')
             if (data.buffer)
-                for (let i=0; i<data.buffer.length; i++)
+                for (let i = 0; i < data.buffer.length; i++)
                     pagination.append(data.buffer[i])
         }
 
-        if (length < limit)
-        {
+        if (length < limit) {
             //add review to list
             const date = new Date(data.reviews[0].createdAt)
             let name = data.reviews[0].fullname || stranger_name
@@ -405,20 +402,19 @@ function postReview()
         else if (length === limit) //prevent exceed page limit
             displayReviewPage(1)
 
-    }).fail(function(data){
-        if(data.message===401)
-            window.location.href='/auth/login/'
-        else if(data.status === 400)
+    }).fail(function (data) {
+        if (data.message === 401)
+            window.location.href = '/auth/login/'
+        else if (data.status === 400)
             alert(data.responseJSON.message)
     })
 }
 
-function displayReviewPage(page)
-{
+function displayReviewPage(page) {
     const productID = $('#review-form input[type=hidden]').val()
 
     const url = `/api/products/review/${productID}?page=${page}`
-    $.get(url, function(data) {
+    $.get(url, function (data) {
         //get reference element
 
         const review_list = $('#review-list')
@@ -428,13 +424,12 @@ function displayReviewPage(page)
         pagination.empty()
 
         //generate new review list
-       for(let i=0 ; i < data.reviews.length ; i++)
-       {
-           const name = data.reviews[i].fullname || data.reviews[i].stranger_name
-           const avatar = data.reviews[i].avatar || "https://ssl.gstatic.com/docs/common/profile/nyancat_lg.png"
-           const date = new Date(data.reviews[i].createdAt)
+        for (let i = 0; i < data.reviews.length; i++) {
+            const name = data.reviews[i].fullname || data.reviews[i].stranger_name
+            const avatar = data.reviews[i].avatar || "https://ssl.gstatic.com/docs/common/profile/nyancat_lg.png"
+            const date = new Date(data.reviews[i].createdAt)
 
-           review_list.append(`                
+            review_list.append(`                
             <div class="review-box">
                 <div class="review-user-avatar">
                     <img src="${avatar}" alt="user's avatar"></img>
@@ -446,11 +441,11 @@ function displayReviewPage(page)
                 </div>
             </div>
             <hr>`)
-       }
+        }
 
-       //generate new pagination
-       for (let i=0 ; i<data.buffer.length ; i++)
-           pagination.append(data.buffer[i])
+        //generate new pagination
+        for (let i = 0; i < data.buffer.length; i++)
+            pagination.append(data.buffer[i])
 
     })
 }

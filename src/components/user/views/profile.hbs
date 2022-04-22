@@ -49,8 +49,7 @@
 									<input type="hidden" id="username" />
 									<div class="mx-auto w-75 mb-5">
 										<button type="button" data-toggle="modal" data-target="#exampleModal"
-												class="btn btn-primary px-4 w-100"
-											style="height:50px;">
+											class="btn btn-primary px-4 w-100" style="height:50px;">
 											Change password
 										</button>
 									</div>
@@ -68,15 +67,19 @@
 													</button>
 												</div>
 												<div class="modal-body" id="modal-body">
-													<div class="form-group">
-														<label for="usr">Password:</label>
+													<label for="usr">Password:</label>
+													<div class="form-group mb-2 d-flex">
 														<input type="password" class="form-control" id="password">
+														<span class="pt-2">
+															<i class="far fa-eye-slash" id="togglePassword-passwd"></i>
+														</span>
 													</div>
 												</div>
 												<div class="modal-footer" id="profile-btn">
 													<button type="button" class="btn btn-secondary"
 														data-dismiss="modal">Close</button>
-													<button type="button" id="change-password" class="btn btn-primary" onclick="changePasswordForm()">Change password</button>
+													<button type="button" id="change-password" class="btn btn-primary"
+														onclick="changePasswordForm()">Change password</button>
 												</div>
 											</div>
 										</div>
@@ -156,13 +159,14 @@
 												</div>
 												<form method="post" class="edit-form" style="display: none">
 													<div class="container edit-form">
-														<input class="edit-input" type="text" name="phone" onkeyup="checkPhone(this)">
-                            <span id="phone-btn">
-														<input type="submit" value="Apply" class="sub-btn" id="phone-btn"
-															onclick="edit('phone')">
-													  </span>
-                          </div>
-                          <div id="phone-error"></div>
+														<input class="edit-input" type="text" name="phone"
+															onkeyup="checkPhone(this)">
+														<span id="phone-btn">
+															<input type="submit" value="Apply" class="sub-btn"
+																id="phone-btn" onclick="edit('phone')">
+														</span>
+													</div>
+													<div id="phone-error"></div>
 												</form>
 											</div>
 											<div class="col-sm-6">
@@ -214,7 +218,23 @@
 				</div>
 			</div>
 		</div>
+
 	</div>
 </section>
+
+<script>
+	const togglePassword = document.querySelector("#togglePassword-passwd");
+	const password = document.querySelector("#password");
+
+	togglePassword.addEventListener("click", function () {
+		// toggle the type attribute
+		const type = password.getAttribute("type") === "password" ? "text" : "password";
+		password.setAttribute("type", type);
+		// toggle the eye icon
+		this.classList.toggle('fa-eye');
+		this.classList.toggle('fa-eye-slash');
+
+	});
+</script>
 
 <script src="/js/userAjax.js"></script>

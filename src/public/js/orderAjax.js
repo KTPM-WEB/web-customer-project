@@ -27,9 +27,16 @@ function loadCheckout() {
                             <div class="row">
                                 <img class="checkout-img" src="${product.thumb}" alt="checkout thumnail">
                                 <div class="col ml-3">
-                                    <div class="row mb-2" style="font-weight: 700;">
+                                    <div class="row" style="font-weight: 700;">
                                         ${product.name}
                                     </div>
+                                    <div class="row mb-2 d-flex align-items-center">
+                                        <div class="pt-1">
+                                            Size: ${product.size}
+                                        </div>
+                                        <span style="margin-left:5px; background-color:${product.color}; width:17px; height:17px; display: inline-block; border-radius: 50%;"></span>
+                                    </div>
+
                                     <div class="row">
                                         <div class="col-8">
                                             ${product.price}
@@ -92,8 +99,7 @@ function placeOrder() {
 
         })
     }).then(r => r.json()).then(data => {
-        if(data.signin)
-        {
+        if (data.signin) {
             $("#place-order-announce").text("Please sign in to place order");
             return
         }

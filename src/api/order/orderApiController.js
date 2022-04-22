@@ -12,6 +12,7 @@ const ls = require("local-storage");
 exports.getCheckout = async (req, res) => {
     try {
         let result;
+        let cart;
         let discount = undefined;
         let total = undefined;
         let products = undefined;
@@ -20,11 +21,17 @@ exports.getCheckout = async (req, res) => {
         if (req.user) {
             user = await userService.getUserByID(req.user._id);
             products = await cartService.getProducts(user.cart);
+            cart = user.cart;
             total = user.total
         } else {
-            const cart = JSON.parse(ls.get("cart"));
+            cart = JSON.parse(ls.get("cart"));
             products = await cartService.getProducts(cart);
             total = JSON.parse(ls.get("total"));
+        }
+
+        for (let i = 0; i < products.length; i++) {
+            products[i].size = cart[i].size
+            products[i].color = cart[i].color
         }
 
         if (req.session.promo === undefined)
@@ -51,9 +58,8 @@ exports.getCheckout = async (req, res) => {
  */
 exports.placeOrder = async (req, res) => {
     try {
-        if(!req.user)
-        {
-            res.send({ signin:"please sign in" });
+        if (!req.user) {
+            res.send({ signin: "please sign in" });
             return;
         }
 

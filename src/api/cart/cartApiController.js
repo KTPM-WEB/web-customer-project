@@ -27,17 +27,10 @@ exports.getProducts = async (req, res) => {
         let number_products = 0;
 
         for (let i = 0; i < products.length; i++) {
-            console.log("----------");
             products[i].size = cart[i].size
-            console.log("products[u].size:", products[i].size);
             products[i].color = cart[i].color
-
             total = Math.round((total + products[i].total) * 100) / 100;
             number_products += products[i].quantity;
-
-            console.log("products[u].color:", products[i].color);
-            console.log("total:", total);
-            console.log("number_products:", number_products);
         }
 
         console.log(products);

@@ -8,7 +8,9 @@ const order = new Schema({
     create_date: String,
     products: [{
         product_id: String,
-        quantity: Number
+        quantity: Number,
+        size: String,
+        color: String,
     }],
     promo: String,
     status: String,

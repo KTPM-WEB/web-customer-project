@@ -21,7 +21,9 @@ module.exports.order = async (user, promo = null) => {
         for (let i = 0; i < user.cart.length; i++) {
             const product = {
                 product_id: user.cart[i].productID,
-                quantity: user.cart[i].quantity
+                quantity: user.cart[i].quantity,
+                size: user.cart[i].size,
+                color: user.cart[i].color
             }
             products.push(product);
         }

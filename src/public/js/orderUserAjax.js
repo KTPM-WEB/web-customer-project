@@ -147,7 +147,14 @@ function loadUserOrder() {
                                                 <div class="col-9 d-flex flex-column justify-content-center">
                                                     <h6 class="mb-0 text-sm">${product.name}</h6>
                                                     <span
-                                                        class="text-secondary text-xs font-weight-bold">${product._id}</span>
+                                                        class="text-secondary text-xs font-weight-bold">${product._id}
+                                                    </span>
+                                                    <div class = "d-flex align-items-center">
+                                                        <div class="pt-1">
+                                                            Size: ${product.size}
+                                                        </div>
+                                                        <span style="margin-left:5px; background-color:${product.color}; width:17px; height:17px; display: inline-block; border-radius: 50%;"></span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

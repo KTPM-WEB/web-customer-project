@@ -74,6 +74,10 @@ module.exports.getProductByField = async (field, type) => {
             return await productModel.find({}).sort({ price: 1 }).exec();
         } else if (type === 'sort' && field === 'High to Low') {
             return await productModel.find({}).sort({ price: -1 }).exec();
+        } else if(type === 'sort' && field === 'Newest'){
+            return await productModel.find({}).sort({ createdAt: -1 }).exec();
+        }else if(type === 'sort' && field === 'Oldest'){
+            return await productModel.find({}).sort({ createdAt: 1 }).exec();
         }
     } catch (err) {
         throw err;

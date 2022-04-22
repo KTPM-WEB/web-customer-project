@@ -10,7 +10,7 @@ const userService = require('../components/user/userService');
 passport.use(new LocalStrategy(
     async (username, password, cb) => {
         const user = await userService.verifyUser(username, password);
-        if (user || user.confirm === false||user.status !=='Banned') return cb(null, user);
+        if (user && user.confirm === true && user.status !=='Banned') return cb(null, user);
         return cb(null, false);
     }));
 

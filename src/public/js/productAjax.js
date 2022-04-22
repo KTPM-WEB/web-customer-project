@@ -85,11 +85,7 @@ function getProductByField(field, type, page) {
             }
 
             products.data.forEach((item) => {
-                let add_to_cart = `<a href="javascript:{}" id="add-product-${item._id}" class="add-cart"
-                                    onClick="addProduct('${item._id}')">
-                                    + Add to cart
-                                    </a>
-                                    <h5>$${item.price}</h5>`
+                let add_to_cart = `<h5>$${item.price}</h5>`
 
                 const url = `/api/products/load/${item._id}`
                 $.get(url, function (data) {

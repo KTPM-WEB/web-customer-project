@@ -24,8 +24,15 @@ function loadProduct() {
 						</a>
                     </div>
                     <div class="product__cart__item__text">
-                        <h6>${item.name}</h6>
-                        <h5>$${item.price}</h5>
+                        <h6 class="mb-0">${item.name}</h6>
+                        <h6 class='d-flex align-items-center '>
+                            <div class="pt-1" style="font-weight:normal !important">
+                                Size: ${item.size}
+                            </div>
+                            <span style="margin-left:5px; background-color:${item.color}; width:17px; height:17px; display: inline-block; border-radius: 50%;">                                
+                            </span>
+                        </h6>
+                        <h4>$${item.price}</h4>
                     </div>
                 </td>
         

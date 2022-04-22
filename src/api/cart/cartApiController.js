@@ -6,23 +6,41 @@ const ls = require("local-storage");
 exports.getProducts = async (req, res) => {
     try {
         let products;
+        let cart
+        console.log("--- get product --");
 
         if (req.user) {
             const user = await userService.getUserByID(req.user._id);
             products = await cartService.getProducts(user.cart);
+            cart = user.cart;
         }
         else {
-            let cart = JSON.parse(ls.get('cart'));
+            cart = JSON.parse(ls.get('cart'));
             products = await cartService.getProducts(cart);
         }
+
+
+        console.log("product:", products);
+        console.log("cart: ", cart);
 
         let total = 0;
         let number_products = 0;
 
         for (let i = 0; i < products.length; i++) {
+            console.log("----------");
+            products[i].size = cart[i].size
+            console.log("products[u].size:", products[i].size);
+            products[i].color = cart[i].color
+
             total = Math.round((total + products[i].total) * 100) / 100;
             number_products += products[i].quantity;
+
+            console.log("products[u].color:", products[i].color);
+            console.log("total:", total);
+            console.log("number_products:", number_products);
         }
+
+        console.log(products);
 
         req.session.number_product = number_products;
         res.send({ number_products, total, products });

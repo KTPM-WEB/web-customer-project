@@ -75,27 +75,41 @@ function getProductByField(field, type, page) {
             }
 
             products.data.forEach((item) => {
-                const str = `
-                <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="card" style="width: 18rem;">
-                        <a href="/product/${item._id}">
-                            <img class="card-img-top" src="${item.thumb}" alt="Card image cap">
-                        </a>
-                        <div class="card-body" id="card-body">
-                            <a href="/product/${item._id}">
-                                <h5 id="product-name"><b>${item.name}</b></h5>
-                            </a>
-                            <input type="hidden" name="id" value="${item._id}" />
-                            <a href="javascript:{}" id="add-product-${item._id}" class="add-cart"
-                                onClick="addProduct('${item._id}')">
-                                + Add to cart
-                            </a>
-                            <h5>$${item.price}</h5>
-                        </div>
-                    </div>
-                </div>`;
-                const html = $.parseHTML(str);
-                $product.append(html);
+                let add_to_cart = `<a href="javascript:{}" id="add-product-${item._id}" class="add-cart"
+                                    onClick="addProduct('${item._id}')">
+                                    + Add to cart
+                                    </a>
+                                    <h5>$${item.price}</h5>`
+
+                const url = `/api/products/load/${item._id}`
+                $.get(url, function (data) {
+                    const variations = data.variations
+                    const status = isInStockProduct(variations)
+
+                    if (status == 1) // coming soon
+                        add_to_cart = `<span style="color: blue; font-style: italic">Coming soon</span>`
+                    else if (status == 2) // out of stock
+                        add_to_cart = `<span style="color: red; font-style: italic">Out of stock</span>`
+
+                    const str = `
+                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                <div class="card" style="width: 18rem;">
+                                    <a href="/product/${item._id}">
+                                        <img class="card-img-top" src="${item.thumb}" alt="Card image cap">
+                                    </a>
+                                    <div class="card-body" id="card-body">
+                                        <a href="/product/${item._id}">
+                                            <h5 id="product-name"><b>${item.name}</b></h5>
+                                        </a>
+                                        <input type="hidden" name="id" value="${item._id}" />
+                                        ${add_to_cart}
+                                        
+                                    </div>
+                                </div>
+                            </div>`;
+                    const html = $.parseHTML(str);
+                    $product.append(html);
+                })
             });
 
             if (products.data.length < 1) {
@@ -135,7 +149,6 @@ function getProductByField(field, type, page) {
                 );
                 return;
             }
-
 
             $start.html(`
             <div class="row">
@@ -188,10 +201,151 @@ function getProductByField(field, type, page) {
             `);
         }
     });
+
+}
+function isInStockProduct(variations)
+{
+    if (variations == undefined) //coming soon
+        return 1
+
+    for (let i=0 ;i<variations.length; i++)
+        if (variations[i].stock != 0)
+            return 0 //in stock
+
+    return 2 //out of stock
 }
 
-window.onload = function () {
-    getProductByField('Random', '', 1);
+function isInstockSize(variations,size)
+{
+    for (let i=0 ;i<variations.length; i++)
+        if (variations[i].size == size && variations[i].stock != 0)
+            return true
+    return false
+}
+
+function isInStockColor(variations, size, color)
+{
+    for (let i=0 ;i<variations.length; i++)
+        if (variations[i].size == size && variations[i].color == color && variations[i].stock != 0)
+            return true
+    return false
+}
+
+function findValidSize(variations, size) {
+    const color_series = []
+    for (let k = 0; k < variations.length; k++) {
+        if (variations[k].size == size && !color_series.includes(variations[k].color) && variations[k].stock != 0)
+            color_series.push(variations[k].color)
+    }
+
+    for (let j = 0; j < color_series.length; j++) {
+        if (!isInStockColor(variations,size, color_series[j]))
+            continue
+        return color_series[j]
+    }
+    return false
+}
+
+
+function displayVariance(variations, size, color, size_series, color_series, stock)
+{
+    const product_detail_size = $(`#product-detail-size`)
+    product_detail_size.children('label').remove()
+
+    for (let i=0;i<size_series.length;i++)
+    {
+        if (isInstockSize(variations,size_series[i]))
+            product_detail_size.append(`
+                      <label for="${size_series[i]}">${size_series[i]}
+                        <input type="radio" id="${size_series[i]}" value="${size_series[i]}" name="size">
+                      </label>`)
+        else
+            product_detail_size.append(`
+                      <label for="${size_series[i]}" style="pointer-events: none; opacity: 0.2">${size_series[i]}
+                        <input type="radio" id="${size_series[i]}" value="${size_series[i]}" name="size">
+                      </label>`)
+    }
+
+
+    const product_detail_color = $(`#product-detail-color`)
+    product_detail_color.children('label').remove()
+
+    for (let i=0;i<color_series.length;i++)
+    {
+        if (isInStockColor(variations,size,color_series[i]))
+            product_detail_color.append(`
+                  <label for="${color_series[i]}" style="background-color: ${color_series[i]}">
+                    <input type="radio" id="${color_series[i]}" value="${color_series[i]}" name="color">
+                  </label>`)
+        else
+            product_detail_color.append(`
+                  <label for="${color_series[i]}" style="pointer-events: none; background-color: ${color_series[i]}; ">
+                    <input type="radio" id="${color_series[i]}" value="${color_series[i]}" name="color">
+                  </label>`)
+    }
+
+
+    $(`#product-detail-stock`).text(stock)
+
+    //set active size
+    const size_label = product_detail_size.children(`label[for=${size}]`)
+    size_label.attr("class","active")
+    size_label.children(`input`).prop('checked', true)
+
+    //set active color
+    const color_label = product_detail_color.children(`label[for='${color}']`)
+    color_label.attr("class","active")
+    color_label.children(`input`).prop('checked', true)
+}
+
+function run(field)
+{
+    const productID = $(`input[name=product-id]`).val()
+    let size , color;
+
+    const url = `/api/products/load/${productID}`
+    $.get(url, function (data) {
+        const variations = data.variations
+        const size_series = []
+        let color_series = []
+
+        if (variations == null || variations.length == 0)
+        {
+            $(`.product__details__text`).html(`<h3>Coming soon...</h3>`)
+            $(`#product-detail-review-section`).empty()
+            return false;
+        }
+
+        for (let i=0;i<variations.length;i++)
+            if (!size_series.includes(variations[i].size))
+                size_series.push(variations[i].size)
+
+        size = $(`#product-detail-size input[name=size]:checked`).val()
+
+        if (field == 'size')
+        {
+            for (let i=size_series.indexOf(size); i < size_series.length; i++)
+            {
+                size = size_series[i]
+                color = findValidSize(variations, size)
+                if (color != false)
+                    break
+            }
+        }
+        else
+            color = $(`#product-detail-color input[name=color]:checked`).val()
+
+        for (let i=0;i<variations.length;i++)
+            if (variations[i].size == size && !color_series.includes(variations[i].color))
+                color_series.push(variations[i].color)
+
+        let stock = 0
+        for (let i=0;i<variations.length;i++)
+            if (variations[i].size == size && variations[i].color == color)
+                stock = variations[i].stock
+
+        displayVariance(variations,size,color, size_series, color_series, stock)
+    })
 }
 
 function postReview()
@@ -252,14 +406,12 @@ function postReview()
             displayReviewPage(1)
 
     }).fail(function(data){
-        console.log(data.responseJSON.message)
         if(data.message===401)
             window.location.href='/auth/login/'
         else if(data.status === 400)
             alert(data.responseJSON.message)
     })
 }
-
 
 function displayReviewPage(page)
 {
@@ -301,4 +453,12 @@ function displayReviewPage(page)
            pagination.append(data.buffer[i])
 
     })
+}
+
+
+window.onload = async function () {
+    getProductByField('Random', '', 1);
+    run('size')
+
+
 }

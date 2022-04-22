@@ -101,7 +101,7 @@ module.exports.getRelatedList = async (categoryValue) => {
  * @param productID {string}
  * @returns {Promise<*>}
  */
-module.exports.getAllReviewByProductID = (productID,stranger_name=null, userID=null) => {
+module.exports.getAllReviewByProductID = (productID, stranger_name = null, userID = null) => {
     try {
         if (stranger_name)
             return ReviewModel.find({ productID: productID, stranger_name: stranger_name }).sort({ createdAt: -1 }).lean();
@@ -122,10 +122,9 @@ module.exports.getAllReviewByProductID = (productID,stranger_name=null, userID=n
  * @param createAt
  * @returns {Promise<*>}
  */
-module.exports.createReview = async (authorized_user, stranger_name,productID, content, createAt) => {
+module.exports.createReview = async (authorized_user, stranger_name, productID, content, createAt) => {
     try {
-        if (authorized_user != null)
-        {
+        if (authorized_user != null) {
             await new ReviewModel({
                 userID: authorized_user._id,
                 productID: productID,
@@ -134,8 +133,7 @@ module.exports.createReview = async (authorized_user, stranger_name,productID, c
             }).save();
         }
 
-        else
-        {
+        else {
             await new ReviewModel({
                 stranger_name: stranger_name,
                 productID: productID,
@@ -157,9 +155,16 @@ module.exports.createReview = async (authorized_user, stranger_name,productID, c
  * @param quantity {number}
  * @returns {Promise<*>}
  */
-module.exports.addToCart = async (productID, userID = undefined, quantity = 1) => {
+module.exports.addToCart = async (productID, size, color, userID = undefined, quantity = 1) => {
     try {
         console.log("---- add to cart ----");
+        console.log("PROID: " + productID);
+        console.log("USERID: " + userID);
+        console.log("QUANTITY: " + quantity);
+        console.log("COLOR: " + color);
+        console.log("SIZE: " + size);
+
+
         if (userID) {
             let user = await userModel.findOne({ _id: userID });
             const product = await productModel.findOne({ _id: productID });
@@ -167,18 +172,26 @@ module.exports.addToCart = async (productID, userID = undefined, quantity = 1) =
             if (user && product) {
 
                 // product exist in cart
-                let itemIdx = user.cart.findIndex(item => item.productID === productID);
+                let itemIdx = user.cart.findIndex(item => {
+                    if (item.productID == productID && item.color == color && item.size == size)
+                        return true;
+                });
+
+                console.log("user.cart: " + user.cart);
+                console.log("ITEMIDX: " + itemIdx);
 
                 if (itemIdx > -1) {
                     // product exist in cart, update quantity
                     user.cart[itemIdx].quantity += parseInt(quantity);
-                    user.cart[itemIdx].total = user.cart[itemIdx].quantity * product.price;
+                    user.cart[itemIdx].total = parseInt(user.cart[itemIdx].quantity) * parseFloat(product.price);
                 } else {
                     // product not exist in cart, add new item
                     user.cart.push({
                         productID: productID,
                         quantity: parseInt(quantity),
-                        total: product.price
+                        color: color,
+                        size: size,
+                        total: Math.round(parseFloat(product.price) * parseInt(quantity) * 100) / 100
                     });
                 }
 
@@ -189,7 +202,9 @@ module.exports.addToCart = async (productID, userID = undefined, quantity = 1) =
                     user.total += user.cart[i].quantity * product_total.price;
                 }
 
-                user.total = Math.round(user.total * 100) / 100;
+                console.log("user.cart (2): " + user.cart);
+
+                user.total = Math.round(parseFloat(user.total) * 100) / 100;
 
                 user = await user.save();
             }
@@ -199,27 +214,32 @@ module.exports.addToCart = async (productID, userID = undefined, quantity = 1) =
             const product = await productModel.findOne({ _id: productID });
 
             if (product) {
-                let cart = JSON.parse(ls.get('cart'));
+                let cart = JSON.parse(ls.get('cart')) || [];
                 console.log('----');
                 console.log("cart:", cart);
                 console.log('----');
 
                 // product exist in cart
-                let itemIdx = cart.findIndex(item => item.productID === productID);
+                let itemIdx = cart.findIndex(item => {
+                    if (item.productID == productID && item.color == color && item.size == size)
+                        return true;
+                });
 
                 if (itemIdx > -1) {
                     // product exist in cart, update quantity
                     cart[itemIdx].quantity += parseInt(quantity);
-                    cart[itemIdx].total = cart[itemIdx].quantity * product.price;
+                    cart[itemIdx].total = parseInt(cart[itemIdx].quantity) * parseFloat(product.price);
                 } else {
                     // product not exist in cart, add new item
                     cart.push({
                         productID: productID,
                         quantity: parseInt(quantity),
-                        total: product.price
+                        color: color,
+                        size: size,
+                        total: Math.round(parseFloat(product.price) * parseInt(quantity) * 100) / 100
                     });
                 }
-                console.log("cart update:", cart);
+                // console.log("cart update:", cart);
 
                 let total = 0;
 
@@ -229,9 +249,11 @@ module.exports.addToCart = async (productID, userID = undefined, quantity = 1) =
                 }
 
 
+                console.log("cart:", cart);
+
                 // save local storage
                 ls.set("cart", JSON.stringify(cart));
-                ls.set("total", Math.round(total * 100) / 100)
+                ls.set("total", Math.round(parseFloat(total) * 100) / 100)
 
                 console.log("total:", ls.get("total"));
             }

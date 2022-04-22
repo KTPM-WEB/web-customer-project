@@ -20,7 +20,9 @@ const user = new Schema({
     cart: [{
         productID: String,
         quantity: Number,
-        total: String
+        color: String,
+        size: String,
+        total: Number
     }]
 }, {
     versionKey: false // You should be aware of the outcome after set to false

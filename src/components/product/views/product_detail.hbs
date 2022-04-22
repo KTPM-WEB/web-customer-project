@@ -100,7 +100,8 @@
 
 								</div>
 							</div>
-							<a href="#" onclick="addProduct('{{product._id}}', $('#input-quantity').val())"
+							<a href="#"
+								onclick="addProduct('{{product._id}}', $('input[name=size]:checked').val(), $('input[name=color]:checked').val(), $('#input-quantity').val() )"
 								class="primary-btn">add to cart</a>
 						</div>
 
@@ -227,7 +228,9 @@
 					</div>
 					<div class="product__item__text">
 						<h6>{{name}}</h6>
-						<a href="#" class="add-cart" onclick="addProduct('{{_id}}')">+ Add To Cart</a>
+						<a href="#"
+							onclick="addProduct('{{product._id}}', $('input[name=size]:checked').val(), $('input[name=color]:checked').val(), $('#input-quantity').val() )"
+							class="primary-btn">add to cart</a>
 						<h5>{{price}}</h5>
 						<div class="product__color__select">
 							{{#each relatedProduct.color}}

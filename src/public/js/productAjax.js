@@ -34,7 +34,15 @@ function sendData(e) {
     }
 }
 
-function addProduct(productID, quantity = 1) {
+function addProduct(productID, size, color, quantity = 1) {
+
+    if (!color) {
+        alert('Please select a color')
+        return;
+    }
+
+    console.log(productID, color, quantity);
+
     const url = '/api/products/add/' + productID;
     fetch(url, {
         method: 'POST',
@@ -43,7 +51,9 @@ function addProduct(productID, quantity = 1) {
         },
         body: JSON.stringify({
             id: productID,
-            quantity: quantity
+            quantity: quantity,
+            color: color,
+            size: size
         })
     }).then(r => r.json()).then(data => {
         $("#number-product-incart").html(data.number);

@@ -92,9 +92,9 @@ function getProductByField(field, type, page) {
                     const variations = data.variations
                     const status = isInStockProduct(variations)
 
-                    if (status == 1) // coming soon
+                    if (status === 1) // coming soon
                         add_to_cart = `<span style="color: blue; font-style: italic">Coming soon</span>`
-                    else if (status == 2) // out of stock
+                    else if (status === 2) // out of stock
                         add_to_cart = `<span style="color: red; font-style: italic">Out of stock</span>`
 
                     const str = `
@@ -134,6 +134,8 @@ function getProductByField(field, type, page) {
                                     <option>Random</option>
                                     <option>Low to High</option>
                                     <option>High to Low</option>
+                                    <option>Oldest</option>
+                                    <option>Newest</option>
                                 </select>
                                 <div class="nice-select" tabIndex="0">
                                     <span class="current">${products.field}</span>
@@ -146,6 +148,12 @@ function getProductByField(field, type, page) {
                                         </li>
                                         <li data-value="" class="option"
                                             onClick="getProductByField('High to Low','sort',1)">High to Low
+                                        </li>
+                                        <li data-value="" class="option"
+                                            onClick="getProductByField('Oldest','sort',1)">Oldest
+                                        </li>
+                                        <li data-value="" class="option"
+                                            onClick="getProductByField('Newest','sort',1)">Newest
                                         </li>
                                     </ul>
                                 </div>
@@ -170,12 +178,16 @@ function getProductByField(field, type, page) {
                                 <option>Random</option>
                                 <option>Low to High</option>
                                 <option>High to Low</option>
+                                <option>Oldest</option>
+                                <option>Newest</option>
                             </select><div class="nice-select" tabindex="0">
                             <span class="current">${products.field}</span>
                             <ul class="list">
                                 <li data-value="" class="option" onclick="getProductByField('Random','',1)">Random</li>
                                 <li data-value="" class="option" onclick="getProductByField('Low to High','sort',1)">Low to High</li>
                                 <li data-value="" class="option" onclick="getProductByField('High to Low','sort',1)">High to Low</li>
+                                <li data-value="" class="option" onclick="getProductByField('Oldest','sort',1)">Oldest</li>
+                                <li data-value="" class="option" onclick="getProductByField('Newest','sort',1)">Newest</li>
                             </ul></div>
                     </div>
                 </div>
@@ -209,6 +221,7 @@ function getProductByField(field, type, page) {
     });
 
 }
+
 function isInStockProduct(variations) {
     if (variations == undefined) //coming soon
         return 1
@@ -263,8 +276,7 @@ function displayVariance(variations, size, color, size_series, color_series, sto
                       <label for="${size_series[i]}">${size_series[i]}
                         <input type="radio" id="${size_series[i]}" value="${size_series[i]}" name="size">
                       </label>`)
-            }
-            else
+            } else
                 product_detail_size.append(`
                       <label for="${size_series[i]}" style="pointer-events: none; opacity: 0.2">${size_series[i]}
                         <input type="radio" id="${size_series[i]}" value="${size_series[i]}" name="size">
@@ -336,8 +348,7 @@ function run(field) {
                 if (color != false)
                     break
             }
-        }
-        else
+        } else
             color = $(`#product-detail-color input[name=color]:checked`).val()
 
         for (let i = 0; i < variations.length; i++)
@@ -363,7 +374,7 @@ function postReview() {
     const productID = $('#review-form input[type=hidden]').val()
     const url = `/api/products/review/${productID}`
 
-    $.post(url, { stranger_name: stranger_name, content: content }, function (data) {
+    $.post(url, {stranger_name: stranger_name, content: content}, function (data) {
         const limit = 3
 
         //set empty for inputs
@@ -404,8 +415,7 @@ function postReview() {
             <hr>`);
 
 
-        }
-        else if (length === limit) //prevent exceed page limit
+        } else if (length === limit) //prevent exceed page limit
             displayReviewPage(1)
 
     }).fail(function (data) {

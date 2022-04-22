@@ -13,6 +13,7 @@ const product = new Schema({
     SKU: String,
     introduction: String,
     infomation: String,
+    createdAt: Date,
     variation:[{size: String, color: String, price: Number, stock: Number}]
 }, {
     versionKey: false // You should be aware of the outcome after set to false

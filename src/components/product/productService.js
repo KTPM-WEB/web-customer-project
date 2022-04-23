@@ -277,3 +277,34 @@ module.exports.addToCart = async (productID, size, color, stock, userID = undefi
         throw err;
     }
 }
+
+
+/**
+ * get number of product in cart
+ * @param productID {string}
+ * @param userID {string}
+ * @param quantity {number}
+ * @returns {Promise<*>}
+ */
+module.exports.getNumberOfProductInCart = async (userID = undefined) => {
+    console.log('--- get number of product in cart ---');
+    const products = await this.getAllProducts();
+    let cart = undefined;
+    let number = 0;
+
+    if (userID) {
+        let user = await userModel.findOne({ _id: userID });
+        cart = user.cart;
+    } else
+        cart = JSON.parse(ls.get('cart')) || [];
+
+    console.log("cart:", cart);
+
+    cart.forEach(item => {
+        number += parseInt(item.quantity);
+    })
+
+    console.log("number:", number);
+
+    return number;
+}

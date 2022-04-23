@@ -55,16 +55,13 @@ exports.addToCart = async (req, res) => {
         if (req.user) {
             req.session.user = await productService.addToCart(req.body.id, req.body.size, req.body.color, req.body.stock, req.user._id, req.body.quantity);
             req.session.number_product += parseInt(req.body.quantity);
-            number = req.session.number_product;
-        } else {
-            // req.session.user = await productService.addToCart(req.body.id);
 
-            // await productService.addToCart(req.body.id, undefined, req.body.quantity);
+            number = await productService.getNumberOfProductInCart(req.user._id)
+        } else {
             await productService.addToCart(req.body.id, req.body.size, req.body.color, req.body.stock, undefined, req.body.quantity);
             console.log("add success");
 
-            req.session.number_product += parseInt(req.body.quantity);
-            number = req.session.number_product;
+            number = await productService.getNumberOfProductInCart()
         }
 
         res.send({ number });

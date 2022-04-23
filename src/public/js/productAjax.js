@@ -60,6 +60,9 @@ function addProduct(productID, size, color, stock, quantity = 1) {
             stock: stock
         })
     }).then(r => r.json()).then(data => {
+        console.log("--- add product ---");
+        console.log(data);
+
         $("#number-product-incart").html(data.number);
     });
 
@@ -504,7 +507,10 @@ function change_quantity(type) {
     } else if (type == 'none') {
         $('#input-quantity').val(1)
     } else if (type == 'max') {
-        $('#input-quantity').val(g_stock)
+        let value = parseInt($('#input-quantity').val());
+        if (value > g_stock)
+            value = g_stock
+        $('#input-quantity').val(value)
     }
 }
 

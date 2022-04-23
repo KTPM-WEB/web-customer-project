@@ -30,7 +30,7 @@ exports.getProducts = async (req, res) => {
             products[i].size = cart[i].size
             products[i].color = cart[i].color
             total = Math.round((total + products[i].total) * 100) / 100;
-            number_products += products[i].quantity;
+            number_products += parseInt(products[i].quantity);
         }
 
         console.log(products);

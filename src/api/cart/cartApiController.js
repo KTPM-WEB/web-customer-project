@@ -46,6 +46,10 @@ exports.getProducts = async (req, res) => {
 
 exports.changeQuantity = async (req, res) => {
     try {
+        console.log("---- chaneg quantity ----");
+        console.log("req.pảrams: ", req.params);
+        console.log("req.body: ", req.body);
+
         let products;
         let user = undefined;
 
@@ -56,31 +60,56 @@ exports.changeQuantity = async (req, res) => {
             products = JSON.parse(ls.get("cart"));
         }
 
+        // console.log("products: ", products);
+
+        let pro = await productService.getProductByID(req.params.productID);
+        // console.log("pro:", pro);
 
         // product index in cart
-        let itemIdx = products.findIndex(item => item.productID === req.params.productID);
+        let itemIdx = products.findIndex(item => item.productID == req.params.productID && item.color == req.body.color && item.size == req.body.size);
+        // console.log("itemIdx: ", itemIdx);
+
+        let itemIdxStock = pro.variation.findIndex(item => item.size == req.body.size && item.color == req.body.color);
+        // console.log("itemIdxStock: ", itemIdxStock);
+
 
         // product exist in cart, update quantity
         if (itemIdx > -1) {
             if (req.params.type === 'plus') {
                 products[itemIdx].quantity += 1;
+
+                if (products[itemIdx].quantity > pro.variation[itemIdxStock].stock) {
+                    products[itemIdx].quantity = pro.variation[itemIdxStock].stock;
+                    req.session.number_product -= 1;
+                }
+
                 req.session.number_product += 1;
             } else if (req.params.type === 'minus') {
                 products[itemIdx].quantity -= 1;
                 req.session.number_product -= 1;
+
             } else {
+                console.log("--- type = undef --");
                 let number = 0;
                 products[itemIdx].quantity = parseInt(req.body.quantity);
+
+                if (products[itemIdx].quantity > pro.variation[itemIdxStock].stock) {
+                    products[itemIdx].quantity = pro.variation[itemIdxStock].stock;
+                }
+
+                console.log("products[itemIdx].quantity: ", products[itemIdx].quantity);
 
                 products.forEach(product => {
                     number += product.quantity;
                 })
 
+                console.log("number: ", number);
                 req.session.number_product = number;
             }
 
             if (products[itemIdx].quantity < 1) {
                 products[itemIdx].quantity = 1;
+                req.session.number_product += 1;
             }
 
             const product = await productService.getProductByID(req.params.productID);

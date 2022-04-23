@@ -14,6 +14,7 @@ function loadProduct() {
         $product_table.html("");
 
         data.products.forEach((item, index) => {
+            let c = item.color.replace("#", "");
             const html = `
             <tr>
                 <td class="product__cart__item">
@@ -39,15 +40,15 @@ function loadProduct() {
                 <td class="quantity__item">
                     <div class="quantity">
                         <div class="pro-qty-2 d-flex">
-                            <button class="btn-minus" onclick="changeQuantity('${item._id}', 'minus')">-</button>
-                            <input type="number"  name="quantity" id=${item._id} value="${item.quantity}" onfocusout="changeQuantity('${item._id}')">
-                            <button class="btn-plus"  onclick="changeQuantity('${item._id}', 'plus')">+</button>
+                            <button class="btn-minus" onclick="changeQuantity('${item._id}', '${item.color}', '${item.size}', 'minus')">-</button>
+                            <input type="number"  name="quantity" id='${item._id}_${c}_${item.size}' value="${item.quantity}" onfocusout="changeQuantity('${item._id}', '${item.color}', '${item.size}')">
+                            <button class="btn-plus"  onclick="changeQuantity('${item._id}', '${item.color}', '${item.size}', 'plus')">+</button>
                         </div>
                     </div>
                 </td>
-                <td class="cart__price" id='${item._id}-total'> $${item.total}</td>
+                <td class="cart__price" id='${item._id}_${c}_${item.size}_total'> $${item.total}</td>
                 <td class="cart__close">
-                    <a href="javascript:{}" onclick="deleteProductInCart('${item._id}')">
+                    <a href="javascript:{}" onclick="deleteProductInCart('${item._id}, ${item.color}, ${item.size}')">
                         <i class="fa fa-close"></i>
                     </a>
         
@@ -62,7 +63,11 @@ function loadProduct() {
     });
 }
 
-function changeQuantity(productID, type) {
+function changeQuantity(productID, color, size, type) {
+    console.log("--- change quantity ---");
+    let pro_number = '#' + productID + '_' + color.replace("#", "") + '_' + size;
+    let pro_total = '#' + productID + '_' + color.replace("#", "") + '_' + size + '_total';
+
     const url = '/api/cart/change-quantity/' + productID + '/' + type;
     fetch(url, {
         method: 'POST',
@@ -71,19 +76,24 @@ function changeQuantity(productID, type) {
         },
         body: JSON.stringify({
             id: productID,
+            color: color,
+            size: size,
             type: type,
-            quantity: $("#" + productID).val()
+            quantity: $(pro_number).val()
         })
     }).then(r => r.json()).then(data => {
+        console.log("data:", data);
+
         $("#number-product-incart").html(data.number_product);
         $("#cart-total").html(data.total);
-        $("#" + productID).val(data.product_quantity);
-        $("#" + productID + "-total").text("$" + data.product_total);
+
+        $(pro_number).val(data.product_quantity);
+        $(pro_total).text("$" + data.product_total);
     });
 }
 
 function deleteProductInCart(productID) {
-    const url = '/api/cart/delete/' + productID;
+    const url = '/api/cart/delete/' + productID + '/' + color + '/' + size;
     fetch(url, {
         method: 'DELETE',
         headers: {

@@ -107,7 +107,7 @@
 								</div> --}}
 							</div>
 							<a href="#"
-								onclick="addProduct('{{product._id}}', $('input[name=size]:checked').val(), $('input[name=color]:checked').val(), $('#input-quantity').val() )"
+								onclick="addProduct('{{product._id}}', $('input[name=size]:checked').val(), $('input[name=color]:checked').val(), $('#product-detail-stock').text(), $('#input-quantity').val() )"
 								class="primary-btn">add to cart</a>
 						</div>
 
@@ -235,7 +235,7 @@
 					<div class="product__item__text">
 						<h6>{{name}}</h6>
 						<a href="#"
-							onclick="addProduct('{{product._id}}', $('input[name=size]:checked').val(), $('input[name=color]:checked').val(), $('#input-quantity').val() )"
+							onclick="addProduct('{{product._id}}', $('input[name=size]:checked').val(), $('input[name=color]:checked').val(), $('#product-detail-stock').text(), $('#input-quantity').val() )"
 							class="primary-btn">add to cart</a>
 						<h5>{{price}}</h5>
 						<div class="product__color__select">

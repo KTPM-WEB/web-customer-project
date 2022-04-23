@@ -74,9 +74,9 @@ module.exports.getProductByField = async (field, type) => {
             return await productModel.find({}).sort({ price: 1 }).exec();
         } else if (type === 'sort' && field === 'High to Low') {
             return await productModel.find({}).sort({ price: -1 }).exec();
-        } else if(type === 'sort' && field === 'Newest'){
+        } else if (type === 'sort' && field === 'Newest') {
             return await productModel.find({}).sort({ createdAt: -1 }).exec();
-        }else if(type === 'sort' && field === 'Oldest'){
+        } else if (type === 'sort' && field === 'Oldest') {
             return await productModel.find({}).sort({ createdAt: 1 }).exec();
         }
     } catch (err) {
@@ -159,7 +159,7 @@ module.exports.createReview = async (authorized_user, stranger_name, productID, 
  * @param quantity {number}
  * @returns {Promise<*>}
  */
-module.exports.addToCart = async (productID, size, color, userID = undefined, quantity = 1) => {
+module.exports.addToCart = async (productID, size, color, stock, userID = undefined, quantity = 1) => {
     try {
         console.log("---- add to cart ----");
         console.log("PROID: " + productID);
@@ -167,6 +167,7 @@ module.exports.addToCart = async (productID, size, color, userID = undefined, qu
         console.log("QUANTITY: " + quantity);
         console.log("COLOR: " + color);
         console.log("SIZE: " + size);
+        console.log("stock: " + stock);
 
 
         if (userID) {
@@ -187,6 +188,11 @@ module.exports.addToCart = async (productID, size, color, userID = undefined, qu
                 if (itemIdx > -1) {
                     // product exist in cart, update quantity
                     user.cart[itemIdx].quantity += parseInt(quantity);
+
+                    if (user.cart[itemIdx].quantity > stock) {
+                        user.cart[itemIdx].quantity = stock;
+                    }
+
                     user.cart[itemIdx].total = parseInt(user.cart[itemIdx].quantity) * parseFloat(product.price);
                 } else {
                     // product not exist in cart, add new item
@@ -232,6 +238,11 @@ module.exports.addToCart = async (productID, size, color, userID = undefined, qu
                 if (itemIdx > -1) {
                     // product exist in cart, update quantity
                     cart[itemIdx].quantity += parseInt(quantity);
+
+                    if (cart[itemIdx].quantity > stock) {
+                        cart[itemIdx].quantity = stock;
+                    }
+
                     cart[itemIdx].total = parseInt(cart[itemIdx].quantity) * parseFloat(product.price);
                 } else {
                     // product not exist in cart, add new item

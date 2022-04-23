@@ -46,6 +46,30 @@ module.exports.renderHomepage = async (req, res) => {
         if (!ls.get("cart"))
             ls.set("cart", JSON.stringify([]));
 
+        //stock check
+        for (let i=0;i<products.length; i++)
+        {
+            const variations = products[i].variation
+
+            if (variations == undefined)
+            {
+                products[i].comingSoon = true;
+                continue;
+            }
+
+            let flag = 0
+
+            for (let j=0; j<variations.length; j++)
+                if (variations[j].stock != 0)
+                {
+                    products[i].onStock = true;
+                    flag = 1
+                    break;
+                }
+            if (flag == 0)
+                products[i].outStock = true;
+        }
+
         let number_product;
         if (req.user) {
             if (JSON.parse(ls.get("cart")).length > 0) {

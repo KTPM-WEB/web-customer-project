@@ -1,3 +1,5 @@
+let g_stock = 0;
+
 function sendData(e) {
     const $searchResult = $('#myList');
     let match = e.value.match(/^[a-zA-Z0-9]*/);
@@ -263,7 +265,12 @@ function findValidSize(variations, size) {
 }
 
 
-function displayVariance(variations, size, color, size_series, color_series, stock) {
+function displayVariance(variations, size, color, size_series, color_series, stock, field) {
+    // set input quantity to 1
+    change_quantity("none")
+
+    console.log("size:", size, "color:", color, "size_series:", size_series, "color_series:", color_series, "stock:", stock, "field:", field);
+
     const product_detail_size = $(`#product-detail-size`)
     product_detail_size.children('label').remove()
     product_detail_size.html(`<span>Sizes:</span>`)
@@ -290,19 +297,29 @@ function displayVariance(variations, size, color, size_series, color_series, sto
     product_detail_color.children('label').remove()
     product_detail_color.html(`<span>Color:</span>`)
 
+    let choose_color = undefined
+
     for (let i = 0; i < color_series.length; i++) {
         if (isInStockColor(variations, size, color_series[i]))
             product_detail_color.append(`  
-                    <input type="radio" id="${color_series[i]}" value="${color_series[i]}" name="color">
-                    <label for="${color_series[i]}" style="background-color: ${color_series[i]}"></label>
+                    <input type="radio" id="color${color_series[i]}" value="${color_series[i]}" name="color">
+                    <label for="color${color_series[i]}" style="background-color: ${color_series[i]}"></label>
                 `)
         else
             product_detail_color.append(`
-                    <input type="radio" id="${color_series[i]}" value="${color_series[i]}" name="color">
-                    <label for="${color_series[i]}"  style="pointer-events: none; background-color: ${color_series[i]}; opacity: 0.15"></label>
+                    <input type="radio" id="color${color_series[i]}" value="${color_series[i]}" name="color">
+                    <label for="color${color_series[i]}"  style="pointer-events: none; background-color: ${color_series[i]}; opacity: 0.15"></label>
                 `)
-    }
 
+        // choose first color
+        if (choose_color == undefined && isInStockColor(variations, size, color_series[i]) && field == "size") {
+            choose_color = color_series[i]
+            $("#color" + color_series[i]).prop("checked", true);
+            $("input[name=color][value='" + color_series[i] + "']").prop("checked", true);
+        } else {
+            $("input[name=color][value='" + color + "']").prop("checked", true);
+        }
+    }
 
     $(`#product-detail-stock`).text(stock)
 
@@ -318,6 +335,7 @@ function displayVariance(variations, size, color, size_series, color_series, sto
 }
 
 function run(field) {
+    console.log("run:", field)
     const productID = $(`input[name=product-id]`).val()
     let size, color;
 
@@ -358,7 +376,10 @@ function run(field) {
             if (variations[i].size == size && variations[i].color == color)
                 stock = variations[i].stock
 
-        displayVariance(variations, size, color, size_series, color_series, stock)
+        console.log("size:", size, "color:", color, "stock:", stock);
+        g_stock = stock;
+
+        displayVariance(variations, size, color, size_series, color_series, stock, field)
     })
 }
 
@@ -463,6 +484,28 @@ function displayReviewPage(page) {
 
     })
 }
+
+function change_quantity(type) {
+    console.log("change_quantity:", type, ' - g_stock', g_stock);
+    if (type == 'plus') {
+        let value = parseInt($('#input-quantity').val()) + 1;
+        if (value > g_stock)
+            value = g_stock
+        $('#input-quantity').val(value)
+    }
+    else if (type == 'sub') {
+        let value = parseInt($('#input-quantity').val()) - 1;
+        if (value < 1)
+            value = 1
+
+        $('#input-quantity').val(value)
+    } else if (type == 'none') {
+        $('#input-quantity').val(1)
+    } else if (type == 'max') {
+        $('#input-quantity').val(g_stock)
+    }
+}
+
 
 
 window.onload = async function () {

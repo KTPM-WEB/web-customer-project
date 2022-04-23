@@ -87,18 +87,24 @@
 							<div class="product__details__option__size" id="product-detail-size" onchange="run('size')">
 								<span>Sizes:</span>
 							</div>
-							<div class="product__details__option__color" id="product-detail-color">
+							<div class="product__details__option__color" id="product-detail-color" onchange="run()">
 								<span>Colors:</span>
 							</div>
 
 						</div>
 						<div class="product__details__cart__option mb-4">
 							<div class="quantity">
-								<div class="pro-qty-2">
-									<input id="input-quantity" type="number" value="1"
-										style="width: 50px; text-align:center;">
+								{{!-- <div class="pro-qty-2"> --}}
+									<button class="btn-minus" onclick="change_quantity('sub')">
+										< </button>
+											<input id="input-quantity" type="number" value="1"
+												style="width: 50px; text-align:center;"
+												onfocusout="change_quantity('max')">
+											<button class=" btn-plus" onclick="change_quantity('plus')"> >
+											</button>
 
-								</div>
+											{{!--
+								</div> --}}
 							</div>
 							<a href="#"
 								onclick="addProduct('{{product._id}}', $('input[name=size]:checked').val(), $('input[name=color]:checked').val(), $('#input-quantity').val() )"

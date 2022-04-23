@@ -276,7 +276,8 @@ function displayVariance(variations, size, color, size_series, color_series, sto
                       <label for="${size_series[i]}">${size_series[i]}
                         <input type="radio" id="${size_series[i]}" value="${size_series[i]}" name="size">
                       </label>`)
-            } else
+            }
+            else
                 product_detail_size.append(`
                       <label for="${size_series[i]}" style="pointer-events: none; opacity: 0.2">${size_series[i]}
                         <input type="radio" id="${size_series[i]}" value="${size_series[i]}" name="size">
@@ -291,18 +292,15 @@ function displayVariance(variations, size, color, size_series, color_series, sto
 
     for (let i = 0; i < color_series.length; i++) {
         if (isInStockColor(variations, size, color_series[i]))
-            product_detail_color.append(`
-                  
+            product_detail_color.append(`  
                     <input type="radio" id="${color_series[i]}" value="${color_series[i]}" name="color">
                     <label for="${color_series[i]}" style="background-color: ${color_series[i]}"></label>
-                  `)
+                `)
         else
             product_detail_color.append(`
-           
-                    <label for="${color_series[i]}" style="pointer-events: none; background-color: ${color_series[i]}"></label>
-
                     <input type="radio" id="${color_series[i]}" value="${color_series[i]}" name="color">
-                  `)
+                    <label for="${color_series[i]}"  style="pointer-events: none; background-color: ${color_series[i]}; opacity: 0.15"></label>
+                `)
     }
 
 
@@ -374,7 +372,7 @@ function postReview() {
     const productID = $('#review-form input[type=hidden]').val()
     const url = `/api/products/review/${productID}`
 
-    $.post(url, {stranger_name: stranger_name, content: content}, function (data) {
+    $.post(url, { stranger_name: stranger_name, content: content }, function (data) {
         const limit = 3
 
         //set empty for inputs

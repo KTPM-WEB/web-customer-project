@@ -140,11 +140,16 @@ exports.changeQuantity = async (req, res) => {
 
 exports.deleteProduct = async (req, res) => {
     try {
+        console.log("---- delete product ----");
+        console.log("param:", req.params);
+        console.log("body:", req.body);
+
+
         if (req.user) {
-            const user = await cartService.deleteProduct(req.user._id, req.params.productID);
+            const user = await cartService.deleteProduct(req.user._id, req.params.productID, req.body.color, req.body.size);
             res.send(user.cart);
         } else {
-            await cartService.deleteProduct(undefined, req.params.productID);
+            await cartService.deleteProduct(undefined, req.params.productID, req.body.color, req.body.size);
             let cart = JSON.parse(ls.get("cart"));
 
             res.send(cart);

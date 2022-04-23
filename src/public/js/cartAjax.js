@@ -48,7 +48,7 @@ function loadProduct() {
                 </td>
                 <td class="cart__price" id='${item._id}_${c}_${item.size}_total'> $${item.total}</td>
                 <td class="cart__close">
-                    <a href="javascript:{}" onclick="deleteProductInCart('${item._id}, ${item.color}, ${item.size}')">
+                    <a href="javascript:{}" onclick="deleteProductInCart('${item._id}', '${item.color}', '${item.size}')">
                         <i class="fa fa-close"></i>
                     </a>
         
@@ -92,15 +92,17 @@ function changeQuantity(productID, color, size, type) {
     });
 }
 
-function deleteProductInCart(productID) {
-    const url = '/api/cart/delete/' + productID + '/' + color + '/' + size;
+function deleteProductInCart(productID, color, size) {
+    const url = '/api/cart/delete/' + productID;
     fetch(url, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            id: productID
+            id: productID,
+            color: color,
+            size: size
         })
     }).then(r => r.json()).then(data => {
         console.log("del data:", data);

@@ -7,6 +7,6 @@ router.post("/change-quantity/:productID/:type", controller.changeQuantity);
 
 router.post("/apply-coupon/:couponCODE", controller.applyCoupon);
 
-router.delete("/delete/:color/:size/:productID", controller.deleteProduct);
+router.delete("/delete/:productID", controller.deleteProduct);
 
 module.exports = router;

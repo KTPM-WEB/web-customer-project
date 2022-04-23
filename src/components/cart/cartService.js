@@ -34,11 +34,11 @@ module.exports.getProducts = async (cart) => {
  * @param productID{String}
  * @returns {Promise<*>}
  */
-module.exports.deleteProduct = async (userID, productID) => {
+module.exports.deleteProduct = async (userID, productID, color, size) => {
     try {
         if (userID) {
             const user = await userModel.findById(userID).lean();
-            let itemIdx = user.cart.findIndex(item => item.productID == productID);
+            let itemIdx = user.cart.findIndex(item => item.productID == productID && item.color == color && item.size == size);
             if (itemIdx > -1) {
                 const product = await productModel.findById(productID);
                 user.total = Math.round((user.total - user.cart[itemIdx].quantity * product.price) * 100) / 100;
@@ -49,7 +49,7 @@ module.exports.deleteProduct = async (userID, productID) => {
         } else {
             let cart = JSON.parse(ls.get("cart"));
             let total = JSON.parse(ls.get("total"));
-            let itemIdx = cart.findIndex(item => item.productID == productID);
+            let itemIdx = cart.findIndex(item => item.productID == productID && item.color == color && item.size == size);
 
             if (itemIdx > -1) {
                 const product = await productModel.findById(productID);

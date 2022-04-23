@@ -70,9 +70,6 @@
 						</a>
 						<input type="hidden" name="id" value="{{_id}}">
                         {{#if onStock}}
-                            <a href="javascript:{}" id="add-product-{{_id}}" class="add-cart"
-                               onclick="addProduct('{{_id}}')">
-                                + Add to cart</a>
                             <h5>${{price}}</h5>
                         {{else if comingSoon}}
                             <span style="color: blue; font-style: italic">Coming soon</span>

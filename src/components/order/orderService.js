@@ -1,6 +1,7 @@
 const orderModel = require("./orderModel");
 const userModel = require("../user/userModel");
 const promoModel = require("../cart/promoModel");
+const productModel = require("../product/model/productModel");
 const ls = require("local-storage");
 
 /**
@@ -25,6 +26,24 @@ module.exports.order = async (user, promo = null) => {
                 size: user.cart[i].size,
                 color: user.cart[i].color
             }
+
+            const p = await productModel.findById(product.product_id).lean();
+            console.log("p:", p);
+
+            let idx = p.variation.findIndex(v => v.size == user.cart[i].size && v.color == user.cart[i].color);
+            console.log("idx:", idx);
+            p.variation[idx].stock -= product.quantity;
+
+            await productModel.findOneAndUpdate(
+                {
+                    _id: user.cart[i].productID,
+                },
+                {
+                    $set: {
+                        variation: p.variation
+                    }
+                });
+
             products.push(product);
         }
 
@@ -58,7 +77,6 @@ module.exports.order = async (user, promo = null) => {
                     });
             }
 
-            console.log("order:", order);
 
             await orderModel.create(order);
 

@@ -19,10 +19,6 @@ exports.getProducts = async (req, res) => {
             products = await cartService.getProducts(cart);
         }
 
-
-        console.log("product:", products);
-        console.log("cart: ", cart);
-
         let total = 0;
         let number_products = 0;
 
@@ -32,8 +28,6 @@ exports.getProducts = async (req, res) => {
             total = Math.round((total + products[i].total) * 100) / 100;
             number_products += parseInt(products[i].quantity);
         }
-
-        console.log(products);
 
         req.session.number_product = number_products;
         res.send({ number_products, total, products });

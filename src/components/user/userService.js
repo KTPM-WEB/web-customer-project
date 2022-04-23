@@ -38,21 +38,34 @@ module.exports.getUserByID = async (userID) => {
  */
 module.exports.updateLocalCartToUser = async (userID) => {
     try {
+        console.log("----- update local cart to user -----");
         let local_cart = JSON.parse(ls.get('cart'));
 
         console.log(userID);
         let user = await userModel.findById(userID).lean();
-        console.log(user);
+        console.log(user.cart);
+
         let user_cart = user.cart;
 
         for (let i = 0; i < local_cart.length; i++) {
             // product index in cart
-            let itemIdx = user_cart.findIndex(item => item.productID === local_cart[i].productID);
             let product = await productService.getProductByID(local_cart[i].productID);
+            let itemIdx = user_cart.findIndex(item => item.productID == local_cart[i].productID && item.size == local_cart[i].size && item.color == local_cart[i].color);
+            let itemIdxVar = product.variation.findIndex(item => item.size == local_cart[i].size && item.color == local_cart[i].color);
 
+
+            console.log("-----");
+            console.log("itemIdx", itemIdx);
+            console.log("itemIdxVar", itemIdxVar);
+            console.log("product", product);
             // product exist in cart, update quantity
             if (itemIdx > -1) {
                 user_cart[itemIdx].quantity += local_cart[i].quantity;
+
+                if (user_cart[itemIdx].quantity > product.variation[itemIdxVar].stock) {
+                    user_cart[itemIdx].quantity = product.variation[itemIdxVar].stock;
+                }
+
                 user_cart[itemIdx].total = parseInt(user_cart[itemIdx].quantity) * parseFloat(product.price);
             } else {
                 user_cart.push({
@@ -199,7 +212,7 @@ module.exports.changeAvatar = async (id, file) => {
     try {
         if (!file) return;
         const url = await cloudinary.upload(file.path, 'user_avatar');
-        console.log(id,url);
+        console.log(id, url);
         await userModel.findByIdAndUpdate(id, { avatar_url: url });
     } catch (err) {
         throw err;

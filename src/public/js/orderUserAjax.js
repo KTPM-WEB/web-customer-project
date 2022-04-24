@@ -28,7 +28,7 @@ function loadUserOrder() {
                     <div class="row w-100">
                         <div class="col-10">
                             <div class="d-flex">
-                                <img src="${item.thumb}"
+                                <img src="${item.thumb || item.img[0]}" alt="order-thumnail">
                                     style="width: 150px; object-fit:cover" alt="logo">
                                 <div class="ml-3 p-3">
                                     <h4 style="font-weight: bold;">${item.products[0].name},...</h4>`

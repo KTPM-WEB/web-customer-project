@@ -83,6 +83,9 @@ function getProductByField(field, type, page) {
         },
         dateType: "JSON",
         success: function (products) {
+            console.log("--- getProductByField ---");
+            console.log("pro:", products);
+
             $product.html('');
             $start.html('');
             $pagination.html('');
@@ -108,7 +111,7 @@ function getProductByField(field, type, page) {
                             <div class="col-lg-4 col-md-6 col-sm-6">
                                 <div class="card" style="width: 18rem;">
                                     <a href="/product/${item._id}">
-                                        <img class="card-img-top" src="${item.thumb}" alt="Card image cap">
+                                        <img class="card-img-top" src="${item.thumb || item.img[0]}" alt="Card image cap">
                                     </a>
                                     <div class="card-body" id="card-body">
                                         <a href="/product/${item._id}">

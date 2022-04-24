@@ -25,7 +25,7 @@ function loadCheckout() {
                     <div class="row">
                         <div class="col-10 ">
                             <div class="row">
-                                <img class="checkout-img" src="${product.thumb}" alt="checkout thumnail">
+                                <img class="checkout-img" src="${product.thumb || product.img[0]}" alt="checkout thumnail">
                                 <div class="col ml-3">
                                     <div class="row" style="font-weight: 700;">
                                         ${product.name}

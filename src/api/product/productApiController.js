@@ -34,6 +34,9 @@ exports.renderByField = async (req, res) => {
         const products = pagination.paging(getProducts, page, 6);
         products.field = req.query.field;
         products.type = req.query.type;
+
+        console.log("--- render by field ---");
+        console.log("products: ", products);
         res.json(products);
     } catch (err) {
         res.status(500).json({ message: err.message });

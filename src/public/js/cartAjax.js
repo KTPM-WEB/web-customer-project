@@ -20,7 +20,7 @@ function loadProduct() {
                 <td class="product__cart__item">
                     <div class="product__cart__item__pic">
                         <a href="/product/${item._id}">
-                            <img src="${item.thumb}" style="width: 150px; object-fit: contain;"
+                            <img src="${item.thumb || item.img[0]}" style="width: 150px; object-fit: contain;"
                                 alt="thumbnail">
 						</a>
                     </div>

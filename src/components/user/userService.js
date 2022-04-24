@@ -71,6 +71,8 @@ module.exports.updateLocalCartToUser = async (userID) => {
                 user_cart.push({
                     productID: local_cart[i].productID,
                     quantity: local_cart[i].quantity,
+                    color: local_cart[i].color,
+                    size: local_cart[i].size,
                     total: Math.round((product.price * local_cart[i].quantity) * 100) / 100
                 })
             }

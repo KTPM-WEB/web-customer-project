@@ -24,16 +24,22 @@ passport.use(new GoogleStrategy({
     async (req, accessToken, refreshToken, profile, cb) => {
         const user = await googleService.verifyGoogle(profile);
 
+        console.log(user);
         if (!user) {
             if (req.query.state === 'register') {
                 const result = await googleService.addUserGoogle(profile);
-                console.log("result:", result);
-
                 return cb(null, true, result);
             } else {
                 return cb(null, true, { message: 'login: account dont exist' });
             }
         } else {
+            if (user.confirm === true && user.status !=='Banned') {
+                return cb(null, user);
+            } else if(user.confirm === false) {
+                return cb(null, true, { message: 'login: account not confirmed' });
+            } else if(user.status === 'Banned') {
+                return cb(null, true, { message: 'login: account banned' });
+            }
 
             if (req.query.state === 'register') {
                 return cb(null, user, { message: 'register: account exist' });
@@ -57,7 +63,8 @@ passport.serializeUser(function (user, cb) {
             phone: user.phone,
             intro: user.intro,
             total: user.total,
-            cart: user.cart
+            cart: user.cart,
+            status: "Unbanned"
         });
     });
 });

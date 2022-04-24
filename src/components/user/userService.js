@@ -252,6 +252,7 @@ module.exports.Register = async (body) => {
             intro: "",
             total: 0,
             confirm: false,
+            status: "Unbanned",
             avatar_url: "https://res.cloudinary.com/web-hcmus/image/upload/v1648341181/Default_avatar/default-avtar_wmf6yf.jpg", //default avatar
         }
         // insert

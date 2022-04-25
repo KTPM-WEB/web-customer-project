@@ -6,11 +6,12 @@ const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const googleService = require('../components/google/googleService');
 const userService = require('../components/user/userService');
 
+
 // authN local
 passport.use(new LocalStrategy(
     async (username, password, cb) => {
         const user = await userService.verifyUser(username, password);
-        if (user && user.confirm === true && user.status !=='Banned') return cb(null, user);
+        if (user && user.confirm === true && user.status !== 'Banned') return cb(null, user);
         return cb(null, false);
     }));
 
@@ -18,7 +19,7 @@ passport.use(new LocalStrategy(
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: 'http://localhost:3000/google/callback',
+    callbackURL: process.env.GOOGLE_CALLBACK_URL,
     passReqToCallback: true
 },
     async (req, accessToken, refreshToken, profile, cb) => {
@@ -33,11 +34,11 @@ passport.use(new GoogleStrategy({
                 return cb(null, true, { message: 'login: account dont exist' });
             }
         } else {
-            if (user.confirm === true && user.status !=='Banned') {
+            if (user.confirm === true && user.status !== 'Banned') {
                 return cb(null, user);
-            } else if(user.confirm === false) {
+            } else if (user.confirm === false) {
                 return cb(null, true, { message: 'login: account not confirmed' });
-            } else if(user.status === 'Banned') {
+            } else if (user.status === 'Banned') {
                 return cb(null, true, { message: 'login: account banned' });
             }
 

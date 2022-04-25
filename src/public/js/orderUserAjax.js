@@ -28,7 +28,7 @@ function loadUserOrder() {
                     <div class="row w-100">
                         <div class="col-10">
                             <div class="d-flex">
-                                <img src="${item.thumb || item.img[0]}" alt="order-thumnail">
+                                <img src="${item.thumb}" alt="order-thumnail"
                                     style="width: 150px; object-fit:cover" alt="logo">
                                 <div class="ml-3 p-3">
                                     <h4 style="font-weight: bold;">${item.products[0].name},...</h4>`
@@ -51,10 +51,14 @@ function loadUserOrder() {
                 order_cart += `<div class="status btn-danger">${item.status}</div>`
             } else if (item.status === "Completed") {
                 order_cart += `<div class="status btn-success">${item.status}</div>`
+            } else if (item.status === "Processing") {
+                order_cart += `<div class="status btn-warning">${item.status}</div>`
             }
+
 
             if (item.status === "Processing") {
                 order_cart += `
+                        
                         <button style="border-radius: 7px;" class="ml-3 btn btn-danger btn-sm"
                             data-toggle="modal" data-target="#cancle-order-${item._id}">
                             &times; Cancel order

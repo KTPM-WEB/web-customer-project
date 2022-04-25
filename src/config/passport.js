@@ -24,8 +24,10 @@ passport.use(new GoogleStrategy({
 },
     async (req, accessToken, refreshToken, profile, cb) => {
         const user = await googleService.verifyGoogle(profile);
+        console.log("--- gg callback ---");
+        console.log("user: ", user);
+        console.log("req.query: ", req.query);
 
-        console.log(user);
         if (!user) {
             if (req.query.state === 'register') {
                 const result = await googleService.addUserGoogle(profile);
@@ -34,9 +36,7 @@ passport.use(new GoogleStrategy({
                 return cb(null, true, { message: 'login: account dont exist' });
             }
         } else {
-            if (user.confirm === true && user.status !== 'Banned') {
-                return cb(null, user);
-            } else if (user.confirm === false) {
+            if (user.confirm === false) {
                 return cb(null, true, { message: 'login: account not confirmed' });
             } else if (user.status === 'Banned') {
                 return cb(null, true, { message: 'login: account banned' });

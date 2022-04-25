@@ -16,7 +16,9 @@ router.get('/login', passport.authenticate('google', {
 router.get("/callback", (req, res, next) => {
     passport.authenticate('google', {}, (err, user, info) => {
         console.log(err, user, info);
+
         info = info.message;
+        console.log("info: ", info);
         if (info === 'login: account dont exist') {
             res.redirect('/auth/login?state=false&message=Account%20dont%20exist');
         }
@@ -24,11 +26,10 @@ router.get("/callback", (req, res, next) => {
             req.session.user = user;
             res.redirect("/");
         }
-        else if(info==='login: account not confirmed')
-        {
+        else if (info === 'login: account not confirmed') {
             res.redirect('/auth/login?state=false&message=Account%20not%20confirmed');
         }
-        else if(info=== 'login: account banned'){
+        else if (info === 'login: account banned') {
             res.redirect('/auth/login?state=false&message=account%20banned');
         }
         else try {

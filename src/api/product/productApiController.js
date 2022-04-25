@@ -36,7 +36,6 @@ exports.renderByField = async (req, res) => {
         products.type = req.query.type;
 
         console.log("--- render by field ---");
-        console.log("products: ", products);
         res.json(products);
     } catch (err) {
         res.status(500).json({ message: err.message });

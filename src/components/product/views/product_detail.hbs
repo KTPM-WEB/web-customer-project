@@ -120,11 +120,12 @@
 					<div class="product__details__tab">
 						<ul class="nav nav-tabs" role="tablist">
 							<li class="nav-item">
-								<a class="nav-link active" style="background:transparent;" data-toggle="tab" href="#tabs-description"
-									role="tab">Description</a>
+								<a class="nav-link active" style="background:transparent;" data-toggle="tab"
+									href="#tabs-description" role="tab">Description</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" style="background:transparent;" data-toggle="tab" href="#tabs-review" role="tab">Reviews</a>
+								<a class="nav-link" style="background:transparent;" data-toggle="tab"
+									href="#tabs-review" role="tab">Reviews</a>
 							</li>
 						</ul>
 						<div class="tab-content">
@@ -234,9 +235,7 @@
 					</div>
 					<div class="product__item__text">
 						<h6>{{name}}</h6>
-						<a href="#"
-							onclick="addProduct('{{product._id}}', $('input[name=size]:checked').val(), $('input[name=color]:checked').val(), $('#product-detail-stock').text(), $('#input-quantity').val() )"
-							class="primary-btn">add to cart</a>
+
 						<h5>{{price}}</h5>
 						<div class="product__color__select">
 							{{#each relatedProduct.color}}
